@@ -6,7 +6,7 @@ Official Constellize methodology plugins for Claude Code.
 
 This marketplace provides the complete Constellize methodology as Claude Code plugins:
 - **69 Skills** across 5 plugins
-- **12 Agents** for expert-in-role consultation
+- **14 Agents** for expert-in-role consultation
 
 ## Installation
 
