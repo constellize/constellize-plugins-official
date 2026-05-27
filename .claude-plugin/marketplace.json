@@ -1,75 +1,34 @@
 {
   "name": "marketplace",
   "owner": {
-    "name": "Constellize",
-    "url": "https://constellize.com"
+    "name": "Constellize"
   },
-  "description": "Official Constellize methodology plugins for Claude Code - prompts become skills, personas become agents",
+  "description": "Official Constellize methodology plugins for Claude Code",
   "plugins": [
     {
-      "name": "constellize-planning",
-      "source": "./plugins/constellize-planning",
-      "description": "Planning and requirements skills and agents for software projects"
+      "name": "constellize:memory",
+      "source": "./plugins/constellize:memory",
+      "description": "Knowledge persistence across context resets"
     },
     {
-      "name": "constellize-architecture",
-      "source": "./plugins/constellize-architecture",
-      "description": "Architecture and design skills and agents"
+      "name": "constellize:design",
+      "source": "./plugins/constellize:design",
+      "description": "Planning and architecture for software projects"
     },
     {
-      "name": "constellize-quality",
-      "source": "./plugins/constellize-quality",
-      "description": "Quality gates, testing, and health check skills and agents"
+      "name": "constellize:craft",
+      "source": "./plugins/constellize:craft",
+      "description": "Code quality, testing, and continuous excellence"
     },
     {
-      "name": "constellize-deployment",
-      "source": "./plugins/constellize-deployment",
-      "description": "Deployment and operations skills and agents"
+      "name": "constellize:deliver",
+      "source": "./plugins/constellize:deliver",
+      "description": "Deployment, operations, and incident management"
     },
     {
-      "name": "constellize-development",
-      "source": "./plugins/constellize-development",
-      "description": "Software development agents"
-    },
-    {
-      "name": "constellize-excellence",
-      "source": "./plugins/constellize-excellence",
-      "description": "Continuous excellence and maintenance skills"
-    },
-    {
-      "name": "constellize-ai-workflow",
-      "source": "./plugins/constellize-ai-workflow",
-      "description": "AI-assisted development and review skills"
-    },
-    {
-      "name": "constellize-memory-bank",
-      "source": "./plugins/constellize-memory-bank",
-      "description": "Memory bank establishment, maintenance, and recovery skills"
-    },
-    {
-      "name": "constellize-operations",
-      "source": "./plugins/constellize-operations",
-      "description": "Operational knowledge and incident management skills"
-    },
-    {
-      "name": "constellize-organization",
-      "source": "./plugins/constellize-organization",
-      "description": "Organizational knowledge discovery and management skills"
-    },
-    {
-      "name": "constellize-learning",
-      "source": "./plugins/constellize-learning",
-      "description": "Team and personal learning skills"
-    },
-    {
-      "name": "constellize-evolution",
-      "source": "./plugins/constellize-evolution",
-      "description": "System evolution and health tracking skills"
-    },
-    {
-      "name": "constellize-adoption",
-      "source": "./plugins/constellize-adoption",
-      "description": "Team onboarding and adoption skills"
+      "name": "constellize:grow",
+      "source": "./plugins/constellize:grow",
+      "description": "Team learning, system evolution, and adoption"
     }
   ]
 }

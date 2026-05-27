@@ -1,0 +1,8 @@
+{
+  "name": "constellize:deliver",
+  "version": "1.0.0",
+  "description": "Deployment, operations, and incident management",
+  "author": {
+    "name": "Constellize"
+  }
+}
