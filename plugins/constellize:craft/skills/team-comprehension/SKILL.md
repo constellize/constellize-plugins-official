@@ -1,10 +1,11 @@
 ---
-name: constellize:craft:team-comprehension
+name: team-comprehension
 description: Ensure team comprehension so any team member can work effectively in the codebase. Making codebase understandable for all team members (Gate 4: Maintainability in Context).
-prompt-id: ensure-team-comprehension
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: ensure-team-comprehension
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

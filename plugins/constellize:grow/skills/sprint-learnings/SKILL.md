@@ -1,10 +1,11 @@
 ---
-name: constellize:grow:sprint-learnings
+name: sprint-learnings
 description: Document sprint learnings for compound organizational knowledge. Transform individual sprint experiences into permanent organizational knowledge by capturing achievements, challenges, technical insights, organizational insights, and cross-sprint learning patterns that accelerate future development.
-prompt-id: capture-sprint-learnings
-argument-hint: "[sprint_id] [team_name] [sprint_duration] [memory_bank_location]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: capture-sprint-learnings
+  argument-hint: "[sprint_id] [team_name] [sprint_duration] [memory_bank_location]"
+  model: sonnet
 ---
 
 <task>

@@ -1,10 +1,11 @@
 ---
-name: constellize:craft:documentation-completeness
+name: documentation-completeness
 description: Achieve documentation completeness that helps any team member understand and contribute. Creating comprehensive documentation for maintainability (Gate 4: Maintainability in Context).
-prompt-id: achieve-documentation-completeness
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: achieve-documentation-completeness
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

@@ -1,10 +1,11 @@
 ---
-name: constellize:deliver:knowledge-health
+name: knowledge-health
 description: Assess operational memory bank health through systematic evaluation. Evaluate runbook currency, check cross-reference integrity, identify knowledge gaps, assess incident response effectiveness, measure time-to-resolution trends, recommend knowledge updates based on recent incidents.
-prompt-id: assess-operational-knowledge-health
-argument-hint: "[system_name] [assessment_scope] [time_period] [memory_bank_structure]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: assess-operational-knowledge-health
+  argument-hint: "[system_name] [assessment_scope] [time_period] [memory_bank_structure]"
+  model: sonnet
 ---
 
 <task>

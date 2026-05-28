@@ -1,10 +1,11 @@
 ---
-name: constellize:memory:recover-noise
+name: recover-noise
 description: Recover memory bank from noise where obsolete entries obscure current information. Prune accumulated noise to restore signal-to-noise ratio when documentation has conflicting or duplicate information.
-prompt-id: recover-from-noise-accumulation
-argument-hint: "[project_name] [noise_indicators]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: recover-from-noise-accumulation
+  argument-hint: "[project_name] [noise_indicators]"
+  model: sonnet
 ---
 
 <task>

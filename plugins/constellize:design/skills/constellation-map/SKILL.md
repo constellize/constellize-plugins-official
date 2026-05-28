@@ -1,10 +1,11 @@
 ---
-name: constellize:design:constellation-map
+name: constellation-map
 description: Map constellation of trusted components and their integration points. When planning system architecture using existing proven components.
-prompt-id: constellation-map
-argument-hint: "[system_name] [system_description] [known_components]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: constellation-map
+  argument-hint: "[system_name] [system_description] [known_components]"
+  model: sonnet
 ---
 
 <task>

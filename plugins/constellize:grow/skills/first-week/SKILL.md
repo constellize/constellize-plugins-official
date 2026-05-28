@@ -1,10 +1,11 @@
 ---
-name: constellize:grow:first-week
+name: first-week
 description: Provide structured five-day guidance from curiosity to practice. Guide individual or team through first week with daily activities, checkpoints, success indicators, and common challenge solutions—enabling early wins and momentum that lead to continued adoption.
-prompt-id: guide-first-week-adoption
-argument-hint: "[engineer_name] [context_type] [adoption_style]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: guide-first-week-adoption
+  argument-hint: "[engineer_name] [context_type] [adoption_style]"
+  model: sonnet
 ---
 
 <task>

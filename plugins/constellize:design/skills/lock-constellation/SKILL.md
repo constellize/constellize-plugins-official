@@ -1,10 +1,11 @@
 ---
-name: constellize:design:lock-constellation
+name: lock-constellation
 description: Lock constellation scope and prevent feature creep. After gap analysis, before implementation to maintain discipline.
-prompt-id: lock-constellation
-argument-hint: "[system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: lock-constellation
+  argument-hint: "[system_name]"
+  model: sonnet
 ---
 
 <task>

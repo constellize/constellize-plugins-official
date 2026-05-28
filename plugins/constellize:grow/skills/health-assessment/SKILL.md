@@ -1,10 +1,11 @@
 ---
-name: constellize:grow:health-assessment
+name: health-assessment
 description: Track long-term system health trends enabling informed evolution decisions. Periodically assess system health across multiple dimensions—architectural debt, documentation currency, complexity trends, maintenance burden, quality metrics—to understand whether system is improving or degrading and identify priorities for health improvements that enable confident system evolution.
-prompt-id: assess-system-health-over-time
-argument-hint: "[system_name] [assessment_period] [memory_bank_location]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: assess-system-health-over-time
+  argument-hint: "[system_name] [assessment_period] [memory_bank_location]"
+  model: sonnet
 ---
 
 <task>

@@ -1,9 +1,10 @@
 ---
-name: constellize:design:specification
+name: specification
 description: Generate software specification document. When creating detailed functional and non-functional requirements.
-prompt-id: specification
 allowed-tools: Read, Glob, Grep, Bash
-model: sonnet
+metadata:
+  prompt-id: specification
+  model: sonnet
 ---
 
 <task>

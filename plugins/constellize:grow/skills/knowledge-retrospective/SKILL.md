@@ -1,10 +1,11 @@
 ---
-name: constellize:grow:knowledge-retrospective
+name: knowledge-retrospective
 description: Facilitate retrospective focused on organizational knowledge practices and continuous learning improvement. After each sprint, evaluate how well team captured learnings, shared knowledge, and maintained memory bank—assessing knowledge capture quality, identifying knowledge gaps, recognizing successful knowledge transfer, and generating action items to improve organizational learning practices and compound learning effects.
-prompt-id: conduct-knowledge-retrospective
-argument-hint: "[sprint_id] [team_name] [sprint_duration] [memory_bank_location]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: conduct-knowledge-retrospective
+  argument-hint: "[sprint_id] [team_name] [sprint_duration] [memory_bank_location]"
+  model: sonnet
 ---
 
 <task>

@@ -1,10 +1,11 @@
 ---
-name: constellize:grow:terminology-drift
+name: terminology-drift
 description: Identify terminology inconsistencies across team memory banks. When teams need to collaborate and may be using different words for the same concepts.
-prompt-id: detect-terminology-drift
-argument-hint: "[memory_banks] [organization_name] [known_glossary]"
 allowed-tools: Read, Glob, Grep
-model: sonnet
+metadata:
+  prompt-id: detect-terminology-drift
+  argument-hint: "[memory_banks] [organization_name] [known_glossary]"
+  model: sonnet
 ---
 
 <role>

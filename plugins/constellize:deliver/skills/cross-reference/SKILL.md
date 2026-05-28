@@ -1,10 +1,11 @@
 ---
-name: constellize:deliver:cross-reference
+name: cross-reference
 description: Map runtime dependencies and establish bidirectional cross-references between operational and development knowledge. Connect operational runbooks to system design, incident reports to architectural decisions, ensuring operational and development knowledge remain coherent as systems evolve.
-prompt-id: cross-reference-operational-dependencies
-argument-hint: "[system_name] [dependency_scope] [memory_bank_location] [operations_memory_location]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: cross-reference-operational-dependencies
+  argument-hint: "[system_name] [dependency_scope] [memory_bank_location] [operations_memory_location]"
+  model: sonnet
 ---
 
 <task>

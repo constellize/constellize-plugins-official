@@ -1,10 +1,11 @@
 ---
-name: constellize:grow:personal-learning
+name: personal-learning
 description: Capture individual learning journey building expertise and personal growth. Document how individual engineer grew through specific challenge—investigation process, skills developed, lessons learned, knowledge gained—building personal expertise while creating knowledge that can be shared with team to accelerate collective capability.
-prompt-id: document-personal-learning-journey
-argument-hint: "[engineer_name] [challenge_description] [learning_period] [memory_bank_location]"
 allowed-tools: Read, Glob, Grep, Bash
-model: sonnet
+metadata:
+  prompt-id: document-personal-learning-journey
+  argument-hint: "[engineer_name] [challenge_description] [learning_period] [memory_bank_location]"
+  model: sonnet
 ---
 
 <task>

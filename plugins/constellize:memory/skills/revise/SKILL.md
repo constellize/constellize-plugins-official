@@ -1,10 +1,11 @@
 ---
-name: constellize:memory:revise
+name: revise
 description: Revise memory bank documentation when circumstances change. Maintain accurate knowledge as constraints, priorities, and understanding evolve.
-prompt-id: revise-memory-bank
-argument-hint: "[project_name] [change_trigger]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: revise-memory-bank
+  argument-hint: "[project_name] [change_trigger]"
+  model: sonnet
 ---
 
 <task>

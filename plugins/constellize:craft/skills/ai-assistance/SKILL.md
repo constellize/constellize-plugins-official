@@ -1,10 +1,11 @@
 ---
-name: constellize:craft:ai-assistance
+name: ai-assistance
 description: Leverage AI assistance to accelerate quality engineering without sacrificing rigor. Use AI to generate tests, automate documentation, enforce quality, and accelerate deployment (Best Practices).
-prompt-id: leverage-ai-assistance
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: leverage-ai-assistance
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

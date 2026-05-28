@@ -1,10 +1,11 @@
 ---
-name: constellize:grow:training-exercise
+name: training-exercise
 description: Design hands-on training exercises for memory bank learning. Create practical, real-context exercises that teach memory bank skills through doing—using real projects, including plan-prompt-proceed practice, building success experiences, enabling self-paced or facilitated learning.
-prompt-id: create-memory-bank-training-exercise
-argument-hint: "[exercise_context] [learning_objectives] [exercise_duration]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: create-memory-bank-training-exercise
+  argument-hint: "[exercise_context] [learning_objectives] [exercise_duration]"
+  model: sonnet
 ---
 
 <task>

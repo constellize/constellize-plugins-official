@@ -1,10 +1,11 @@
 ---
-name: constellize:deliver:operational-memory-bank
+name: operational-memory-bank
 description: Establish operational memory bank structure for production systems. Choose between separate, integrated, or hybrid operational knowledge structure based on team dynamics, access requirements, and operational coupling.
-prompt-id: establish-operational-memory-bank
-argument-hint: "[project_name] [team_structure] [team_size] [existing_memory_bank]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: establish-operational-memory-bank
+  argument-hint: "[project_name] [team_structure] [team_size] [existing_memory_bank]"
+  model: sonnet
 ---
 
 <task>

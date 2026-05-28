@@ -1,10 +1,11 @@
 ---
-name: constellize:craft:architectural-consistency
+name: architectural-consistency
 description: Ensure architectural consistency by following established patterns from memory bank. Validating that code follows constellation patterns (Gate 4: Maintainability in Context).
-prompt-id: ensure-architectural-consistency
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: ensure-architectural-consistency
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

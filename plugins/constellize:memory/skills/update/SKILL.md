@@ -1,10 +1,11 @@
 ---
-name: constellize:memory:update
+name: update
 description: Update memory bank documentation to capture session knowledge. Preserve decisions, patterns, progress, and learnings after each work session.
-prompt-id: update-memory-bank
-argument-hint: "[project_name] [work_completed]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: update-memory-bank
+  argument-hint: "[project_name] [work_completed]"
+  model: sonnet
 ---
 
 <task>

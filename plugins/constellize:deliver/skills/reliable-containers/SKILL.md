@@ -1,10 +1,11 @@
 ---
-name: constellize:deliver:reliable-containers
+name: reliable-containers
 description: Build container reliability with clean builds, predictable starts, and graceful shutdowns. Creating Docker containers that deploy reliably (Gate 3: Deployment Readiness).
-prompt-id: build-reliable-containers
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: build-reliable-containers
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

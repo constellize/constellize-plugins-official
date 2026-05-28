@@ -1,10 +1,11 @@
 ---
-name: constellize:memory:branch
+name: branch
 description: Branch memory bank to explore alternative approaches safely. Investigate alternatives while preserving production knowledge and enabling evidence-based decisions.
-prompt-id: branch-memory-bank
-argument-hint: "[project_name] [exploration_topic]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: branch-memory-bank
+  argument-hint: "[project_name] [exploration_topic]"
+  model: sonnet
 ---
 
 <task>

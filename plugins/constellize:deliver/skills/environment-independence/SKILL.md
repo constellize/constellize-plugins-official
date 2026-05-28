@@ -1,10 +1,11 @@
 ---
-name: constellize:deliver:environment-independence
+name: environment-independence
 description: Achieve environment independence so deployment processes work identically across dev, staging, and production. Making deployments work the same way in all environments (Gate 3: Deployment Readiness).
-prompt-id: achieve-environment-independence
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: achieve-environment-independence
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

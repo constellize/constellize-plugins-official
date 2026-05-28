@@ -1,10 +1,11 @@
 ---
-name: constellize:grow:adoption-obstacles
+name: adoption-obstacles
 description: Diagnose and resolve adoption obstacles systematically. Identify specific adoption challenges, diagnose root causes, match to proven solutions, create action plans—removing friction and enabling successful adoption despite real obstacles teams face.
-prompt-id: diagnose-adoption-obstacles
-argument-hint: "[team_name] [obstacle_description] [memory_bank_location]"
 allowed-tools: Read, Glob, Grep, Bash
-model: sonnet
+metadata:
+  prompt-id: diagnose-adoption-obstacles
+  argument-hint: "[team_name] [obstacle_description] [memory_bank_location]"
+  model: sonnet
 ---
 
 <task>

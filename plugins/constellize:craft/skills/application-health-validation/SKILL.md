@@ -1,10 +1,11 @@
 ---
-name: constellize:craft:application-health-validation
+name: application-health-validation
 description: Build application health validation for startup, config, environment, and business rules. After component implementation, add application health validation (Gate 2: Health Check Completeness).
-prompt-id: implement-application-health-validation
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Bash
-model: sonnet
+metadata:
+  prompt-id: implement-application-health-validation
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

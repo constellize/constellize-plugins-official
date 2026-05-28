@@ -1,10 +1,11 @@
 ---
-name: constellize:grow:grow-organically
+name: grow-organically
 description: Enable organic memory bank growth based on actual team needs. Assess coverage gaps and pain points, identify what to add based on real usage patterns, expand existing docs when needed, prune obsolete content—allowing memory bank to evolve naturally with team rather than becoming bloated theoretical structure.
-prompt-id: grow-memory-bank-organically
-argument-hint: "[team_name] [assessment_period] [memory_bank_location]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: grow-memory-bank-organically
+  argument-hint: "[team_name] [assessment_period] [memory_bank_location]"
+  model: sonnet
 ---
 
 <task>

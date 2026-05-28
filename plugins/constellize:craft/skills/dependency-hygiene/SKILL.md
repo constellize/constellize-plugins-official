@@ -1,10 +1,11 @@
 ---
-name: constellize:craft:dependency-hygiene
+name: dependency-hygiene
 description: Maintain dependency hygiene to keep codebase secure and maintainable. Managing dependencies with justification and security scanning (Gate 4: Maintainability in Context).
-prompt-id: maintain-dependency-hygiene
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: maintain-dependency-hygiene
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

@@ -1,10 +1,11 @@
 ---
-name: constellize:design:vision-statement
+name: vision-statement
 description: Generate vision statement using For/Who/The/Is/That/Unlike template. When creating product vision statements.
-prompt-id: vision-statement
-argument-hint: "[product_name] [product_description]"
 allowed-tools: Read, Glob, Grep
-model: sonnet
+metadata:
+  prompt-id: vision-statement
+  argument-hint: "[product_name] [product_description]"
+  model: sonnet
 ---
 
 <role>

@@ -1,10 +1,11 @@
 ---
-name: constellize:deliver:proactive-architecture
+name: proactive-architecture
 description: Design proactive operational architecture during development. Build resilience into system design by planning health checks, failure modes, observability, degradation patterns, and deployment procedures before first production deployment.
-prompt-id: design-proactive-operational-architecture
-argument-hint: "[system_name] [deployment_environment] [criticality] [memory_bank_location]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: design-proactive-operational-architecture
+  argument-hint: "[system_name] [deployment_environment] [criticality] [memory_bank_location]"
+  model: sonnet
 ---
 
 <task>

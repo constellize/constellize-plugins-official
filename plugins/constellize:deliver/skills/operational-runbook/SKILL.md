@@ -1,10 +1,11 @@
 ---
-name: constellize:deliver:operational-runbook
+name: operational-runbook
 description: Create operational runbook for common operational scenarios. Structure effective runbooks with step-by-step troubleshooting procedures, decision trees, prerequisite checks, rollback procedures, and success criteria enabling on-call engineers to respond effectively during incidents.
-prompt-id: create-operational-runbook
-argument-hint: "[scenario_name] [system_name] [severity] [runbook_location]"
 allowed-tools: Read, Glob, Grep, Bash
-model: sonnet
+metadata:
+  prompt-id: create-operational-runbook
+  argument-hint: "[scenario_name] [system_name] [severity] [runbook_location]"
+  model: sonnet
 ---
 
 <task>

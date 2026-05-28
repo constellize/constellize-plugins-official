@@ -1,10 +1,11 @@
 ---
-name: constellize:craft:contract-tests
+name: contract-tests
 description: Write comprehensive contract tests to ensure API contracts maintained and detect breaking changes. After code generation plan, write contract tests (Gate 1: Test Integrity).
-prompt-id: write-contract-tests
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: write-contract-tests
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

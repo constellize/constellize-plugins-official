@@ -1,10 +1,11 @@
 ---
-name: constellize:memory:recover-abandonment
+name: recover-abandonment
 description: Recover memory bank from abandonment where updates completely stopped. Restart documentation practice after extended period without updates following deadline pressure.
-prompt-id: recover-from-abandonment
-argument-hint: "[project_name] [abandonment_duration]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: recover-from-abandonment
+  argument-hint: "[project_name] [abandonment_duration]"
+  model: sonnet
 ---
 
 <task>

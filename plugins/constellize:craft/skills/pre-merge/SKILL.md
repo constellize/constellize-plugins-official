@@ -1,10 +1,11 @@
 ---
-name: constellize:craft:pre-merge
+name: pre-merge
 description: Enforce pre-merge quality gates to ensure code quality before main branch. Before code joins main branch, run comprehensive validation in CI (Gate 5: Review Process).
-prompt-id: pre-merge-review
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: pre-merge-review
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

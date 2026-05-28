@@ -1,10 +1,11 @@
 ---
-name: constellize:grow:knowledge-connections
+name: knowledge-connections
 description: Discover knowledge islands and connections across organizational memory banks. Build meta-constellation view revealing systemic risks, strategic alignment gaps, and connection opportunities at organizational scale.
-prompt-id: discover-organizational-knowledge-connections
-argument-hint: "[organization_name] [repository_scope]"
 allowed-tools: Read, Glob, Grep, Bash
-model: sonnet
+metadata:
+  prompt-id: discover-organizational-knowledge-connections
+  argument-hint: "[organization_name] [repository_scope]"
+  model: sonnet
 ---
 
 <task>

@@ -1,10 +1,11 @@
 ---
-name: constellize:craft:integration-tests
+name: integration-tests
 description: Write comprehensive integration tests with constellation stars using real dependencies. After code generation plan, write integration tests (Gate 1: Test Integrity).
-prompt-id: write-integration-tests
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: write-integration-tests
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

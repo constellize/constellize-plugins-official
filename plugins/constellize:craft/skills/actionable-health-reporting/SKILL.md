@@ -1,10 +1,11 @@
 ---
-name: constellize:craft:actionable-health-reporting
+name: actionable-health-reporting
 description: Design actionable health reporting with status indicators, errors, thresholds, and dependency mapping. After health checks implemented, create actionable reporting (Gate 2: Health Check Completeness).
-prompt-id: implement-actionable-health-reporting
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: implement-actionable-health-reporting
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

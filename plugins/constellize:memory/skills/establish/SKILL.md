@@ -1,10 +1,11 @@
 ---
-name: constellize:memory:establish
+name: establish
 description: Establish memory bank documentation system for living project knowledge. Maintain project context across context resets and team transitions.
-prompt-id: establish-memory-bank
-argument-hint: "[project_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: establish-memory-bank
+  argument-hint: "[project_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

@@ -1,10 +1,11 @@
 ---
-name: constellize:deliver:incident-query
+name: incident-query
 description: Query operational knowledge efficiently during incidents to accelerate investigation. Filter knowledge to incident-specific scope, pull targeted context without information overload, traverse dependencies, support time-sensitive decision making under pressure.
-prompt-id: query-operational-knowledge-during-incidents
-argument-hint: "[incident_context] [incident_severity] [time_constraint] [memory_bank_structure]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: query-operational-knowledge-during-incidents
+  argument-hint: "[incident_context] [incident_severity] [time_constraint] [memory_bank_structure]"
+  model: sonnet
 ---
 
 <task>

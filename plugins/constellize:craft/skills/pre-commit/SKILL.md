@@ -1,10 +1,11 @@
 ---
-name: constellize:craft:pre-commit
+name: pre-commit
 description: Enforce pre-commit quality gates to prevent issues from entering repository. Before code enters shared repository, run automated checks (Gate 5: Review Process).
-prompt-id: pre-commit-review
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: pre-commit-review
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

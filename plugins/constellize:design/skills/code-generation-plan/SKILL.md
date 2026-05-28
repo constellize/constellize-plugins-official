@@ -1,10 +1,11 @@
 ---
-name: constellize:design:code-generation-plan
+name: code-generation-plan
 description: Create implementation plan for code generation shaped by constellation context. After implementation sketches, before writing code for a specific gap.
-prompt-id: code-generation-plan
-argument-hint: "[system_name] [gap_to_implement]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: code-generation-plan
+  argument-hint: "[system_name] [gap_to_implement]"
+  model: sonnet
 ---
 
 <task>

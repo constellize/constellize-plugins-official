@@ -1,10 +1,11 @@
 ---
-name: constellize:craft:quality-metrics
+name: quality-metrics
 description: Track quality metrics to measure system health and guide continuous improvement. Continuously measure and monitor quality across multiple dimensions (Gate 6: Continuous Improvement).
-prompt-id: track-quality-metrics
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: track-quality-metrics
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

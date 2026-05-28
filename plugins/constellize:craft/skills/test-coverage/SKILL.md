@@ -1,10 +1,11 @@
 ---
-name: constellize:craft:test-coverage
+name: test-coverage
 description: Validate test coverage meets thresholds: 80% branch, 100% critical logic and error paths. After writing all tests, validate coverage (Gate 1: Test Integrity).
-prompt-id: validate-test-coverage
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: validate-test-coverage
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

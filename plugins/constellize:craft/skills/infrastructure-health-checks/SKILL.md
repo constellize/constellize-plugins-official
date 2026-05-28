@@ -1,10 +1,11 @@
 ---
-name: constellize:craft:infrastructure-health-checks
+name: infrastructure-health-checks
 description: Implement infrastructure health checks for databases, caches, APIs, and filesystems. After component implementation, add infrastructure health checks (Gate 2: Health Check Completeness).
-prompt-id: implement-infrastructure-health-checks
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: implement-infrastructure-health-checks
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

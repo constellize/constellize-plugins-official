@@ -1,10 +1,11 @@
 ---
-name: constellize:grow:architectural-evolution
+name: architectural-evolution
 description: Preserve architectural context enabling confident system evolution. Document architectural changes with full context—original design rationale, evolution triggers, new decisions, trade-offs, migration path, and lessons learned—so future architects understand not just current state but the journey that led there and reasons that shaped each decision.
-prompt-id: document-architectural-evolution
-argument-hint: "[system_name] [evolution_reason] [memory_bank_location]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: document-architectural-evolution
+  argument-hint: "[system_name] [evolution_reason] [memory_bank_location]"
+  model: sonnet
 ---
 
 <task>

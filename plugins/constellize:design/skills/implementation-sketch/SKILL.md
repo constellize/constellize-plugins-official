@@ -1,10 +1,11 @@
 ---
-name: constellize:design:implementation-sketch
+name: implementation-sketch
 description: Sketch implementation approaches for gaps before coding. After gap analysis and scope lock, before implementation to guide design.
-prompt-id: implementation-sketch
-argument-hint: "[system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: implementation-sketch
+  argument-hint: "[system_name]"
+  model: sonnet
 ---
 
 <task>

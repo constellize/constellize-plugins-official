@@ -1,10 +1,11 @@
 ---
-name: constellize:deliver:rollback-capability
+name: rollback-capability
 description: Build rollback capability to recover quickly when deployments fail. Creating rollback procedures for fast recovery (Gate 3: Deployment Readiness).
-prompt-id: implement-rollback-capability
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: implement-rollback-capability
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

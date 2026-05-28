@@ -1,10 +1,11 @@
 ---
-name: constellize:grow:extract-decisions-from-meetings
+name: extract-decisions-from-meetings
 description: Extract actionable decisions from meeting notes into memory bank entries. After meetings to capture decisions, constraints, and action items that would otherwise be lost.
-prompt-id: extract-decisions-from-meetings
-argument-hint: "[meeting_transcript] [team_name] [meeting_context]"
 allowed-tools: Read, Glob, Grep, Bash
-model: sonnet
+metadata:
+  prompt-id: extract-decisions-from-meetings
+  argument-hint: "[meeting_transcript] [team_name] [meeting_context]"
+  model: sonnet
 ---
 
 <role>

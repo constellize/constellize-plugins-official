@@ -1,10 +1,11 @@
 ---
-name: constellize:craft:feedback-loops
+name: feedback-loops
 description: Establish feedback loops to surface issues quickly and guide improvement. Build automated, team, user, and system feedback mechanisms (Gate 6: Continuous Improvement).
-prompt-id: establish-feedback-loops
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: establish-feedback-loops
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

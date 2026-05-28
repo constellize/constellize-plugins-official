@@ -1,10 +1,11 @@
 ---
-name: constellize:deliver:incident-investigation
+name: incident-investigation
 description: Document incident investigation in real-time to capture systematic debugging paths. Capture hypotheses → tests → results pattern during incidents, record dead ends and reasoning, preserve commands and outputs, extract reusable debugging patterns for future incidents.
-prompt-id: document-incident-investigation
-argument-hint: "[incident_id] [system_name] [severity] [incident_location]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: document-incident-investigation
+  argument-hint: "[incident_id] [system_name] [severity] [incident_location]"
+  model: sonnet
 ---
 
 <task>

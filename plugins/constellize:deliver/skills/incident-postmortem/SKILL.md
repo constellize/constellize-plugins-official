@@ -1,10 +1,11 @@
 ---
-name: constellize:deliver:incident-postmortem
+name: incident-postmortem
 description: Write incident postmortems that transform incidents into institutional learning. Document incident timeline with decision points, capture hypotheses explored, record remediation options and rationale, analyze root cause vs contributing factors, identify systemic improvements, link to affected systems, create organizational learning.
-prompt-id: write-incident-postmortem
-argument-hint: "[incident_id] [system_name] [severity] [postmortem_location]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: write-incident-postmortem
+  argument-hint: "[incident_id] [system_name] [severity] [postmortem_location]"
+  model: sonnet
 ---
 
 <task>

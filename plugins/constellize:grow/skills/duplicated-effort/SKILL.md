@@ -1,10 +1,11 @@
 ---
-name: constellize:grow:duplicated-effort
+name: duplicated-effort
 description: Detect patterns suggesting teams are solving similar problems independently. When analyzing cross-team efficiency and looking for consolidation opportunities.
-prompt-id: surface-duplicated-effort
-argument-hint: "[memory_banks] [organization_name] [time_range]"
 allowed-tools: Read, Glob, Grep, Bash
-model: sonnet
+metadata:
+  prompt-id: surface-duplicated-effort
+  argument-hint: "[memory_banks] [organization_name] [time_range]"
+  model: sonnet
 ---
 
 <role>

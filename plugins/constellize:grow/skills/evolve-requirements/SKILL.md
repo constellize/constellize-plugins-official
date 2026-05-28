@@ -1,10 +1,11 @@
 ---
-name: constellize:grow:evolve-requirements
+name: evolve-requirements
 description: Document how requirements evolved through implementation learnings. Capture original assumptions, implementation discoveries, and evolved requirements—preserving requirement history and reasoning to enable future projects to benefit from past learning rather than repeating same discoveries.
-prompt-id: evolve-requirements-from-implementation
-argument-hint: "[feature_name] [original_requirement] [memory_bank_location]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: evolve-requirements-from-implementation
+  argument-hint: "[feature_name] [original_requirement] [memory_bank_location]"
+  model: sonnet
 ---
 
 <task>

@@ -1,10 +1,11 @@
 ---
-name: constellize:craft:unit-tests
+name: unit-tests
 description: Write comprehensive unit tests for component behavior in isolation. After code generation plan, write unit tests (Gate 1: Test Integrity).
-prompt-id: write-unit-tests
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: write-unit-tests
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

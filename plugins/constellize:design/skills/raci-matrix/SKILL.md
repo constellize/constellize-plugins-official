@@ -1,10 +1,11 @@
 ---
-name: constellize:design:raci-matrix
+name: raci-matrix
 description: Generate RACI matrix. When defining stakeholder responsibilities.
-prompt-id: raci-matrix
-argument-hint: "[product_name] [product_description]"
 allowed-tools: Read, Glob, Grep, Bash
-model: sonnet
+metadata:
+  prompt-id: raci-matrix
+  argument-hint: "[product_name] [product_description]"
+  model: sonnet
 ---
 
 <role>

@@ -1,10 +1,11 @@
 ---
-name: constellize:memory:triage-salvageable-knowledge
+name: triage-salvageable-knowledge
 description: Triage moderately stale memory bank to assess salvageability. Honest assessment of what can be saved vs needs work for memory banks stale 1-3 months.
-prompt-id: triage-salvageable-knowledge
-argument-hint: "[project_name] [staleness_period]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: triage-salvageable-knowledge
+  argument-hint: "[project_name] [staleness_period]"
+  model: sonnet
 ---
 
 <task>

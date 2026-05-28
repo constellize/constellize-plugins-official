@@ -1,10 +1,11 @@
 ---
-name: constellize:memory:recover-staleness
+name: recover-staleness
 description: Recover memory bank from staleness where docs describe past not present. Reconcile documentation with reality when memory bank has drifted from actual codebase state.
-prompt-id: recover-from-staleness-drift
-argument-hint: "[project_name] [staleness_indicators]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: recover-from-staleness-drift
+  argument-hint: "[project_name] [staleness_indicators]"
+  model: sonnet
 ---
 
 <task>

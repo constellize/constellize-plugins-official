@@ -1,10 +1,11 @@
 ---
-name: constellize:craft:pre-deployment
+name: pre-deployment
 description: Enforce pre-deployment quality gates to ensure production safety. Before code reaches production, validate deployment safety (Gate 5: Review Process).
-prompt-id: pre-deployment-review
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: pre-deployment-review
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

@@ -1,10 +1,11 @@
 ---
-name: constellize:design:business-problem
+name: business-problem
 description: Generate business problem statement using SPIIBV template. When documenting business problems and opportunities.
-prompt-id: business-problem
-argument-hint: "[product_name] [product_description]"
 allowed-tools: Read, Glob, Grep
-model: sonnet
+metadata:
+  prompt-id: business-problem
+  argument-hint: "[product_name] [product_description]"
+  model: sonnet
 ---
 
 <role>

@@ -1,10 +1,11 @@
 ---
-name: constellize:craft:continuous-learning
+name: continuous-learning
 description: Foster continuous learning through structured reflection and proactive improvement. Build learning culture through post-incident reviews, architecture reviews, and team development (Gate 6: Continuous Improvement).
-prompt-id: foster-continuous-learning
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: foster-continuous-learning
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

@@ -1,10 +1,11 @@
 ---
-name: constellize:memory:establish-stewardship
+name: establish-stewardship
 description: Establish sustainable memory bank stewardship practices. Create rotation, automation, and cultural practices preventing future degradation.
-prompt-id: establish-stewardship-practices
-argument-hint: "[project_name] [team_size]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: establish-stewardship-practices
+  argument-hint: "[project_name] [team_size]"
+  model: sonnet
 ---
 
 <task>

@@ -1,10 +1,11 @@
 ---
-name: constellize:craft:ai-changes
+name: ai-changes
 description: Validate AI-generated changes to ensure correctness, alignment, and safety. Rigorously validate AI code changes before integration (Best Practices).
-prompt-id: validate-ai-changes
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: validate-ai-changes
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

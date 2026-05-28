@@ -1,10 +1,11 @@
 ---
-name: constellize:grow:onboard-team
+name: onboard-team
 description: Create effective team onboarding plan for memory bank adoption. Plan team-wide memory bank adoption with hands-on exercises, gradual complexity, early wins, and shared conventions—enabling smooth transition from curiosity to confident adoption with minimal friction and maximum momentum.
-prompt-id: onboard-team-to-memory-banks
-argument-hint: "[team_name] [team_size] [onboarding_timeline] [memory_bank_location]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: onboard-team-to-memory-banks
+  argument-hint: "[team_name] [team_size] [onboarding_timeline] [memory_bank_location]"
+  model: sonnet
 ---
 
 <task>

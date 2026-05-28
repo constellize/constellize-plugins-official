@@ -1,10 +1,11 @@
 ---
-name: constellize:memory:retire
+name: retire
 description: Retire outdated memory bank documentation gracefully with preservation. Archive obsolete knowledge while preserving lessons and maintaining complete system evolution history.
-prompt-id: retire-memory-bank
-argument-hint: "[project_name] [retirement_trigger]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: retire-memory-bank
+  argument-hint: "[project_name] [retirement_trigger]"
+  model: sonnet
 ---
 
 <task>

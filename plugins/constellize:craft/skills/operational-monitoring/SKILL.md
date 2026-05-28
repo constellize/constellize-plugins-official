@@ -1,10 +1,11 @@
 ---
-name: constellize:craft:operational-monitoring
+name: operational-monitoring
 description: Enable operational health monitoring for memory, threads, throughput, and business metrics. After component implementation, add operational monitoring (Gate 2: Health Check Completeness).
-prompt-id: implement-operational-monitoring
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: implement-operational-monitoring
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

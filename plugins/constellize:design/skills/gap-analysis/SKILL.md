@@ -1,10 +1,11 @@
 ---
-name: constellize:design:gap-analysis
+name: gap-analysis
 description: Identify gaps between trusted components and document missing capabilities. After constellation mapping, when identifying what needs to be built.
-prompt-id: gap-analysis
-argument-hint: "[system_name] [stakeholder_requirements]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: gap-analysis
+  argument-hint: "[system_name] [stakeholder_requirements]"
+  model: sonnet
 ---
 
 <task>

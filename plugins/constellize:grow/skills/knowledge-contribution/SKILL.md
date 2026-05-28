@@ -1,10 +1,11 @@
 ---
-name: constellize:grow:knowledge-contribution
+name: knowledge-contribution
 description: Package personal insights for team sharing and reuse. Transform individual expertise into reusable team knowledge by creating clear problem statement, documenting solution with rationale, providing patterns and templates, integrating with existing memory bank—enabling knowledge transfer from individual to team and preventing knowledge loss.
-prompt-id: create-knowledge-contribution
-argument-hint: "[engineer_name] [insight_title] [target_audience] [memory_bank_location]"
 allowed-tools: Read, Glob, Grep, Bash
-model: sonnet
+metadata:
+  prompt-id: create-knowledge-contribution
+  argument-hint: "[engineer_name] [insight_title] [target_audience] [memory_bank_location]"
+  model: sonnet
 ---
 
 <task>

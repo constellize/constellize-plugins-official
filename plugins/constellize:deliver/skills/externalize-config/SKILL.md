@@ -1,10 +1,11 @@
 ---
-name: constellize:deliver:externalize-config
+name: externalize-config
 description: Externalize configuration to eliminate environment-specific values from code. Loading configuration from external sources with validation (Gate 3: Deployment Readiness).
-prompt-id: externalize-configuration
-argument-hint: "[component_name] [system_name]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: externalize-configuration
+  argument-hint: "[component_name] [system_name]"
+  model: sonnet
 ---
 
 <task>

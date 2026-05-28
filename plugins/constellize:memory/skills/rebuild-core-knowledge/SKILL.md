@@ -1,10 +1,11 @@
 ---
-name: constellize:memory:rebuild-core-knowledge
+name: rebuild-core-knowledge
 description: Rebuild core memory bank files in correct dependency order. Systematic reconstruction from foundation to current ensuring consistency and accuracy.
-prompt-id: rebuild-core-knowledge
-argument-hint: "[project_name] [rebuild_priority]"
 allowed-tools: Read, Glob, Grep, Write, Bash
-model: sonnet
+metadata:
+  prompt-id: rebuild-core-knowledge
+  argument-hint: "[project_name] [rebuild_priority]"
+  model: sonnet
 ---
 
 <task>

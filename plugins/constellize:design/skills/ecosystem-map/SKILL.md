@@ -1,10 +1,11 @@
 ---
-name: constellize:design:ecosystem-map
+name: ecosystem-map
 description: Generate linear ecosystem map. When mapping stakeholders and actors.
-prompt-id: ecosystem-map
-argument-hint: "[product_name] [product_description]"
 allowed-tools: Read, Glob, Grep
-model: sonnet
+metadata:
+  prompt-id: ecosystem-map
+  argument-hint: "[product_name] [product_description]"
+  model: sonnet
 ---
 
 <role>
