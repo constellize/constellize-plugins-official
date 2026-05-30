@@ -6,28 +6,28 @@
   "description": "Official Constellize methodology plugins for Claude Code",
   "plugins": [
     {
-      "name": "constellize:memory",
-      "source": "./plugins/constellize:memory",
+      "name": "constellize-memory",
+      "source": "./plugins/constellize-memory",
       "description": "Knowledge persistence across context resets"
     },
     {
-      "name": "constellize:design",
-      "source": "./plugins/constellize:design",
+      "name": "constellize-design",
+      "source": "./plugins/constellize-design",
       "description": "Planning and architecture for software projects"
     },
     {
-      "name": "constellize:craft",
-      "source": "./plugins/constellize:craft",
+      "name": "constellize-craft",
+      "source": "./plugins/constellize-craft",
       "description": "Code quality, testing, and continuous excellence"
     },
     {
-      "name": "constellize:deliver",
-      "source": "./plugins/constellize:deliver",
+      "name": "constellize-deliver",
+      "source": "./plugins/constellize-deliver",
       "description": "Deployment, operations, and incident management"
     },
     {
-      "name": "constellize:grow",
-      "source": "./plugins/constellize:grow",
+      "name": "constellize-grow",
+      "source": "./plugins/constellize-grow",
       "description": "Team learning, system evolution, and adoption"
     }
   ]
