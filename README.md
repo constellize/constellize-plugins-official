@@ -13,25 +13,20 @@ This marketplace provides the complete Constellize methodology as Claude Code pl
 Add this marketplace to Claude Code:
 
 ```bash
-/plugin marketplace add constellize/marketplace
+/plugin marketplace add constellize/constellize-plugins-official
 ```
 
-Then install individual plugins:
-
-```bash
-/plugin install constellize:memory
-/plugin install constellize:craft
-```
+Then install plugins via `/plugin` and select the ones you want.
 
 ## Available Plugins
 
 | Plugin | Description |
 |--------|-------------|
-| `constellize:memory` | Knowledge persistence across context resets |
-| `constellize:design` | Planning and architecture for software projects |
-| `constellize:craft` | Code quality, testing, and continuous excellence |
-| `constellize:deliver` | Deployment, operations, and incident management |
-| `constellize:grow` | Team learning, system evolution, and adoption |
+| `constellize-memory` | Knowledge persistence across context resets |
+| `constellize-design` | Planning and architecture for software projects |
+| `constellize-craft` | Code quality, testing, and continuous excellence |
+| `constellize-deliver` | Deployment, operations, and incident management |
+| `constellize-grow` | Team learning, system evolution, and adoption |
 
 ## Source
 
