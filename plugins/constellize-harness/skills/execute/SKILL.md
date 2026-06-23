@@ -1,6 +1,6 @@
 ---
-name: orchestrate
-description: Execute an approved plan of constellize skills. Use after plan to run skills in sequence with progress tracking.
+name: execute
+description: Execute an approved plan of constellize skills step by step.
 allowed-tools: Read, Glob, Grep, Write, Bash
 metadata:
   argument-hint: "[advisory|spawn]"
