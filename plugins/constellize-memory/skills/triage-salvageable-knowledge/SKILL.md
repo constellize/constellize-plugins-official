@@ -55,12 +55,12 @@ $1
 
 **Standard Construction Folder Structure:**
 This prompt reviews:
-- `memory-bank/projectbrief.md` (foundation accuracy)
-- `memory-bank/systemPatterns.md` (architecture currency)
-- `memory-bank/techContext.md` (tool and convention accuracy)
-- `memory-bank/productContext.md` (user need relevance)
-- `memory-bank/activeContext.md` (current state accuracy)
-- `memory-bank/progress.md` (completion tracking accuracy)
+- `llm/memory-bank/projectbrief.md` (foundation accuracy)
+- `llm/memory-bank/systemPatterns.md` (architecture currency)
+- `llm/memory-bank/techContext.md` (tool and convention accuracy)
+- `llm/memory-bank/productContext.md` (user need relevance)
+- `llm/memory-bank/activeContext.md` (current state accuracy)
+- `llm/memory-bank/progress.md` (completion tracking accuracy)
 
 This prompt creates:
 - Triage assessment report
@@ -234,7 +234,7 @@ Order of triage:
 
 **File Triage Template:**
 ```
-File: [memory-bank/filename.md]
+File: [llm/memory-bank/filename.md]
 Reviewed: [Date]
 Reviewer: [Name]
 
@@ -399,7 +399,7 @@ Replace section with:
 > **Reason:** [Technology removed / Feature deleted / Approach abandoned]
 > **Removed:** [When the change happened]
 > **Replacement:** [See new approach in X] OR [No replacement needed]
-> **Original content archived:** memory-bank/archived/[year]/[topic]/
+> **Original content archived:** llm/memory-bank/archived/[year]/[topic]/
 > **Retirement notice:** [Link to archived RETIRED.md]
 
 Original content moved to archive.

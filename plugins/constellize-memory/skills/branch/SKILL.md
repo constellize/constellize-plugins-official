@@ -54,14 +54,14 @@ $1
 
 **Standard Construction Folder Structure:**
 This prompt creates:
-- `construction/explorations/[topic]/hypothesis.md` (what we're testing)
-- `construction/explorations/[topic]/investigation.md` (findings)
-- `construction/explorations/[topic]/comparison.md` (vs current approach)
+- `llm/construction/explorations/[topic]/hypothesis.md` (what we're testing)
+- `llm/construction/explorations/[topic]/investigation.md` (findings)
+- `llm/construction/explorations/[topic]/comparison.md` (vs current approach)
 
 This prompt links to:
-- `memory-bank/systemPatterns.md` (current production patterns)
-- `memory-bank/techContext.md` (current technical context)
-- `memory-bank/activeContext.md` (note exploration in progress)
+- `llm/memory-bank/systemPatterns.md` (current production patterns)
+- `llm/memory-bank/techContext.md` (current technical context)
+- `llm/memory-bank/activeContext.md` (note exploration in progress)
 </context>
 
 <thinking>
@@ -467,8 +467,8 @@ GraphQL API:
 - Data transferred: 95KB
 
 **Evidence:**
-- Load testing results: /construction/explorations/graphql/load-test-results.json
-- Network traces: /construction/explorations/graphql/network-traces/
+- Load testing results: /llm/construction/explorations/graphql/load-test-results.json
+- Network traces: /llm/construction/explorations/graphql/network-traces/
 - Metrics dashboard: [link]
 
 **Conclusion:**
@@ -981,7 +981,7 @@ Decide what to do with exploration:
 - activeContext.md: [Changes needed]
 
 **Construction knowledge to archive:**
-- Move exploration to /construction/archived/[topic]
+- Move exploration to /llm/construction/archived/[topic]
 - Add resolution summary
 - Link from archived to production
 
@@ -1035,7 +1035,7 @@ REPEAT: Branching is parallel knowledge development. Preserve production while e
 
 **Example branch:**
 ```
-Created: /construction/explorations/graphql/
+Created: /llm/construction/explorations/graphql/
 
 hypothesis.md (shown earlier - complete)
 investigation.md (shown earlier - complete)
@@ -1171,7 +1171,7 @@ productContext.md:
 
 **Construction knowledge to archive:**
 
-Move to: /construction/archived/graphql-exploration/
+Move to: /llm/construction/archived/graphql-exploration/
 Files preserved:
 - hypothesis.md (what we tested)
 - investigation.md (what we found)
@@ -1207,7 +1207,7 @@ This exploration taught us:
    - Objective criteria prevent bike-shedding
    - Data beats opinions
 
-Preserved in: /construction/archived/graphql-exploration/LESSONS.md
+Preserved in: /llm/construction/archived/graphql-exploration/LESSONS.md
 
 ---
 
@@ -1250,7 +1250,7 @@ No comparison to REST.
 No decision documentation.
 No learning captured.
 
-Just abandoned in /construction/graphql-thing/
+Just abandoned in /llm/construction/graphql-thing/
 
 Production docs unchanged.
 No reference to exploration.

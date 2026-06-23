@@ -55,10 +55,10 @@ $1
 
 **Standard Construction Folder Structure:**
 This prompt updates:
-- `memory-bank/activeContext.md` (critical: establish current state)
-- `memory-bank/progress.md` (mark what completed during gap)
-- `memory-bank/systemPatterns.md` (capture current patterns)
-- `memory-bank/techContext.md` (document current tools and conventions)
+- `llm/memory-bank/activeContext.md` (critical: establish current state)
+- `llm/memory-bank/progress.md` (mark what completed during gap)
+- `llm/memory-bank/systemPatterns.md` (capture current patterns)
+- `llm/memory-bank/techContext.md` (document current tools and conventions)
 
 This prompt creates:
 - Team processes for preventing future abandonment

@@ -188,7 +188,7 @@ Scope: $0
 
 Query targets:
 - $3dependencies/operational-dependencies.md
-- memory-bank/systemPatterns.md (architecture dependencies)
+- llm/memory-bank/systemPatterns.md (architecture dependencies)
 
 Filter criteria:
 - Services that depend on affected component (downstream impact)
@@ -213,7 +213,7 @@ grep -r "depends on.*PaymentAPI\|calls.*PaymentAPI" $3dependencies/ -A 5
 grep -r "PaymentAPI.*depends on\|PaymentAPI.*calls" $3dependencies/ -A 5
 
 # Check architecture for dependency graph
-grep -A 30 "dependency\|integration" memory-bank/systemPatterns.md
+grep -A 30 "dependency\|integration" llm/memory-bank/systemPatterns.md
 ```
 
 Results format:
@@ -255,8 +255,8 @@ Time budget: 3 minutes maximum for dependency traversal
 Scope: $0
 
 Query targets:
-- memory-bank/systemPatterns.md
-- memory-bank/techContext.md
+- llm/memory-bank/systemPatterns.md
+- llm/memory-bank/techContext.md
 - Design decision documents
 
 Filter criteria:
@@ -272,16 +272,16 @@ Query method:
 Example queries:
 ```bash
 # Find architecture description of affected component
-grep -A 50 "^## PaymentAPI\|^### PaymentAPI" memory-bank/systemPatterns.md
+grep -A 50 "^## PaymentAPI\|^### PaymentAPI" llm/memory-bank/systemPatterns.md
 
 # Find design decisions about connection management (if connection issue)
-grep -r "connection pool\|connection management" memory-bank/ -A 10
+grep -r "connection pool\|connection management" llm/memory-bank/ -A 10
 
 # Find capacity/performance assumptions
-grep -r "capacity\|throughput\|scaling" memory-bank/systemPatterns.md -A 10
+grep -r "capacity\|throughput\|scaling" llm/memory-bank/systemPatterns.md -A 10
 
 # Find technology constraints
-grep -A 20 "^## Database\|^## Infrastructure" memory-bank/techContext.md
+grep -A 20 "^## Database\|^## Infrastructure" llm/memory-bank/techContext.md
 ```
 
 Results format:
@@ -392,7 +392,7 @@ Time budget: 2 minutes maximum for baseline comparison
 Scope: $0
 
 Query targets:
-- memory-bank/progress.md (development changes)
+- llm/memory-bank/progress.md (development changes)
 - $3runbooks/ (deployment history)
 - Deployment logs
 - Configuration change logs
@@ -410,7 +410,7 @@ Query method:
 Example queries:
 ```bash
 # Check recent development activity
-tail -50 memory-bank/progress.md | grep -i "payment-api\|database"
+tail -50 llm/memory-bank/progress.md | grep -i "payment-api\|database"
 
 # Check deployment history
 kubectl rollout history deployment/payment-api -n payment-api
@@ -649,7 +649,7 @@ REMEMBER: The goal is not comprehensive knowledge review—it's targeted context
 Incident Context: PaymentAPI experiencing database query timeouts, 503 errors
 Severity: SEV-1 (Critical outage—payment processing down)
 Time Constraint: 5 minutes (active outage)
-Memory Bank Structure: Integrated: memory-bank/operations/
+Memory Bank Structure: Integrated: llm/memory-bank/operations/
 
 ---
 
@@ -685,7 +685,7 @@ Query priority: Ultra-Fast Mode (runbooks, past incidents, dependencies only)
 Query:
 ```bash
 # Find runbooks mentioning database or PaymentAPI
-ls memory-bank/operations/runbooks/ | grep -i "database\|payment"
+ls llm/memory-bank/operations/runbooks/ | grep -i "database\|payment"
 ```
 
 Result:
@@ -699,7 +699,7 @@ performance-degradation.md
 Deep dive on most relevant:
 ```bash
 # Check database connection failure runbook for symptoms match
-grep -A 5 "When to use" memory-bank/operations/runbooks/database-connection-failure.md
+grep -A 5 "When to use" llm/memory-bank/operations/runbooks/database-connection-failure.md
 ```
 
 Result:
@@ -711,11 +711,11 @@ When to use this runbook:
 ```
 
 Analysis:
-- Runbook: memory-bank/operations/runbooks/database-connection-failure.md
+- Runbook: llm/memory-bank/operations/runbooks/database-connection-failure.md
 - Scenario: Database connection failures
 - Relevance: HIGH—symptoms match exactly ("connection timeout", 503 errors, payment processing fails)
 - When to use: Now—alert fired, symptoms present
-- Quick access: memory-bank/operations/runbooks/database-connection-failure.md
+- Quick access: llm/memory-bank/operations/runbooks/database-connection-failure.md
 
 **Decision**: Follow database-connection-failure.md runbook
 
@@ -728,7 +728,7 @@ Time spent: 45 seconds
 Query:
 ```bash
 # Find recent PaymentAPI incidents
-ls -lt memory-bank/operations/incidents/ | grep -i "payment\|database" | head -5
+ls -lt llm/memory-bank/operations/incidents/ | grep -i "payment\|database" | head -5
 ```
 
 Result:
@@ -741,7 +741,7 @@ Result:
 Deep dive on most recent/relevant:
 ```bash
 # Quick scan of most recent database incident
-head -30 memory-bank/operations/incidents/2025-12-15-database-connection-pool.md
+head -30 llm/memory-bank/operations/incidents/2025-12-15-database-connection-pool.md
 ```
 
 Result:
@@ -774,7 +774,7 @@ Time spent: 1 minute (cumulative: 1:45)
 Query:
 ```bash
 # Find PaymentAPI dependencies
-grep -A 20 "^## PaymentAPI" memory-bank/operations/dependencies/operational-dependencies.md
+grep -A 20 "^## PaymentAPI" llm/memory-bank/operations/dependencies/operational-dependencies.md
 ```
 
 Result:
@@ -820,7 +820,7 @@ Time spent: 1 minute (cumulative: 2:45)
 Query:
 ```bash
 # Find PaymentAPI architecture, focus on database connection
-grep -A 30 "^## PaymentAPI" memory-bank/systemPatterns.md | grep -A 15 "database\|connection"
+grep -A 30 "^## PaymentAPI" llm/memory-bank/systemPatterns.md | grep -A 15 "database\|connection"
 ```
 
 Result:
@@ -864,7 +864,7 @@ Time spent: 1 minute (cumulative: 3:45)
 Query:
 ```bash
 # Find database latency baseline
-grep -A 10 "PaymentAPI.*latency\|database.*latency" memory-bank/operations/performance/baseline-metrics.md
+grep -A 10 "PaymentAPI.*latency\|database.*latency" llm/memory-bank/operations/performance/baseline-metrics.md
 ```
 
 Result:
@@ -903,7 +903,7 @@ Time spent: 30 seconds (cumulative: 4:15)
 ### Knowledge Summary
 
 Relevant runbooks:
-- Primary: memory-bank/operations/runbooks/database-connection-failure.md (exact symptom match)
+- Primary: llm/memory-bank/operations/runbooks/database-connection-failure.md (exact symptom match)
 
 Similar past incidents:
 - Most similar: 2025-12-15-database-connection-pool (exact symptoms)

@@ -16,8 +16,8 @@ Code should use consistent naming conventions across the constellation, making i
 Follow this process:
 
 1. **Review established patterns:**
-   - Read system patterns from `memory-bank/systemPatterns.md`
-   - Read constellation map from `construction/requirements/constellation-map.md`
+   - Read system patterns from `llm/memory-bank/systemPatterns.md`
+   - Read constellation map from `llm/construction/requirements/constellation-map.md`
    - Extract naming conventions, error handling patterns, logging standards
    - Identify authentication/authorization patterns used by other stars
 
@@ -52,8 +52,8 @@ $0
 
 **Standard Construction Folder Structure:**
 This prompt reads from:
-- `memory-bank/systemPatterns.md` (established patterns)
-- `construction/requirements/constellation-map.md` (other components)
+- `llm/memory-bank/systemPatterns.md` (established patterns)
+- `llm/construction/requirements/constellation-map.md` (other components)
 - Existing component implementations (for pattern reference)
 
 And validates/updates the component to match patterns.

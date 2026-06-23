@@ -78,7 +78,7 @@ Related systems: [Other systems affected or involved]
 
 - Incident investigation: [Link to real-time investigation documentation if exists]
 - Runbook used: [Link to runbook that guided response]
-- System architecture: [Link to memory-bank/systemPatterns.md relevant section]
+- System architecture: [Link to llm/memory-bank/systemPatterns.md relevant section]
 - Design decisions: [Link to design documentation]
 - Similar past incidents: [Links to related postmortems]
 ```
@@ -728,7 +728,7 @@ Based on postmortem, these documents need updates:
 
 ### Update 1: System Architecture
 
-**File**: memory-bank/systemPatterns.md#connection-management
+**File**: llm/memory-bank/systemPatterns.md#connection-management
 
 **Current state**: Documents connection pool configuration and sizing formula
 
@@ -758,7 +758,7 @@ Related incidents:
 
 ### Update 2: Operational Dependencies
 
-**File**: memory-bank/operations/dependencies/operational-dependencies.md
+**File**: llm/memory-bank/operations/dependencies/operational-dependencies.md
 
 **Update needed**: Add application-side failure mode for database dependency
 ```markdown
@@ -784,7 +784,7 @@ Failure modes:
 
 ### Update 3: Runbook Validation
 
-**File**: memory-bank/operations/runbooks/database-connection-failure.md
+**File**: llm/memory-bank/operations/runbooks/database-connection-failure.md
 
 **Update needed**: Add success story and timing benchmark
 ```markdown
@@ -802,7 +802,7 @@ Recent Incidents Using This Runbook:
 
 ### Update 4: Performance Baselines
 
-**File**: memory-bank/operations/performance/baseline-metrics.md
+**File**: llm/memory-bank/operations/performance/baseline-metrics.md
 
 **Update needed**: Add connection pool utilization baseline (validated by incident)
 
@@ -837,9 +837,9 @@ Already updated during incident. No further action needed.
 ### Cross-Reference Summary
 
 Documents to update: 4
-- memory-bank/systemPatterns.md (architecture lessons)
-- memory-bank/operations/dependencies/operational-dependencies.md (dependency behavior)
-- memory-bank/operations/runbooks/database-connection-failure.md (runbook validation)
+- llm/memory-bank/systemPatterns.md (architecture lessons)
+- llm/memory-bank/operations/dependencies/operational-dependencies.md (dependency behavior)
+- llm/memory-bank/operations/runbooks/database-connection-failure.md (runbook validation)
 - engineering-practices/code-review-checklist.md (NEW—process improvement)
 
 All updates link to this postmortem: 2026-01-15-database-connection-pool
@@ -854,7 +854,7 @@ All updates link to this postmortem: 2026-01-15-database-connection-pool
 
 [Link to incident investigation documentation if exists—much more detailed than postmortem timeline]
 
-Link: memory-bank/operations/incidents/2026-01-15-database-connection-pool.md
+Link: llm/memory-bank/operations/incidents/2026-01-15-database-connection-pool.md
 
 ---
 
@@ -909,10 +909,10 @@ Communication during incident:
 ## Appendix E: References
 
 Related documentation:
-- System architecture: memory-bank/systemPatterns.md#connection-management
-- Database dependency: memory-bank/operations/dependencies/operational-dependencies.md#database
-- Incident investigation: memory-bank/operations/incidents/2026-01-15-database-connection-pool.md
-- Runbook used: memory-bank/operations/runbooks/database-connection-failure.md
+- System architecture: llm/memory-bank/systemPatterns.md#connection-management
+- Database dependency: llm/memory-bank/operations/dependencies/operational-dependencies.md#database
+- Incident investigation: llm/memory-bank/operations/incidents/2026-01-15-database-connection-pool.md
+- Runbook used: llm/memory-bank/operations/runbooks/database-connection-failure.md
 
 Related past incidents:
 - None—first incident of this type
@@ -1003,10 +1003,10 @@ Related systems:
 
 ## Related Documentation
 
-- Incident investigation: memory-bank/operations/incidents/2026-01-15-database-connection-pool.md
-- Runbook used: memory-bank/operations/runbooks/database-connection-failure.md
-- System architecture: memory-bank/systemPatterns.md#connection-management
-- Design decisions: memory-bank/systemPatterns.md#database-layer
+- Incident investigation: llm/memory-bank/operations/incidents/2026-01-15-database-connection-pool.md
+- Runbook used: llm/memory-bank/operations/runbooks/database-connection-failure.md
+- System architecture: llm/memory-bank/systemPatterns.md#connection-management
+- Design decisions: llm/memory-bank/systemPatterns.md#database-layer
 - Similar past incidents: None (first connection pool incident)
 
 ---
@@ -1072,9 +1072,9 @@ Initial hypothesis: Database unavailable or unhealthy
 Actions taken: Checked database availability (Step 1 of runbook)
 
 Resources consulted:
-- Runbook: memory-bank/operations/runbooks/database-connection-failure.md
+- Runbook: llm/memory-bank/operations/runbooks/database-connection-failure.md
 - Past incidents: Searched for similar symptoms (found none initially)
-- Documentation: memory-bank/systemPatterns.md#database-layer for architecture context
+- Documentation: llm/memory-bank/systemPatterns.md#database-layer for architecture context
 
 Result: Database healthy, accepting connections (hypothesis rejected)
 
@@ -1194,7 +1194,7 @@ Total duration: 47 minutes (14:00 failure start → 14:47 resolution)
 Post-resolution actions:
 - Monitoring: Extended monitoring for 30 minutes to ensure no recurrence
 - Communication: Updated status page, notified stakeholders in #payments-team
-- Documentation: Filed incident report memory-bank/operations/incidents/2026-01-15-database-connection-pool.md
+- Documentation: Filed incident report llm/memory-bank/operations/incidents/2026-01-15-database-connection-pool.md
 
 ---
 
@@ -1808,7 +1808,7 @@ Based on postmortem, these documents need updates:
 
 ### Update 1: System Architecture
 
-**File**: memory-bank/systemPatterns.md#connection-management
+**File**: llm/memory-bank/systemPatterns.md#connection-management
 
 **Current state**: Documents connection pool configuration and sizing formula
 
@@ -1825,7 +1825,7 @@ Based on postmortem, these documents need updates:
 
 ### Update 2: Operational Dependencies
 
-**File**: memory-bank/operations/dependencies/operational-dependencies.md
+**File**: llm/memory-bank/operations/dependencies/operational-dependencies.md
 
 **Update needed**: Add application-side failure mode for database dependency
 
@@ -1840,7 +1840,7 @@ Based on postmortem, these documents need updates:
 
 ### Update 3: Runbook Validation
 
-**File**: memory-bank/operations/runbooks/database-connection-failure.md
+**File**: llm/memory-bank/operations/runbooks/database-connection-failure.md
 
 **Update needed**: Add success story and timing benchmark
 
@@ -1873,7 +1873,7 @@ Based on postmortem, these documents need updates:
 Documents updated: 3 (systemPatterns.md, operational-dependencies.md, runbook)
 Documents to create: 1 (code-review-checklist.md)
 
-All updates link to this postmortem: memory-bank/operations/postmortems/2026-01-15-database-connection-pool-postmortem.md
+All updates link to this postmortem: llm/memory-bank/operations/postmortems/2026-01-15-database-connection-pool-postmortem.md
 
 ---
 
@@ -1881,7 +1881,7 @@ All updates link to this postmortem: memory-bank/operations/postmortems/2026-01-
 
 For detailed real-time investigation documentation (hypotheses, commands, outputs, dead ends), see:
 
-memory-bank/operations/incidents/2026-01-15-database-connection-pool.md
+llm/memory-bank/operations/incidents/2026-01-15-database-connection-pool.md
 
 Postmortem timeline (above) is synthesized summary. Incident investigation captures full detail.
 
@@ -1952,10 +1952,10 @@ Follow-up review scheduled: 2026-02-15 (1 month post-incident)
 ## Appendix E: References
 
 Related documentation:
-- System architecture: memory-bank/systemPatterns.md#connection-management
-- Database dependency: memory-bank/operations/dependencies/operational-dependencies.md#database
-- Incident investigation: memory-bank/operations/incidents/2026-01-15-database-connection-pool.md
-- Runbook used: memory-bank/operations/runbooks/database-connection-failure.md
+- System architecture: llm/memory-bank/systemPatterns.md#connection-management
+- Database dependency: llm/memory-bank/operations/dependencies/operational-dependencies.md#database
+- Incident investigation: llm/memory-bank/operations/incidents/2026-01-15-database-connection-pool.md
+- Runbook used: llm/memory-bank/operations/runbooks/database-connection-failure.md
 
 Related past incidents:
 - None—first incident of this type (connection pool exhaustion due to leak)

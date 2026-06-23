@@ -61,7 +61,7 @@ Scope: [% of users, request volume, geographic regions, etc.]
 Business impact: [Revenue loss, SLA violations, customer complaints]
 
 ## Related Documentation
-- System Architecture: [Link to memory-bank/systemPatterns.md relevant section]
+- System Architecture: [Link to llm/memory-bank/systemPatterns.md relevant section]
 - Design Decisions: [Link to design documentation explaining architecture choices]
 - Dependencies: [Link to operational-dependencies.md]
 - Runbook Used: [Link to runbook if one guided investigation]
@@ -98,7 +98,7 @@ Runbook consulted: [If runbook exists for this scenario, link it]
 **Reasoning**: [Why this hypothesis makes sense given symptoms]
 - Symptom X suggests Y because [connection to architecture/past experience]
 - Similar to [past incident] where [context]
-- Architecture context: [Reference to memory-bank/systemPatterns.md section]
+- Architecture context: [Reference to llm/memory-bank/systemPatterns.md section]
 
 **Test**: [How we'll validate or invalidate this hypothesis]
 
@@ -173,7 +173,7 @@ Output:
 - Suggests root cause: [What this points to]
 
 **Architecture connection**: [Link to design documentation explaining why this component matters]
-- Design context: memory-bank/systemPatterns.md#[section]
+- Design context: llm/memory-bank/systemPatterns.md#[section]
 - Design decision: [How system was designed to behave in this scenario]
 - Deviation: [How actual behavior differs from design intent]
 
@@ -304,7 +304,7 @@ Document what slowed investigation to improve future response.
 
 **Improvement needed**: [Specific action to prevent recurrence]
 - Observability: [Metrics/logs to add]
-- Documentation: [What to document in memory-bank/]
+- Documentation: [What to document in llm/memory-bank/]
 - Tooling: [Tool to build/acquire]
 - Process: [Process improvement]
 
@@ -403,7 +403,7 @@ What this incident taught us about system behavior.
 ### Architecture Assumption 1: [Assumption]
 
 **We assumed**: [Design assumption made during architecture]
-- Documented in: memory-bank/systemPatterns.md#[section]
+- Documented in: llm/memory-bank/systemPatterns.md#[section]
 - Assumption: [What we believed would be true]
 - Design based on: [Reasoning behind assumption]
 
@@ -415,7 +415,7 @@ What this incident taught us about system behavior.
 **Implications**: [What this means for architecture]
 - Design change needed: [Yes/No]
 - If yes: [What architectural change required]
-- Documentation update: [Update memory-bank/ with reality]
+- Documentation update: [Update llm/memory-bank/ with reality]
 - Monitoring addition: [Alerts for when assumption breaks]
 
 **Action required**: [Ticket to address or accept risk]
@@ -435,7 +435,7 @@ What we learned about dependencies.
 ### Dependency: [Dependency name]
 
 **Expected behavior**: [How we thought dependency would behave]
-- Documented in: memory-bank/operations/dependencies/operational-dependencies.md
+- Documented in: llm/memory-bank/operations/dependencies/operational-dependencies.md
 - SLA: [Expected availability, latency]
 - Failure mode: [How we expected it to fail]
 
@@ -465,7 +465,7 @@ Based on investigation, these documents need updates:
 
 ### Update 1: System Architecture
 
-**File**: memory-bank/systemPatterns.md#[section]
+**File**: llm/memory-bank/systemPatterns.md#[section]
 
 **Current content says**: [Quote or summary of current documentation]
 
@@ -482,7 +482,7 @@ Based on investigation, these documents need updates:
 
 ### Update 2: Operational Dependencies
 
-**File**: memory-bank/operations/dependencies/operational-dependencies.md
+**File**: llm/memory-bank/operations/dependencies/operational-dependencies.md
 
 **Update needed**: [What to change]
 - Dependency: [Which dependency]
@@ -510,7 +510,7 @@ Based on investigation, these documents need updates:
 
 ### Update 4: Performance Baselines
 
-**File**: memory-bank/operations/performance/baseline-metrics.md
+**File**: llm/memory-bank/operations/performance/baseline-metrics.md
 
 **What incident revealed**: [New understanding of performance characteristics]
 
@@ -576,10 +576,10 @@ Scope: 100% of payment attempts failing, ~500 requests/minute affected
 Business impact: ~$10K/minute revenue loss, SLA breach (99.9% availability), customer complaints escalating
 
 ## Related Documentation
-- System Architecture: memory-bank/systemPatterns.md#database-layer
-- Connection Pool Design: memory-bank/systemPatterns.md#connection-management (documents pool sized for 50 connections)
-- Dependencies: memory-bank/operations/dependencies/operational-dependencies.md#database
-- Runbook Used: memory-bank/operations/runbooks/database-connection-failure.md
+- System Architecture: llm/memory-bank/systemPatterns.md#database-layer
+- Connection Pool Design: llm/memory-bank/systemPatterns.md#connection-management (documents pool sized for 50 connections)
+- Dependencies: llm/memory-bank/operations/dependencies/operational-dependencies.md#database
+- Runbook Used: llm/memory-bank/operations/runbooks/database-connection-failure.md
 - Related Past Incidents: None (first occurrence of this failure mode)
 
 ---
@@ -599,7 +599,7 @@ Initial assessment:
 - Impact: All payment attempts failing
 - Urgency: Critical—revenue impact, SLA breach imminent
 
-Runbook consulted: memory-bank/operations/runbooks/database-connection-failure.md
+Runbook consulted: llm/memory-bank/operations/runbooks/database-connection-failure.md
 
 ---
 
@@ -610,7 +610,7 @@ Runbook consulted: memory-bank/operations/runbooks/database-connection-failure.m
 **Reasoning**: Connection errors typically mean database unavailable
 - Symptom: "connection refused" errors in logs
 - Runbook Step 4 suggests checking database availability first
-- Architecture context: memory-bank/systemPatterns.md#database-layer (PaymentAPI depends on single PostgreSQL instance)
+- Architecture context: llm/memory-bank/systemPatterns.md#database-layer (PaymentAPI depends on single PostgreSQL instance)
 
 **Test**: Check database availability using pg_isready
 
@@ -639,7 +639,7 @@ payment-db.production.svc.cluster.local:5432 - accepting connections
 
 **Reasoning**: Database healthy but connections failing suggests pool exhaustion
 - Symptom: Errors say "timeout obtaining connection" in logs (noticed just now)
-- Architecture context: memory-bank/systemPatterns.md#connection-management documents HikariCP pool with maxPoolSize=50
+- Architecture context: llm/memory-bank/systemPatterns.md#connection-management documents HikariCP pool with maxPoolSize=50
 - Runbook Step 3 suggests checking connection pool state
 
 **Test**: Check connection pool utilization
@@ -701,7 +701,7 @@ Result:
 
 **Reasoning**: Legitimate traffic surge could exhaust fixed-size pool
 - Need to verify if request rate increased significantly
-- Architecture assumption: Pool sized for 500 req/s (memory-bank/systemPatterns.md#connection-management)
+- Architecture assumption: Pool sized for 500 req/s (llm/memory-bank/systemPatterns.md#connection-management)
 
 **Test**: Check request rate over last hour
 
@@ -730,7 +730,7 @@ Request rate timeline:
 **Reasoning**: Pool exhausted at normal traffic suggests connections not being released
 - 50 connections stuck
 - Normal traffic shouldn't need all 50 connections
-- Design: memory-bank/systemPatterns.md#connection-management assumes 10ms DB query time, 500 req/s = need ~5 connections average
+- Design: llm/memory-bank/systemPatterns.md#connection-management assumes 10ms DB query time, 500 req/s = need ~5 connections average
 - Reality: 50 connections all active = 10x expected
 
 **Test**: Check how long connections have been active
@@ -857,7 +857,7 @@ public boolean validatePayment(Payment payment) {
 - Timeline: Deployed 30 minutes ago (14:00), incident started 14:23 (23 minutes to exhaust 50 connections = ~2 invalid payments/minute)
 - Narrows problem space to: Specific code change in validation logic
 
-**Architecture connection**: memory-bank/systemPatterns.md#connection-management
+**Architecture connection**: llm/memory-bank/systemPatterns.md#connection-management
 - Design context: Documents try-with-resources pattern for connection management
 - Design intent: All connections automatically closed via try-with-resources
 - Deviation: New code didn't follow try-with-resources pattern, manually managed connection incorrectly
@@ -887,7 +887,7 @@ public boolean validatePayment(Payment payment) {
 - Missing observability: No alert on connection leak warnings (HikariCP was logging warnings but no alert)
 - Documentation gaps: None—runbook worked well, led us to diagnosis
 
-**Architecture context**: memory-bank/systemPatterns.md#connection-management
+**Architecture context**: llm/memory-bank/systemPatterns.md#connection-management
 - Design assumption: All code uses try-with-resources for connection management
 - Reality: New code manually managed connection, missed error path
 - Design implications: Need code review checklist enforcing try-with-resources, or linter rule
@@ -1019,7 +1019,7 @@ Grafana dashboard: database_connection_errors dropped from 50/min to 0/min
 
 **Time saved**: This pattern helped us reach root cause in 17 minutes (14:25-14:42). Without systematic approach, could have spent time restarting pods first (masks problem temporarily) without finding actual cause.
 
-**Add to runbook**: memory-bank/operations/runbooks/database-connection-failure.md already includes this pattern (followed it successfully)
+**Add to runbook**: llm/memory-bank/operations/runbooks/database-connection-failure.md already includes this pattern (followed it successfully)
 
 ---
 
@@ -1107,7 +1107,7 @@ Grafana dashboard: database_connection_errors dropped from 50/min to 0/min
 **Improvement needed**:
 - Process: Add code review checklist item: "Verify database connections use try-with-resources pattern"
 - Tooling: Add custom PMD/Checkstyle rule flagging manual connection management
-- Documentation: Update memory-bank/systemPatterns.md#connection-management with clear guidance on required pattern
+- Documentation: Update llm/memory-bank/systemPatterns.md#connection-management with clear guidance on required pattern
 
 **Ticket created**: DEV-4523 "Add code review checklist and linter rule for connection management"
 
@@ -1221,7 +1221,7 @@ Effect: Confirmed rollback completed successfully
 ### Architecture Assumption 1: Try-with-resources pattern universally followed
 
 **We assumed**: All code uses try-with-resources for connection management
-- Documented in: memory-bank/systemPatterns.md#connection-management
+- Documented in: llm/memory-bank/systemPatterns.md#connection-management
 - Assumption: "All database access uses try-with-resources to guarantee connection closure"
 - Design based on: Java best practice, automatic resource management
 
@@ -1232,12 +1232,12 @@ Effect: Confirmed rollback completed successfully
 
 **Implications**:
 - Design change needed: No (pattern is correct)
-- Documentation update: memory-bank/systemPatterns.md#connection-management should emphasize enforcement mechanisms
+- Documentation update: llm/memory-bank/systemPatterns.md#connection-management should emphasize enforcement mechanisms
 - Monitoring addition: Alert on connection leak warnings (INFRA-2341)
 - Process change: Code review checklist, linter rule (DEV-4523)
 
 **Action required**:
-- Update memory-bank/systemPatterns.md: Add section on enforcement (code review, linters)
+- Update llm/memory-bank/systemPatterns.md: Add section on enforcement (code review, linters)
 - INFRA-2341: Add alert on connection leak warnings
 - DEV-4523: Add code review checklist and linter rule
 
@@ -1246,7 +1246,7 @@ Effect: Confirmed rollback completed successfully
 ### Architecture Assumption 2: Connection pool sized for peak traffic
 
 **We assumed**: 50 connection pool size adequate for peak traffic
-- Documented in: memory-bank/systemPatterns.md#connection-management
+- Documented in: llm/memory-bank/systemPatterns.md#connection-management
 - Assumption: "Peak traffic 500 req/s × 10ms query time = 5 connections needed, sized to 50 for 10x headroom"
 - Design based on: Load testing at 2x peak, connection pool formula
 
@@ -1269,7 +1269,7 @@ Effect: Confirmed rollback completed successfully
 ### Dependency: PostgreSQL Database
 
 **Expected behavior**: Database handles up to 200 connections, pool uses up to 50
-- Documented in: memory-bank/operations/dependencies/operational-dependencies.md#database
+- Documented in: llm/memory-bank/operations/dependencies/operational-dependencies.md#database
 - SLA: 99.9% availability, <10ms query latency p95
 - Failure mode: If database down, health checks fail, requests fail fast
 
@@ -1293,7 +1293,7 @@ Effect: Confirmed rollback completed successfully
 
 ### Update 1: System Architecture
 
-**File**: memory-bank/systemPatterns.md#connection-management
+**File**: llm/memory-bank/systemPatterns.md#connection-management
 
 **Current content says**:
 "Connection Management:
@@ -1324,7 +1324,7 @@ Related incidents:
 
 ### Update 2: Operational Dependencies
 
-**File**: memory-bank/operations/dependencies/operational-dependencies.md#database
+**File**: llm/memory-bank/operations/dependencies/operational-dependencies.md#database
 
 **Update needed**: Add note about connection pool management criticality
 ```markdown
@@ -1348,7 +1348,7 @@ Failure modes:
 
 ### Update 3: Runbook
 
-**File**: memory-bank/operations/runbooks/database-connection-failure.md
+**File**: llm/memory-bank/operations/runbooks/database-connection-failure.md
 
 **What was missing**: Nothing—runbook worked perfectly
 
@@ -1364,7 +1364,7 @@ Related Past Incidents:
 
 ### Update 4: Performance Baselines
 
-**File**: memory-bank/operations/performance/baseline-metrics.md
+**File**: llm/memory-bank/operations/performance/baseline-metrics.md
 
 **What incident revealed**: Connection pool utilization baseline confirmed
 

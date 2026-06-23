@@ -55,12 +55,12 @@ $1
 
 **Standard Construction Folder Structure:**
 This prompt revises:
-- `memory-bank/systemPatterns.md` (architectural decisions affected by changes)
-- `memory-bank/productContext.md` (user needs or metrics that shifted)
-- `memory-bank/techContext.md` (technical constraints that changed)
-- `memory-bank/projectbrief.md` (requirements or scope adjustments)
-- `memory-bank/activeContext.md` (current understanding updates)
-- `memory-bank/progress.md` (timeline or priority adjustments)
+- `llm/memory-bank/systemPatterns.md` (architectural decisions affected by changes)
+- `llm/memory-bank/productContext.md` (user needs or metrics that shifted)
+- `llm/memory-bank/techContext.md` (technical constraints that changed)
+- `llm/memory-bank/projectbrief.md` (requirements or scope adjustments)
+- `llm/memory-bank/activeContext.md` (current understanding updates)
+- `llm/memory-bank/progress.md` (timeline or priority adjustments)
 </context>
 
 <thinking>

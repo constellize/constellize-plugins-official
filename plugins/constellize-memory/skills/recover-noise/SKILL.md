@@ -55,10 +55,10 @@ $1
 
 **Standard Construction Folder Structure:**
 This prompt updates:
-- `memory-bank/systemPatterns.md` (remove duplicates, consolidate)
-- `memory-bank/techContext.md` (retire obsolete tools, clarify current)
-- `memory-bank/activeContext.md` (remove completed items, focus current)
-- `memory-bank/archived/` (move obsolete entries here)
+- `llm/memory-bank/systemPatterns.md` (remove duplicates, consolidate)
+- `llm/memory-bank/techContext.md` (retire obsolete tools, clarify current)
+- `llm/memory-bank/activeContext.md` (remove completed items, focus current)
+- `llm/memory-bank/archived/` (move obsolete entries here)
 
 This prompt creates:
 - Clear information architecture
@@ -236,7 +236,7 @@ Reason: Based on outdated architecture
 
 **Navigation:**
 For [topic], always refer to this section.
-Previous entries archived: memory-bank/archived/[year]/[topic]/
+Previous entries archived: llm/memory-bank/archived/[year]/[topic]/
 ```
 
 **Example Conflict Resolution:**
@@ -285,7 +285,7 @@ Status: Removed 2026-01-21 - migration completed March 2026
 Action: Marked migration complete, removed in-progress note
 
 Previous architecture (session-based):
-Archived: memory-bank/archived/2026/session-auth/RETIRED.md
+Archived: llm/memory-bank/archived/2026/session-auth/RETIRED.md
 Active: June 2025 - March 2026
 Lessons: See archived entry
 
@@ -629,20 +629,20 @@ Prevent future noise accumulation:
 echo "Detecting memory bank noise..."
 
 # Check for DEPRECATED markers
-deprecated=$(grep -r "DEPRECATED" memory-bank/ | wc -l)
+deprecated=$(grep -r "DEPRECATED" llm/memory-bank/ | wc -l)
 if [ $deprecated -gt 0 ]; then
   echo "⚠️  Found $deprecated DEPRECATED markers - retire these"
 fi
 
 # Check for duplicate content (simple heuristic)
 # Find paragraphs that appear in multiple files
-for file in memory-bank/*.md; do
+for file in llm/memory-bank/*.md; do
   # Extract paragraphs, check for duplicates across files
   # (simplified - use more sophisticated tool in practice)
 done
 
 # Check file sizes (large files may have noise)
-find memory-bank/ -name "*.md" -size +50k | while read file; do
+find llm/memory-bank/ -name "*.md" -size +50k | while read file; do
   size=$(du -h "$file" | cut -f1)
   echo "⚠️  Large file (may have noise): $file ($size)"
 done
@@ -651,7 +651,7 @@ done
 # (requires semantic analysis - future enhancement)
 
 # Check for broken references
-grep -r "See " memory-bank/ | grep -o "\[.*\]" | while read ref; do
+grep -r "See " llm/memory-bank/ | grep -o "\[.*\]" | while read ref; do
   # Validate reference exists
   # (simplified - implement full link checking)
 done
@@ -943,7 +943,7 @@ Implemented noise prevention:
 
 1. Immediate retirement process:
    - When entry obsolete, retire same day
-   - Template: memory-bank/templates/retirement-notice.md
+   - Template: llm/memory-bank/templates/retirement-notice.md
    - Script: scripts/retire-entry.sh [topic]
 
 2. Duplicate prevention:

@@ -562,7 +562,7 @@ REMEMBER: Every production incident is an opportunity to improve proactive opera
 System: PaymentAPI
 Deployment: Kubernetes cluster
 Criticality: CRITICAL (customer-facing payments)
-Documentation: memory-bank/
+Documentation: llm/memory-bank/
 
 Health Check Design:
 
@@ -1045,7 +1045,7 @@ Step 4: Post-Deployment (30 minutes)
 - [ ] Monitor operational dashboard for 30 minutes
 - [ ] Check for delayed issues (memory leaks, connection pool leaks)
 - [ ] Verify no alerts fired
-- [ ] Update deployment log in memory-bank/progress.md
+- [ ] Update deployment log in llm/memory-bank/progress.md
 - [ ] Notify #payments-team Slack: "PaymentAPI v1.2.3 deployed successfully"
 
 Total Deployment Time: ~60 minutes (including monitoring)
@@ -1064,7 +1064,7 @@ Rollback Steps (Target: < 5 minutes):
 3. [ ] Verify previous version healthy (health checks passing)
 4. [ ] Verify metrics returned to baseline
 5. [ ] Database migration: Rollback migration if applied (rollback script prepared)
-6. [ ] Incident report: Document rollback reason in memory-bank/operations/incidents/
+6. [ ] Incident report: Document rollback reason in llm/memory-bank/operations/incidents/
 7. [ ] Post-mortem: Schedule within 24 hours
 
 Rollback Time: < 5 minutes (Kubernetes native rollback fast)
@@ -1086,23 +1086,23 @@ Additional Precautions:
 
 Documentation Update:
 
-memory-bank/systemPatterns.md:
+llm/memory-bank/systemPatterns.md:
 - Updated: Health check strategy (added Stripe API check)
 - Updated: Failure mode design (Stripe retry with exponential backoff)
 - Updated: Graceful degradation (Stripe slow mode)
 
-memory-bank/techContext.md:
+llm/memory-bank/techContext.md:
 - Updated: Observability architecture (new Stripe API metrics)
 - Updated: Alert configuration (Stripe API error rate alert)
 
-memory-bank/operations/runbooks/deployment-runbook.md:
+llm/memory-bank/operations/runbooks/deployment-runbook.md:
 - Updated: Pre-deployment checks (added Stripe API client version check)
 - Updated: Rollback procedure (added Stripe API client rollback)
 
-memory-bank/operations/performance/capacity-planning.md:
+llm/memory-bank/operations/performance/capacity-planning.md:
 - Updated: Concurrency limits (Stripe connection pool considerations)
 
-memory-bank/progress.md:
+llm/memory-bank/progress.md:
 - Added: Deployment v1.2.3 on 2026-02-01 (successful, 60 min monitoring, no issues)
 ```
 

@@ -53,7 +53,7 @@ This prompt creates/updates:
 - `README.md` in component directory
 - Code comments in implementation files
 - API documentation (OpenAPI spec, JSDoc, etc.)
-- `memory-bank/decisions/[component-name]-*.md` entries
+- `llm/memory-bank/decisions/[component-name]-*.md` entries
 </context>
 
 <thinking>

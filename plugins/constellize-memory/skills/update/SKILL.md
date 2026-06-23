@@ -54,12 +54,12 @@ $1
 
 **Standard Construction Folder Structure:**
 This prompt updates:
-- `memory-bank/activeContext.md` (always updated)
-- `memory-bank/progress.md` (always updated)
-- `memory-bank/systemPatterns.md` (if patterns added)
-- `memory-bank/techContext.md` (if tools changed)
-- `memory-bank/productContext.md` (if user needs clarified)
-- `memory-bank/projectbrief.md` (rarely, if scope changed)
+- `llm/memory-bank/activeContext.md` (always updated)
+- `llm/memory-bank/progress.md` (always updated)
+- `llm/memory-bank/systemPatterns.md` (if patterns added)
+- `llm/memory-bank/techContext.md` (if tools changed)
+- `llm/memory-bank/productContext.md` (if user needs clarified)
+- `llm/memory-bank/projectbrief.md` (rarely, if scope changed)
 </context>
 
 <thinking>

@@ -284,9 +284,9 @@ Pattern Consistency:
 Identify memory bank violations:
 
 1. Load system constraints:
-   - From memory-bank/systemPatterns.md
-   - From memory-bank/decisions/*.md
-   - From memory-bank/constraints.md
+   - From llm/memory-bank/systemPatterns.md
+   - From llm/memory-bank/decisions/*.md
+   - From llm/memory-bank/constraints.md
 
 2. Check each constraint:
    Constraint: [Name]
@@ -303,15 +303,15 @@ Identify memory bank violations:
 Example violations:
 ❌ Change uses synchronous blocking in async context
    Constraint: "All I/O operations must be async"
-   Reference: memory-bank/decisions/async-architecture.md
+   Reference: llm/memory-bank/decisions/async-architecture.md
 
 ❌ Change adds direct database access from API layer
    Constraint: "API layer calls service layer only"
-   Reference: memory-bank/systemPatterns.md
+   Reference: llm/memory-bank/systemPatterns.md
 
 ❌ Change exceeds maximum function complexity
    Constraint: "Functions must have cyclomatic complexity < 10"
-   Reference: memory-bank/quality-standards.md
+   Reference: llm/memory-bank/quality-standards.md
 ```
 
 **Business Context Understanding Test:**
@@ -562,10 +562,10 @@ Ensure AI had proper context:
 Verify AI received complete context:
 
 Memory Bank Documents:
-□ memory-bank/systemPatterns.md provided
-□ memory-bank/decisions/*.md relevant ones included
-□ memory-bank/constraints.md provided
-□ memory-bank/businessContext.md provided
+□ llm/memory-bank/systemPatterns.md provided
+□ llm/memory-bank/decisions/*.md relevant ones included
+□ llm/memory-bank/constraints.md provided
+□ llm/memory-bank/businessContext.md provided
 □ Similar code examples from codebase shown
 
 Component Information:
@@ -943,7 +943,7 @@ Feedback to AI:
 "Changes rejected due to three issues:
 
 1. Error handling must use custom error types per
-   memory-bank/systemPatterns.md:
+   llm/memory-bank/systemPatterns.md:
    [Show error handling pattern]
 
 2. Logging must be structured per logging standard:
@@ -1055,20 +1055,20 @@ Validator: Carol
 Memory Bank Cross-Validation:
 
 1. Load relevant documents:
-   - memory-bank/systemPatterns.md
-   - memory-bank/decisions/caching-strategy.md
-   - memory-bank/decisions/data-consistency.md
+   - llm/memory-bank/systemPatterns.md
+   - llm/memory-bank/decisions/caching-strategy.md
+   - llm/memory-bank/decisions/data-consistency.md
 
 2. Check constraints:
 
 Constraint 1: "Caching only at API gateway layer"
-Source: memory-bank/decisions/caching-strategy.md
+Source: llm/memory-bank/decisions/caching-strategy.md
 Rationale: Centralized cache management, avoid inconsistency
 AI change: Added caching in service layer
 Violation: ❌ YES
 
 Constraint 2: "Real-time data required for orders"
-Source: memory-bank/decisions/data-consistency.md
+Source: llm/memory-bank/decisions/data-consistency.md
 Rationale: Order status must be current
 AI change: Caches order data for 5 minutes
 Violation: ❌ YES
@@ -1091,11 +1091,11 @@ Decision: ❌ REJECTED
 Feedback:
 "Changes violate two architectural constraints:
 
-1. Caching strategy (memory-bank/decisions/caching-strategy.md):
+1. Caching strategy (llm/memory-bank/decisions/caching-strategy.md):
    'Caching only at API gateway layer'
    Your change adds caching at service layer.
 
-2. Data consistency (memory-bank/decisions/data-consistency.md):
+2. Data consistency (llm/memory-bank/decisions/data-consistency.md):
    'Orders require real-time data'
    Your change caches order data.
 

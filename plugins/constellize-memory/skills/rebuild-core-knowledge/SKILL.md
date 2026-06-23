@@ -55,12 +55,12 @@ $1
 
 **Standard Construction Folder Structure:**
 This prompt rebuilds:
-- `memory-bank/projectbrief.md` (first - foundation)
-- `memory-bank/systemPatterns.md` (second - architecture)
-- `memory-bank/progress.md` (third - evolution)
-- `memory-bank/activeContext.md` (fourth - current state)
-- `memory-bank/techContext.md` (as needed - tools and setup)
-- `memory-bank/productContext.md` (as needed - user needs)
+- `llm/memory-bank/projectbrief.md` (first - foundation)
+- `llm/memory-bank/systemPatterns.md` (second - architecture)
+- `llm/memory-bank/progress.md` (third - evolution)
+- `llm/memory-bank/activeContext.md` (fourth - current state)
+- `llm/memory-bank/techContext.md` (as needed - tools and setup)
+- `llm/memory-bank/productContext.md` (as needed - user needs)
 
 **Rebuild Order:** Foundation → Architecture → History → Current
 </context>

@@ -22,8 +22,8 @@ Operational memory captures knowledge needed to run systems reliably: runbooks, 
 
 **Structure Choices:**
 
-**Separate**: operations-memory-bank/ folder distinct from memory-bank/
-**Integrated**: operational knowledge within unified memory-bank/
+**Separate**: llm/operations-memory-bank/ folder distinct from llm/memory-bank/
+**Integrated**: operational knowledge within unified llm/memory-bank/
 **Hybrid**: Core platform integrated, customer-specific operations separate
 
 Decision depends on team structure, access requirements, and how operational knowledge evolves relative to development changes.
@@ -106,7 +106,7 @@ Critical Success Factor:
 ## Separate Structure Pattern
 
 ```
-operations-memory-bank/
+llm/operations-memory-bank/
 ├── runbooks/
 │   ├── incident-response-procedures.md
 │   ├── deployment-runbook.md
@@ -127,13 +127,13 @@ operations-memory-bank/
 │   ├── operational-dependencies.md
 │   ├── service-level-objectives.md
 │   └── integration-points.md
-└── cross-references.md (Links to memory-bank/)
+└── cross-references.md (Links to llm/memory-bank/)
 
 Cross-Reference Strategy:
-- Each runbook references relevant memory-bank/ architecture
-- Each incident links to memory-bank/ design decisions
-- operations-memory-bank/cross-references.md maps all connections
-- memory-bank/ references operations-memory-bank/ for operational context
+- Each runbook references relevant llm/memory-bank/ architecture
+- Each incident links to llm/memory-bank/ design decisions
+- llm/operations-memory-bank/cross-references.md maps all connections
+- llm/memory-bank/ references llm/operations-memory-bank/ for operational context
 ```
 
 ---
@@ -141,7 +141,7 @@ Cross-Reference Strategy:
 ## Integrated Structure Pattern
 
 ```
-memory-bank/
+llm/memory-bank/
 ├── projectbrief.md (includes operational overview)
 ├── systemPatterns.md (includes operational patterns)
 ├── techContext.md (includes operational technologies)
@@ -179,18 +179,18 @@ Cross-Reference Strategy:
 
 ```
 Core Platform (Integrated):
-platform-service/memory-bank/
+platform-service/llm/memory-bank/
 ├── [Standard memory bank files]
 └── operations/
     └── [Operational knowledge for platform]
 
 Customer-Specific (Separate):
-customer-a/operations-memory-bank/
+customer-a/llm/operations-memory-bank/
 ├── runbooks/
 ├── incidents/
 └── cross-references-to-platform.md
 
-customer-b/operations-memory-bank/
+customer-b/llm/operations-memory-bank/
 ├── runbooks/
 ├── incidents/
 └── cross-references-to-platform.md
@@ -215,13 +215,13 @@ Owner: [Team/Person]
 Step 2: Establish Core Files
 
 For Separate:
-- operations-memory-bank/runbooks/incident-response-procedures.md
-- operations-memory-bank/cross-references.md
-- operations-memory-bank/README.md
+- llm/operations-memory-bank/runbooks/incident-response-procedures.md
+- llm/operations-memory-bank/cross-references.md
+- llm/operations-memory-bank/README.md
 
 For Integrated:
-- memory-bank/operations/README.md
-- memory-bank/README.md (update with operations section)
+- llm/memory-bank/operations/README.md
+- llm/memory-bank/README.md (update with operations section)
 - Add operations overview to projectbrief.md
 
 For Hybrid:
@@ -259,8 +259,8 @@ Dependencies:
 Step 4: Cross-Reference Foundation
 
 Development → Operations Links:
-- memory-bank/systemPatterns.md → operations runbooks
-- memory-bank/techContext.md → performance baselines
+- llm/memory-bank/systemPatterns.md → operations runbooks
+- llm/memory-bank/techContext.md → performance baselines
 - Design decision docs → related incidents/postmortems
 
 Operations → Development Links:
@@ -429,7 +429,7 @@ Maintain clear operational knowledge organization within unified structure so on
 
 Structure:
 
-payment-api/memory-bank/
+payment-api/llm/memory-bank/
 ├── projectbrief.md (includes operational overview)
 ├── systemPatterns.md (includes operational patterns)
 ├── techContext.md (includes observability stack)
@@ -461,7 +461,7 @@ payment-api/memory-bank/
 
 Cross-References:
 
-memory-bank/systemPatterns.md:
+llm/memory-bank/systemPatterns.md:
 "## Payment Processing Architecture
 ...design details...
 
@@ -471,14 +471,14 @@ Operational Context:
 - Performance: operations/performance/baseline-metrics.md
 - Related Incidents: operations/incidents/2026-01-15-payment-timeout.md"
 
-memory-bank/operations/runbooks/incident-response.md:
+llm/memory-bank/operations/runbooks/incident-response.md:
 "# Incident Response Procedures
 
 ## Payment Timeout Investigation
 When payment timeouts occur, systematic investigation:
 
-1. Check Architecture: memory-bank/systemPatterns.md#payment-processing
-2. Review Recent Changes: memory-bank/progress.md
+1. Check Architecture: llm/memory-bank/systemPatterns.md#payment-processing
+2. Review Recent Changes: llm/memory-bank/progress.md
 3. Compare Baselines: operations/performance/baseline-metrics.md
 4. Check Dependencies: operations/dependencies/operational-dependencies.md
 
@@ -496,7 +496,7 @@ Validation:
 ✓ Postmortem template created
 ✓ Performance baseline initialized
 
-✓ Operations references memory-bank/ core files
+✓ Operations references llm/memory-bank/ core files
 ✓ Core files reference operations/ content
 ✓ Bidirectional cross-references verified
 ✓ Cross-reference convention: relative paths with section anchors
@@ -569,16 +569,16 @@ Maintain rigorous bidirectional cross-references between memory banks with regul
 
 Structure:
 
-patient-api/memory-bank/
+patient-api/llm/memory-bank/
 ├── [Standard development memory bank]
 ├── projectbrief.md
-├── systemPatterns.md (references operations-memory-bank/)
+├── systemPatterns.md (references llm/operations-memory-bank/)
 ├── techContext.md
 └── operational-overview.md (high-level, links to ops memory bank)
 
-patient-api/operations-memory-bank/
+patient-api/llm/operations-memory-bank/
 ├── README.md
-├── cross-references-to-dev.md (All links to memory-bank/)
+├── cross-references-to-dev.md (All links to llm/memory-bank/)
 ├── runbooks/
 │   ├── incident-response-procedures.md
 │   ├── deployment-runbook.md
@@ -603,35 +603,35 @@ patient-api/operations-memory-bank/
 
 Cross-Reference Strategy:
 
-operations-memory-bank/cross-references-to-dev.md:
+llm/operations-memory-bank/cross-references-to-dev.md:
 "# Cross-References to Development Memory Bank
 
 ## Architecture → Operations Mappings
 
-memory-bank/systemPatterns.md#api-gateway:
-- Runbook: operations-memory-bank/runbooks/incident-response-procedures.md#api-gateway
-- Performance: operations-memory-bank/performance/baseline-metrics.md#api-latency
-- Dependencies: operations-memory-bank/dependencies/operational-dependencies.md#upstream
+llm/memory-bank/systemPatterns.md#api-gateway:
+- Runbook: llm/operations-memory-bank/runbooks/incident-response-procedures.md#api-gateway
+- Performance: llm/operations-memory-bank/performance/baseline-metrics.md#api-latency
+- Dependencies: llm/operations-memory-bank/dependencies/operational-dependencies.md#upstream
 
-memory-bank/systemPatterns.md#database-layer:
-- Runbook: operations-memory-bank/runbooks/database-failover.md
-- Performance: operations-memory-bank/performance/baseline-metrics.md#database
-- Recent Incident: operations-memory-bank/incidents/2026-01-15-db-connection-pool.md
+llm/memory-bank/systemPatterns.md#database-layer:
+- Runbook: llm/operations-memory-bank/runbooks/database-failover.md
+- Performance: llm/operations-memory-bank/performance/baseline-metrics.md#database
+- Recent Incident: llm/operations-memory-bank/incidents/2026-01-15-db-connection-pool.md
 
 [Comprehensive mapping of all architecture → operations links]
 
 ## Incident → Design Decision Mappings
 
-operations-memory-bank/incidents/2026-01-15-db-connection-pool.md:
-- Related Design: memory-bank/systemPatterns.md#connection-pooling
-- Architecture Context: memory-bank/techContext.md#database-configuration
+llm/operations-memory-bank/incidents/2026-01-15-db-connection-pool.md:
+- Related Design: llm/memory-bank/systemPatterns.md#connection-pooling
+- Architecture Context: llm/memory-bank/techContext.md#database-configuration
 
 [All incidents mapped to relevant design documentation]"
 
-memory-bank/operational-overview.md:
+llm/memory-bank/operational-overview.md:
 "# Operational Overview
 
-For detailed operational procedures, see operations-memory-bank/ (SRE access required)
+For detailed operational procedures, see llm/operations-memory-bank/ (SRE access required)
 
 ## High-Level Operational Architecture
 
@@ -639,15 +639,15 @@ For detailed operational procedures, see operations-memory-bank/ (SRE access req
 
 ## Developer-Relevant Operational Links
 
-Deployment Procedures: operations-memory-bank/runbooks/deployment-runbook.md
+Deployment Procedures: llm/operations-memory-bank/runbooks/deployment-runbook.md
 - What developers need to know: [summary]
 - When to coordinate with SRE: [criteria]
 
-Incident Response: operations-memory-bank/runbooks/incident-response-procedures.md
+Incident Response: llm/operations-memory-bank/runbooks/incident-response-procedures.md
 - Developer on-call responsibilities: [summary]
 - Escalation procedures: [details]
 
-Service Level Objectives: operations-memory-bank/dependencies/service-level-objectives.md
+Service Level Objectives: llm/operations-memory-bank/dependencies/service-level-objectives.md
 - Current SLOs: [list]
 - How SLOs inform design: [guidance]
 
@@ -655,13 +655,13 @@ Service Level Objectives: operations-memory-bank/dependencies/service-level-obje
 
 [Maintained by SRE, reviewed weekly]
 - 2026-01-20: Database connection pool size increased (affects connection handling)
-- 2026-01-15: New monitoring alerts (see operations-memory-bank/...)
+- 2026-01-15: New monitoring alerts (see llm/operations-memory-bank/...)
 "
 
 Validation:
 
 ✓ Chosen structure: Separate (documented rationale including HIPAA)
-✓ Directory structure created: memory-bank/ and operations-memory-bank/
+✓ Directory structure created: llm/memory-bank/ and llm/operations-memory-bank/
 ✓ README files explain organization and access requirements
 ✓ Cross-reference strategy: Explicit bidirectional mapping files
 
@@ -670,8 +670,8 @@ Validation:
 ✓ Postmortem template created
 ✓ Performance baseline initialized
 
-✓ operations-memory-bank/cross-references-to-dev.md created (68 links)
-✓ memory-bank/operational-overview.md created with public operational summary
+✓ llm/operations-memory-bank/cross-references-to-dev.md created (68 links)
+✓ llm/memory-bank/operational-overview.md created with public operational summary
 ✓ Bidirectional cross-references validated (automated check script)
 ✓ Cross-reference conventions documented in both READMEs
 
@@ -680,7 +680,7 @@ Validation:
 ✓ On-call SRE can navigate quickly (validated in drill)
 ✓ Developer on-call knows escalation procedures
 
-✓ Access controls: SRE full access, developers read-only to operations-memory-bank/
+✓ Access controls: SRE full access, developers read-only to llm/operations-memory-bank/
 ✓ PagerDuty integration links to runbooks
 ✓ Automated cross-reference validation in CI (weekly)
 ```

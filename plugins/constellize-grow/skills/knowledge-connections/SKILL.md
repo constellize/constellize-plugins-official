@@ -21,7 +21,7 @@ Organization: $0
 Repository scope: $1
 
 **Expected Structure:**
-- Each repo may contain `memory-bank/` folder
+- Each repo may contain `llm/memory-bank/` folder
 - Standard files: projectbrief.md, systemPatterns.md, techContext.md, etc.
 
 **Analysis Output:**
@@ -47,7 +47,7 @@ Create organizational knowledge analysis following these patterns:
 
 ```
 For each repository:
-1. Check for memory-bank/
+1. Check for llm/memory-bank/
 2. Extract: Team, system, domain, dependencies
 3. Index topics: patterns, technologies, decisions
 4. Identify gaps: missing, incomplete, stale
@@ -131,13 +131,13 @@ Rationale:
 [Why these should be linked - specific reason]
 
 Cross-Reference 1:
-File: [repo-a]/memory-bank/[file]#[section]
-Add: "[Team B's topic]: [repo-b]/memory-bank/[file]#[section]
+File: [repo-a]/llm/memory-bank/[file]#[section]
+Add: "[Team B's topic]: [repo-b]/llm/memory-bank/[file]#[section]
       [One sentence why relevant]"
 
 Cross-Reference 2:
-File: [repo-b]/memory-bank/[file]#[section]
-Add: "[Team A's dependency]: [repo-a]/memory-bank/[file]#[section]
+File: [repo-b]/llm/memory-bank/[file]#[section]
+Add: "[Team A's dependency]: [repo-a]/llm/memory-bank/[file]#[section]
       [One sentence explaining connection]"
 
 Impact:
@@ -285,11 +285,11 @@ SYSTEMIC RISKS:
 Risk #1: Token Lifetime Mismatch
 Severity: CRITICAL
 
-API Gateway (api-gateway/memory-bank/systemPatterns.md#auth):
+API Gateway (api-gateway/llm/memory-bank/systemPatterns.md#auth):
 - JWT expires 15 minutes
 - Date: 2025-10-15
 
-Mobile App (mobile-app/memory-bank/techContext.md#api):
+Mobile App (mobile-app/llm/memory-bank/techContext.md#api):
 - Expects tokens valid 60 minutes
 - Date: 2025-11-20
 
@@ -320,20 +320,20 @@ CONNECTIONS (23 total):
 #1: Auth Service ↔ Mobile App
 Type: Integration + Risk
 Priority: CRITICAL
-Add to api-gateway/memory-bank/systemPatterns.md#auth:
-"Mobile integration: mobile-app/memory-bank/techContext.md#auth
+Add to api-gateway/llm/memory-bank/systemPatterns.md#auth:
+"Mobile integration: mobile-app/llm/memory-bank/techContext.md#auth
  Critical: JWT 15min lifetime, mobile must refresh"
-Add to mobile-app/memory-bank/techContext.md#auth:
-"API auth: api-gateway/memory-bank/systemPatterns.md#auth
+Add to mobile-app/llm/memory-bank/techContext.md#auth:
+"API auth: api-gateway/llm/memory-bank/systemPatterns.md#auth
  Tokens expire 15 minutes, implement refresh flow"
 Impact: Prevents 401 errors, clarifies integration
 
 #2: Search ↔ Analytics
 Type: Duplication Prevention
 Priority: HIGH
-Add to search/memory-bank/activeContext.md:
+Add to search/llm/memory-bank/activeContext.md:
 "Before building: Team E caching library proven in prod
- analytics/memory-bank/systemPatterns.md#caching"
+ analytics/llm/memory-bank/systemPatterns.md#caching"
 Impact: Save 2 weeks, use proven solution
 
 STRATEGIC ALIGNMENT:

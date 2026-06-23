@@ -53,7 +53,7 @@ Emergency Contacts: [On-call rotation, escalation contacts]
 [One paragraph explaining what this scenario is, why it matters, and general approach]
 
 ## Related Documentation
-- System Architecture: [Link to memory-bank/systemPatterns.md relevant section]
+- System Architecture: [Link to llm/memory-bank/systemPatterns.md relevant section]
 - Dependencies: [Link to operational-dependencies.md]
 - Recent Incidents: [Links to incidents that used this runbook]
 - Design Decisions: [Links to relevant design documentation]
@@ -381,9 +381,9 @@ After issue resolved, complete these steps before closing incident:
 ### Step 5: Cross-Reference Updates
 
 □ Link incident to relevant documentation:
-  - memory-bank/systemPatterns.md: If design assumptions revealed incorrect
-  - memory-bank/operations/dependencies/: If dependency behavior surprised us
-  - memory-bank/operations/performance/: If capacity assumptions wrong
+  - llm/memory-bank/systemPatterns.md: If design assumptions revealed incorrect
+  - llm/memory-bank/operations/dependencies/: If dependency behavior surprised us
+  - llm/memory-bank/operations/performance/: If capacity assumptions wrong
 
 □ Update cross-references:
   - This runbook → incident report
@@ -478,11 +478,11 @@ Prerequisites:
 Database connection failures prevent PaymentAPI from processing payments, causing immediate customer impact. Most common causes: database overload, connection pool exhaustion, network issues, or database maintenance. This runbook guides systematic investigation to identify cause and restore service.
 
 ## Related Documentation
-- System Architecture: memory-bank/systemPatterns.md#database-layer
-- Connection Pool Design: memory-bank/systemPatterns.md#connection-management
-- Dependencies: memory-bank/operations/dependencies/operational-dependencies.md#database
+- System Architecture: llm/memory-bank/systemPatterns.md#database-layer
+- Connection Pool Design: llm/memory-bank/systemPatterns.md#connection-management
+- Dependencies: llm/memory-bank/operations/dependencies/operational-dependencies.md#database
 - Recent Incidents:
-  - 2026-01-15: Connection pool exhaustion - memory-bank/operations/incidents/2026-01-15-db-connection-pool.md
+  - 2026-01-15: Connection pool exhaustion - llm/memory-bank/operations/incidents/2026-01-15-db-connection-pool.md
 
 ---
 
@@ -684,7 +684,7 @@ Procedure:
 Step 1: Verify connection pool configuration
 Command: kubectl get configmap payment-api-config -n payment-api -o yaml | grep -i "connection\|pool"
 Expected result: See current connection pool size (e.g., maxPoolSize: 50)
-Verification: Compare to design: memory-bank/systemPatterns.md#connection-management (documents intended size)
+Verification: Compare to design: llm/memory-bank/systemPatterns.md#connection-management (documents intended size)
 
 Step 2: Determine if pool size increase appropriate
 Analysis:
@@ -903,8 +903,8 @@ Note: Root cause is network/platform-side. Coordinate with platform team on post
 
 ### Step 2: Document Findings
 
-□ Create incident report: memory-bank/operations/incidents/2026-XX-XX-database-connection-failure.md
-  - Use template: memory-bank/operations/incidents/incident-template.md
+□ Create incident report: llm/memory-bank/operations/incidents/2026-XX-XX-database-connection-failure.md
+  - Use template: llm/memory-bank/operations/incidents/incident-template.md
   - Timeline: When started, investigation steps, resolution applied, when resolved
   - Root cause: [Specific cause identified]
   - Resolution: [Specific actions taken]
@@ -927,7 +927,7 @@ Note: Root cause is network/platform-side. Coordinate with platform team on post
 Create tickets for preventive measures:
 
 □ If connection pool exhausted:
-  - Ticket: Review connection pool sizing calculation (memory-bank/systemPatterns.md#connection-management)
+  - Ticket: Review connection pool sizing calculation (llm/memory-bank/systemPatterns.md#connection-management)
   - Ticket: Add alert for connection pool utilization >70% (early warning)
   - Ticket: Investigate if connection leak exists (connections not released)
 
@@ -955,11 +955,11 @@ Create tickets for preventive measures:
 ### Step 5: Cross-Reference Updates
 
 □ Link incident to design documentation:
-  - memory-bank/systemPatterns.md#database-layer: Add cross-reference to incident if design assumption revealed incorrect
-  - memory-bank/systemPatterns.md#connection-management: Add cross-reference if connection pool sizing needs revision
+  - llm/memory-bank/systemPatterns.md#database-layer: Add cross-reference to incident if design assumption revealed incorrect
+  - llm/memory-bank/systemPatterns.md#connection-management: Add cross-reference if connection pool sizing needs revision
 
 □ Update operational dependencies:
-  - memory-bank/operations/dependencies/operational-dependencies.md#database: Add incident as example of dependency failure
+  - llm/memory-bank/operations/dependencies/operational-dependencies.md#database: Add incident as example of dependency failure
 
 □ Update cross-references:
   - This runbook: Add incident to "Recent Incidents" section
@@ -979,7 +979,7 @@ Review Checklist:
 □ Metrics/dashboard links still valid
 □ Contact information current: #database-oncall, #platform-oncall
 □ Recent incidents validate runbook: 2026-01-15 incident used this runbook, connection pool exhaustion resolution worked
-□ Cross-references valid: Links to memory-bank/ still correct
+□ Cross-references valid: Links to llm/memory-bank/ still correct
 □ Severity assessment accurate: Still SEV-1 (payment processing critical)
 □ Time estimate realistic: 15-30 minutes was accurate for 2026-01-15 incident
 

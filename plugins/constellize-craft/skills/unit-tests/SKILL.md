@@ -16,8 +16,8 @@ Unit tests are executable documentation—they tell the story of what your compo
 Follow this process:
 
 1. **Review component specification:**
-   - Read code generation plan from `construction/design/code-generation-plan-*.md`
-   - Read gap analysis at `construction/requirements/gap-analysis.md` for success criteria
+   - Read code generation plan from `llm/construction/design/code-generation-plan-*.md`
+   - Read gap analysis at `llm/construction/requirements/gap-analysis.md` for success criteria
    - Extract all public methods, edge cases, and error conditions to test
 
 2. **Write happy path tests:**
@@ -47,8 +47,8 @@ $0
 
 **Standard Construction Folder Structure:**
 This prompt reads from:
-- `construction/design/code-generation-plan-*.md` (component specification)
-- `construction/requirements/gap-analysis.md` (success criteria to validate)
+- `llm/construction/design/code-generation-plan-*.md` (component specification)
+- `llm/construction/requirements/gap-analysis.md` (success criteria to validate)
 
 And outputs test code to standard test file location based on language conventions.
 </context>
@@ -219,7 +219,7 @@ REPEAT: Tests are executable documentation. Every test name should read like a s
 ```typescript
 // UNIT TESTS: RateLimitMiddleware
 // Purpose: Validate rate limiting behavior in isolation
-// Specification: construction/design/code-generation-plan-rate-limiter.md
+// Specification: llm/construction/design/code-generation-plan-rate-limiter.md
 //
 // Test Coverage:
 // - Happy paths: allows requests below limit, queues at limit

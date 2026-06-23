@@ -55,12 +55,12 @@ $1
 
 **Standard Construction Folder Structure:**
 This prompt updates:
-- `memory-bank/systemPatterns.md` (correct architectural patterns)
-- `memory-bank/techContext.md` (update file paths, tools, conventions)
-- `memory-bank/activeContext.md` (current state, not past state)
-- `memory-bank/progress.md` (mark completed work, add missing items)
-- `memory-bank/productContext.md` (current user needs and metrics)
-- `memory-bank/projectbrief.md` (if scope or requirements evolved)
+- `llm/memory-bank/systemPatterns.md` (correct architectural patterns)
+- `llm/memory-bank/techContext.md` (update file paths, tools, conventions)
+- `llm/memory-bank/activeContext.md` (current state, not past state)
+- `llm/memory-bank/progress.md` (mark completed work, add missing items)
+- `llm/memory-bank/productContext.md` (current user needs and metrics)
+- `llm/memory-bank/projectbrief.md` (if scope or requirements evolved)
 </context>
 
 <thinking>
@@ -289,7 +289,7 @@ offline capability and cross-platform support.
 
 Historical Context:
 The session-based approach above was accurate from June 2025
-to March 2026 (9 months). See memory-bank/archived/2026/session-auth/
+to March 2026 (9 months). See llm/memory-bank/archived/2026/session-auth/
 for complete history and lessons learned from migration.
 
 Related:
@@ -361,7 +361,7 @@ Correct file paths systematically:
 **File Path Correction Process:**
 ```
 1. Extract all file paths from memory bank:
-   grep -r "src/" memory-bank/ > file-references.txt
+   grep -r "src/" llm/memory-bank/ > file-references.txt
 
 2. Validate each path exists:
    for path in $(cat file-references.txt); do
@@ -452,7 +452,7 @@ echo "Validating memory bank accuracy..."
 
 # Check file references
 echo "Checking file references..."
-grep -r "src/" memory-bank/ | grep -o 'src/[^ ]*' | sort -u | while read path; do
+grep -r "src/" llm/memory-bank/ | grep -o 'src/[^ ]*' | sort -u | while read path; do
   if [ ! -f "$path" ] && [ ! -d "$path" ]; then
     echo "❌ Missing: $path"
   fi
@@ -460,12 +460,12 @@ done
 
 # Check for common staleness indicators
 echo "Checking for staleness indicators..."
-if grep -r "TODO" memory-bank/ >/dev/null; then
+if grep -r "TODO" llm/memory-bank/ >/dev/null; then
   echo "⚠️  Found TODO markers in memory bank"
 fi
 
 # Check last update date
-last_update=$(git log -1 --format=%cd --date=short memory-bank/)
+last_update=$(git log -1 --format=%cd --date=short llm/memory-bank/)
 days_since=$(( ($(date +%s) - $(date -d "$last_update" +%s)) / 86400 ))
 if [ $days_since -gt 30 ]; then
   echo "⚠️  Memory bank not updated in $days_since days"
@@ -474,7 +474,7 @@ fi
 # Check for recently added files not in memory bank
 recent_files=$(git diff --name-only HEAD~20 HEAD | grep "^src/")
 for file in $recent_files; do
-  if ! grep -r "$file" memory-bank/ >/dev/null; then
+  if ! grep -r "$file" llm/memory-bank/ >/dev/null; then
     echo "⚠️  Recent file not in memory bank: $file"
   fi
 done
@@ -702,7 +702,7 @@ Why Changed:
 Historical Context:
 Monolithic architecture above was accurate from project
 start (June 2024) to microservices migration (May 2025).
-Migration took 3 months. See memory-bank/archived/2025/
+Migration took 3 months. See llm/memory-bank/archived/2025/
 monolith-architecture/ for complete history and lessons.
 
 Current Diagrams:

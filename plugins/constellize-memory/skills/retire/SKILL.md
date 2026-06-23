@@ -55,13 +55,13 @@ $1
 
 **Standard Construction Folder Structure:**
 This prompt moves to:
-- `memory-bank/archived/[year]/[topic]/` (preserved historical knowledge)
+- `llm/memory-bank/archived/[year]/[topic]/` (preserved historical knowledge)
 
 This prompt updates:
-- `memory-bank/systemPatterns.md` (remove obsolete, add deprecation notices)
-- `memory-bank/techContext.md` (remove old tools, note what replaced them)
-- `memory-bank/progress.md` (mark migrations complete)
-- `memory-bank/activeContext.md` (remove old approaches from current focus)
+- `llm/memory-bank/systemPatterns.md` (remove obsolete, add deprecation notices)
+- `llm/memory-bank/techContext.md` (remove old tools, note what replaced them)
+- `llm/memory-bank/progress.md` (mark migrations complete)
+- `llm/memory-bank/activeContext.md` (remove old approaches from current focus)
 </context>
 
 <thinking>
@@ -445,8 +445,8 @@ apps should start with JWT unless web-only guaranteed."
 - techContext.md: "Refresh Token Rotation"
 
 **Related Archived Knowledge:**
-- memory-bank/archived/2026/csrf-protection/ (also retired with sessions)
-- memory-bank/archived/2026/redis-session-store/ (configuration details)
+- llm/memory-bank/archived/2026/csrf-protection/ (also retired with sessions)
+- llm/memory-bank/archived/2026/redis-session-store/ (configuration details)
 
 **Git History:**
 - Original implementation: commit abc123 (2025-06-10)
@@ -466,7 +466,7 @@ apps should start with JWT unless web-only guaranteed."
 ---
 
 **Archived Location:**
-/memory-bank/archived/2026/session-based-auth/
+/llm/memory-bank/archived/2026/session-based-auth/
 
 **Access:**
 This knowledge is preserved for historical reference. If you're
@@ -492,7 +492,7 @@ In current documentation, add deprecation notice:
 **Previous Approach ([date range]):**
 We used [old approach]. Migrated to current approach because
 [brief reason]. See archived documentation for complete history:
-memory-bank/archived/[year]/[topic]/
+llm/memory-bank/archived/[year]/[topic]/
 
 **Why Changed:**
 [One-sentence summary of key reason]
@@ -518,7 +518,7 @@ clients with stateless access tokens and revocable refresh tokens.
 We used session-based authentication with Redis storage. Migrated
 to JWT because mobile app requirements needed stateless auth and
 offline capability. See complete history and lessons learned:
-memory-bank/archived/2026/session-based-auth/
+llm/memory-bank/archived/2026/session-based-auth/
 
 **Why Changed:**
 Mobile platform requirements made stateless authentication necessary,
@@ -540,7 +540,7 @@ Structure archived knowledge:
 
 **Archive Structure:**
 ```
-memory-bank/archived/
+llm/memory-bank/archived/
 ├── README.md (explains archive purpose and how to use)
 ├── INDEX.md (searchable index of all archived knowledge)
 ├── 2025/
@@ -643,7 +643,7 @@ Systematic retirement process:
   → What worked, what didn't, key insights, warnings
 
 □ Create archive location
-  → memory-bank/archived/[year]/[topic]/
+  → llm/memory-bank/archived/[year]/[topic]/
 
 □ Move original documentation
   → Preserve exactly as it was, don't edit

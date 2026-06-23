@@ -117,7 +117,7 @@ For each critical runbook:
 
 □ System state matches documentation
   - Test: [Compare runbook's system description to actual architecture]
-  - Reference: memory-bank/systemPatterns.md
+  - Reference: llm/memory-bank/systemPatterns.md
   - Result: ✓ Accurate / ⚠ Minor drift / ✗ Significant drift
   - Details: [Architecture changes not reflected in runbook]
 
@@ -194,10 +194,10 @@ Evaluate bidirectional cross-references between operational and development know
 
 If separate operational memory bank:
 - File: $3cross-references.md (operations → development)
-- File: memory-bank/operational-overview.md (development → operations)
+- File: llm/memory-bank/operational-overview.md (development → operations)
 
 If integrated:
-- Cross-references: Within memory-bank/ (internal links)
+- Cross-references: Within llm/memory-bank/ (internal links)
 
 ---
 
@@ -207,7 +207,7 @@ Check references from operational knowledge to development knowledge.
 
 ```bash
 # Find all cross-references from operations to development
-grep -r "memory-bank/" $3 -n
+grep -r "llm/memory-bank/" $3 -n
 ```
 
 Total references found: [N]
@@ -216,10 +216,10 @@ Sample verification (check 10-20 representative references):
 
 | Source Document | Target Document | Status | Issue |
 |-----------------|-----------------|--------|-------|
-| runbooks/database-connection-failure.md:15 | memory-bank/systemPatterns.md#database-layer | ✓ Valid | - |
-| incidents/2026-01-15.md:45 | memory-bank/systemPatterns.md#connection-management | ✓ Valid | - |
-| dependencies/operational-dependencies.md:20 | memory-bank/techContext.md#database | ✗ Broken | Section renamed |
-| postmortems/2025-12-10.md:80 | memory-bank/systemPatterns.md#api-gateway | ⚠ Warning | Section moved |
+| runbooks/database-connection-failure.md:15 | llm/memory-bank/systemPatterns.md#database-layer | ✓ Valid | - |
+| incidents/2026-01-15.md:45 | llm/memory-bank/systemPatterns.md#connection-management | ✓ Valid | - |
+| dependencies/operational-dependencies.md:20 | llm/memory-bank/techContext.md#database | ✗ Broken | Section renamed |
+| postmortems/2025-12-10.md:80 | llm/memory-bank/systemPatterns.md#api-gateway | ⚠ Warning | Section moved |
 
 Integrity assessment:
 - ✓ Valid references: [N] ([%])
@@ -240,8 +240,8 @@ Check references from development knowledge to operational knowledge.
 
 ```bash
 # Find all cross-references from development to operations
-grep -r "operations/" memory-bank/ -n
-grep -r "operations-memory-bank/" memory-bank/ -n
+grep -r "operations/" llm/memory-bank/ -n
+grep -r "llm/operations-memory-bank/" llm/memory-bank/ -n
 ```
 
 Total references found: [N]
@@ -250,8 +250,8 @@ Sample verification:
 
 | Source Document | Target Document | Status | Issue |
 |-----------------|-----------------|--------|-------|
-| memory-bank/systemPatterns.md:120 | operations/runbooks/deployment.md | ✓ Valid | - |
-| memory-bank/systemPatterns.md:250 | operations/performance/baselines.md | ✗ Broken | File moved |
+| llm/memory-bank/systemPatterns.md:120 | operations/runbooks/deployment.md | ✓ Valid | - |
+| llm/memory-bank/systemPatterns.md:250 | operations/performance/baselines.md | ✗ Broken | File moved |
 
 Integrity assessment:
 - ✓ Valid references: [N] ([%])
@@ -271,11 +271,11 @@ Sample check:
 **Example: Database architecture ↔ Database runbook**
 
 Forward (architecture → runbook):
-- memory-bank/systemPatterns.md#database-layer references operations/runbooks/database-connection-failure.md
+- llm/memory-bank/systemPatterns.md#database-layer references operations/runbooks/database-connection-failure.md
 - Status: ✓ Present
 
 Backward (runbook → architecture):
-- operations/runbooks/database-connection-failure.md references memory-bank/systemPatterns.md#database-layer
+- operations/runbooks/database-connection-failure.md references llm/memory-bank/systemPatterns.md#database-layer
 - Status: ✓ Present
 
 Bidirectional: ✓ Complete
@@ -383,7 +383,7 @@ Priority: [N] high-priority missing runbooks (SEV-1 scenarios)
 Failure modes that surprised responders:
 1. [Failure mode 1]: [Description, system, incident [ID]]
    - Why unexpected: [What we thought vs what happened]
-   - Where to document: [memory-bank/systemPatterns.md#[section] + runbook]
+   - Where to document: [llm/memory-bank/systemPatterns.md#[section] + runbook]
 2. [Failure mode 2]: [Description, system, incident [ID]]
 
 Priority: [N] high-priority undocumented failure modes
@@ -532,7 +532,7 @@ How often do responders consult architecture documentation during incidents?
 
 Query incidents for references to architecture:
 ```bash
-grep -r "memory-bank/systemPatterns.md" $3incidents/ | wc -l
+grep -r "llm/memory-bank/systemPatterns.md" $3incidents/ | wc -l
 ```
 
 Incidents referencing architecture: [N] of [M] total ([%])
@@ -882,7 +882,7 @@ Scope: Single service (critical payment processing service)
 Assessment Period: Last 3 months (2025-11-01 to 2026-02-01)
 Assessment Date: 2026-02-01
 Assessor: sam-patel (Platform Lead)
-Memory Bank Structure: Integrated: memory-bank/operations/
+Memory Bank Structure: Integrated: llm/memory-bank/operations/
 
 Purpose: Quarterly operational knowledge health review
 
@@ -903,7 +903,7 @@ Review Trigger: Scheduled quarterly review
 ### Runbook Inventory
 
 ```bash
-ls memory-bank/operations/runbooks/
+ls llm/memory-bank/operations/runbooks/
 ```
 
 Result:
@@ -942,14 +942,14 @@ Total runbooks: 5
   - Details: All access instructions accurate
 
 ✓ System state matches documentation
-  - Test: Compared runbook's description to memory-bank/systemPatterns.md#database-layer
-  - Reference: memory-bank/systemPatterns.md
+  - Test: Compared runbook's description to llm/memory-bank/systemPatterns.md#database-layer
+  - Reference: llm/memory-bank/systemPatterns.md
   - Result: ✓ Accurate
   - Details: Recent incident prompted runbook update, now reflects current architecture (connection pool size 50, HikariCP, etc.)
 
 ✓ Dependencies still accurate
-  - Test: Verified dependency list matches memory-bank/operations/dependencies/operational-dependencies.md
-  - Reference: memory-bank/operations/dependencies/operational-dependencies.md#database
+  - Test: Verified dependency list matches llm/memory-bank/operations/dependencies/operational-dependencies.md
+  - Reference: llm/memory-bank/operations/dependencies/operational-dependencies.md#database
   - Result: ✓ Accurate
   - Details: PostgreSQL dependency correctly documented
 
@@ -998,7 +998,7 @@ Total runbooks: 5
   - Details: APM dashboard URL changed (Datadog migration in Dec 2025)
 
 ✓ System state matches documentation
-  - Test: Compared to memory-bank/systemPatterns.md
+  - Test: Compared to llm/memory-bank/systemPatterns.md
   - Result: ✓ Accurate
   - Details: Architecture description still accurate
 
@@ -1057,7 +1057,7 @@ Total runbooks: 5
   - Details: CI/CD tool changed (Jenkins → GitHub Actions in Oct 2025)
 
 ✗ System state matches documentation
-  - Test: Compared to memory-bank/systemPatterns.md
+  - Test: Compared to llm/memory-bank/systemPatterns.md
   - Result: ✗ Significant drift
   - Details: Deployment architecture changed significantly (now use Helm, GitOps, automated pipelines)
 
@@ -1126,7 +1126,7 @@ Systemic improvements needed:
 ### Forward References: Operations → Development
 
 ```bash
-grep -r "memory-bank/" memory-bank/operations/ -n | head -20
+grep -r "llm/memory-bank/" llm/memory-bank/operations/ -n | head -20
 ```
 
 Total references found: 43
@@ -1135,13 +1135,13 @@ Sample verification (checked 20 references):
 
 | Source Document | Target Document | Status | Issue |
 |-----------------|-----------------|--------|-------|
-| runbooks/database-connection-failure.md:15 | memory-bank/systemPatterns.md#database-layer | ✓ Valid | - |
-| runbooks/database-connection-failure.md:18 | memory-bank/systemPatterns.md#connection-management | ✓ Valid | - |
-| incidents/2026-01-15-db-conn-pool.md:45 | memory-bank/systemPatterns.md#connection-management | ✓ Valid | - |
-| postmortems/2026-01-15-postmortem.md:80 | memory-bank/systemPatterns.md#database-layer | ✓ Valid | - |
-| runbooks/performance-degradation.md:25 | memory-bank/systemPatterns.md#api-architecture | ✓ Valid | - |
-| runbooks/performance-degradation.md:40 | memory-bank/techContext.md#observability | ⚠ Warning | Section renamed to #monitoring-tools |
-| dependencies/operational-dependencies.md:20 | memory-bank/techContext.md#database-stack | ✗ Broken | Section doesn't exist |
+| runbooks/database-connection-failure.md:15 | llm/memory-bank/systemPatterns.md#database-layer | ✓ Valid | - |
+| runbooks/database-connection-failure.md:18 | llm/memory-bank/systemPatterns.md#connection-management | ✓ Valid | - |
+| incidents/2026-01-15-db-conn-pool.md:45 | llm/memory-bank/systemPatterns.md#connection-management | ✓ Valid | - |
+| postmortems/2026-01-15-postmortem.md:80 | llm/memory-bank/systemPatterns.md#database-layer | ✓ Valid | - |
+| runbooks/performance-degradation.md:25 | llm/memory-bank/systemPatterns.md#api-architecture | ✓ Valid | - |
+| runbooks/performance-degradation.md:40 | llm/memory-bank/techContext.md#observability | ⚠ Warning | Section renamed to #monitoring-tools |
+| dependencies/operational-dependencies.md:20 | llm/memory-bank/techContext.md#database-stack | ✗ Broken | Section doesn't exist |
 
 Integrity assessment:
 - ✓ Valid references: 17 (85%)
@@ -1151,11 +1151,11 @@ Integrity assessment:
 Forward reference health: Good (85% valid, 15% need attention)
 
 Issues to fix:
-1. memory-bank/operations/dependencies/operational-dependencies.md:20 → memory-bank/techContext.md#database-stack (broken)
+1. llm/memory-bank/operations/dependencies/operational-dependencies.md:20 → llm/memory-bank/techContext.md#database-stack (broken)
    - Fix: Update to #database-infrastructure (section renamed in Nov 2025)
    - Owner: sam-patel, 2026-02-08
 
-2. memory-bank/operations/runbooks/performance-degradation.md:40 → memory-bank/techContext.md#observability (warning)
+2. llm/memory-bank/operations/runbooks/performance-degradation.md:40 → llm/memory-bank/techContext.md#observability (warning)
    - Fix: Update to #monitoring-tools (section renamed)
    - Owner: sam-patel, 2026-02-08
 
@@ -1164,7 +1164,7 @@ Issues to fix:
 ### Backward References: Development → Operations
 
 ```bash
-grep -r "operations/" memory-bank/ -n
+grep -r "operations/" llm/memory-bank/ -n
 ```
 
 Total references found: 15
@@ -1173,10 +1173,10 @@ Sample verification:
 
 | Source Document | Target Document | Status | Issue |
 |-----------------|-----------------|--------|-------|
-| memory-bank/systemPatterns.md:120 | operations/runbooks/database-connection-failure.md | ✓ Valid | - |
-| memory-bank/systemPatterns.md:125 | operations/runbooks/deployment-procedures.md | ✓ Valid | - |
-| memory-bank/systemPatterns.md:250 | operations/performance/baseline-metrics.md | ✓ Valid | - |
-| memory-bank/systemPatterns.md:280 | operations/dependencies/operational-dependencies.md | ✓ Valid | - |
+| llm/memory-bank/systemPatterns.md:120 | operations/runbooks/database-connection-failure.md | ✓ Valid | - |
+| llm/memory-bank/systemPatterns.md:125 | operations/runbooks/deployment-procedures.md | ✓ Valid | - |
+| llm/memory-bank/systemPatterns.md:250 | operations/performance/baseline-metrics.md | ✓ Valid | - |
+| llm/memory-bank/systemPatterns.md:280 | operations/dependencies/operational-dependencies.md | ✓ Valid | - |
 
 Integrity assessment:
 - ✓ Valid references: 15 (100%)
@@ -1194,11 +1194,11 @@ Tested 10 reference pairs:
 **Example: Database architecture ↔ Database runbook**
 
 Forward (architecture → runbook):
-- memory-bank/systemPatterns.md#database-layer references operations/runbooks/database-connection-failure.md
+- llm/memory-bank/systemPatterns.md#database-layer references operations/runbooks/database-connection-failure.md
 - Status: ✓ Present
 
 Backward (runbook → architecture):
-- operations/runbooks/database-connection-failure.md references memory-bank/systemPatterns.md#database-layer
+- operations/runbooks/database-connection-failure.md references llm/memory-bank/systemPatterns.md#database-layer
 - Status: ✓ Present
 
 Bidirectional: ✓ Complete
@@ -1209,7 +1209,7 @@ Test cases checked: 10
 - ✗ No connection (should be linked but isn't): 0 (0%)
 
 Unidirectional case:
-- memory-bank/systemPatterns.md#api-gateway → operations/performance/baseline-metrics.md (forward exists)
+- llm/memory-bank/systemPatterns.md#api-gateway → operations/performance/baseline-metrics.md (forward exists)
 - operations/performance/baseline-metrics.md does NOT reference api-gateway section (backward missing)
 - Action: Add backward reference - alex-chen, 2026-02-15
 
@@ -1388,12 +1388,12 @@ Priority: 2 high-priority missing runbooks
 Failure modes that surprised responders:
 1. Connection leak exhausting connection pool: PaymentAPI, 2026-01-15-db-conn-pool
    - Why unexpected: Design assumed try-with-resources pattern universally followed
-   - Where to document: memory-bank/systemPatterns.md#connection-management + database-connection-failure runbook
+   - Where to document: llm/memory-bank/systemPatterns.md#connection-management + database-connection-failure runbook
    - Priority: P0 (Critical) - SEV-1, now documented but should be in architecture
 
 2. Upstream dependency capacity exhaustion causing cascading failure: PaymentAPI → AuthService, 2026-01-25-auth-503
    - Why unexpected: Assumed AuthService had sufficient capacity, no documented failure mode
-   - Where to document: memory-bank/systemPatterns.md#dependencies + operational-dependencies.md
+   - Where to document: llm/memory-bank/systemPatterns.md#dependencies + operational-dependencies.md
    - Priority: P0 (Critical) - SEV-1, major gap
 
 Priority: 2 high-priority undocumented failure modes
@@ -1404,11 +1404,11 @@ Priority: 2 high-priority undocumented failure modes
 
 Metrics lacking documented baselines:
 1. Connection pool utilization: PaymentAPI, 2026-01-15-db-conn-pool couldn't compare to baseline
-   - Where to document: memory-bank/operations/performance/baseline-metrics.md
+   - Where to document: llm/memory-bank/operations/performance/baseline-metrics.md
    - Priority: P0 (Critical) - SEV-1 scenario, would accelerate diagnosis
 
 2. AuthService latency/error rate: PaymentAPI, 2026-01-25-auth-503 couldn't detect AuthService degradation early
-   - Where to document: memory-bank/operations/performance/baseline-metrics.md
+   - Where to document: llm/memory-bank/operations/performance/baseline-metrics.md
    - Priority: P1 (High) - SEV-1 scenario, early warning signal
 
 Priority: 2 high-priority missing baselines
@@ -1420,7 +1420,7 @@ Priority: 2 high-priority missing baselines
 Dependencies not accurately documented:
 1. AuthService failure modes: PaymentAPI, 2026-01-25-auth-503
    - What was missing: How AuthService fails, capacity limits, degradation patterns
-   - Where to document: memory-bank/operations/dependencies/operational-dependencies.md#authservice
+   - Where to document: llm/memory-bank/operations/dependencies/operational-dependencies.md#authservice
    - Priority: P0 (Critical) - SEV-1, major dependency
 
 Priority: 1 high-priority dependency gap
@@ -1530,7 +1530,7 @@ New runbooks needed (prioritized):
 ### Past Incident Documentation Usage
 
 ```bash
-grep -r "Similar to\|Related incident" memory-bank/operations/incidents/ | wc -l
+grep -r "Similar to\|Related incident" llm/memory-bank/operations/incidents/ | wc -l
 ```
 
 Result: 2 of 5 incidents (40%) referenced past incidents
@@ -1554,7 +1554,7 @@ Improvement: Past incident usage is moderate (40%). Improve discoverability:
 ### Architecture Documentation Usage
 
 ```bash
-grep -r "memory-bank/systemPatterns.md\|memory-bank/techContext.md" memory-bank/operations/incidents/ | wc -l
+grep -r "llm/memory-bank/systemPatterns.md\|llm/memory-bank/techContext.md" llm/memory-bank/operations/incidents/ | wc -l
 ```
 
 Result: 4 of 5 incidents (80%) referenced architecture

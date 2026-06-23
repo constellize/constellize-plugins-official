@@ -51,13 +51,13 @@ $0
 
 **Standard Construction Folder Structure:**
 This prompt creates:
-- `memory-bank/` folder at project root
-- `memory-bank/projectbrief.md` (foundation)
-- `memory-bank/productContext.md` (the why)
-- `memory-bank/systemPatterns.md` (implementation guide)
-- `memory-bank/techContext.md` (technical details)
-- `memory-bank/activeContext.md` (current focus)
-- `memory-bank/progress.md` (status tracking)
+- `llm/memory-bank/` folder at project root
+- `llm/memory-bank/projectbrief.md` (foundation)
+- `llm/memory-bank/productContext.md` (the why)
+- `llm/memory-bank/systemPatterns.md` (implementation guide)
+- `llm/memory-bank/techContext.md` (technical details)
+- `llm/memory-bank/activeContext.md` (current focus)
+- `llm/memory-bank/progress.md` (status tracking)
 </context>
 
 <thinking>
@@ -616,7 +616,7 @@ From creation to maturity:
 ```
 Create initial structure:
 
-1. Create memory-bank/ folder
+1. Create llm/memory-bank/ folder
 2. Create 6 core files with templates
 3. Fill projectbrief.md with initial requirements
 4. Document initial understanding in other files
@@ -714,7 +714,7 @@ REPEAT: Memory bank is your single source of truth. Six core files with distinct
 **Example usage:**
 ```
 Day 1: Project start
-Developer creates memory-bank/ with 6 core files
+Developer creates llm/memory-bank/ with 6 core files
 Spends 2 hours documenting initial understanding
 
 projectbrief.md:
@@ -846,7 +846,7 @@ Result: Can continue work effectively with full context
 **Bad example:**
 ```
 Day 1: Project start
-Developer creates memory-bank/ folder
+Developer creates llm/memory-bank/ folder
 Writes minimal content:
 
 projectbrief.md:

@@ -50,10 +50,10 @@ $0
 **Standard Construction Folder Structure:**
 This prompt reads from:
 - Test files for $0
-- Code generation plan from `construction/design/code-generation-plan-*.md`
-- Gap analysis from `construction/requirements/gap-analysis.md`
+- Code generation plan from `llm/construction/design/code-generation-plan-*.md`
+- Gap analysis from `llm/construction/requirements/gap-analysis.md`
 
-And outputs coverage report to `construction/quality/coverage-report-$0.md`
+And outputs coverage report to `llm/construction/quality/coverage-report-$0.md`
 </context>
 
 <thinking>
@@ -66,7 +66,7 @@ Before validating coverage, analyze:
 </thinking>
 
 <output-format>
-Generate coverage report to `construction/quality/coverage-report-$0.md`:
+Generate coverage report to `llm/construction/quality/coverage-report-$0.md`:
 
 # Test Coverage Report: $0
 

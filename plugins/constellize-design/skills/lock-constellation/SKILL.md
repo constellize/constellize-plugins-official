@@ -16,8 +16,8 @@ A common trap when building from reusable parts is overextending: adding feature
 Follow this process:
 
 1. **Review completed artifacts:**
-   - Read constellation map at `construction/requirements/constellation-map.md`
-   - Read gap analysis at `construction/requirements/gap-analysis.md`
+   - Read constellation map at `llm/construction/requirements/constellation-map.md`
+   - Read gap analysis at `llm/construction/requirements/gap-analysis.md`
    - Extract all documented stars
    - Extract all validated gaps
 
@@ -43,10 +43,10 @@ Follow this process:
 <context>
 **Standard Construction Folder Structure:**
 This prompt reads from:
-- `construction/requirements/constellation-map.md` (star catalog)
-- `construction/requirements/gap-analysis.md` (identified gaps)
+- `llm/construction/requirements/constellation-map.md` (star catalog)
+- `llm/construction/requirements/gap-analysis.md` (identified gaps)
 
-And outputs to: `construction/requirements/scope-lock.md` (scope governance)
+And outputs to: `llm/construction/requirements/scope-lock.md` (scope governance)
 </context>
 
 <thinking>
@@ -58,7 +58,7 @@ Before locking scope, analyze:
 </thinking>
 
 <output-format>
-Format your output as `construction/requirements/scope-lock.md`:
+Format your output as `llm/construction/requirements/scope-lock.md`:
 
 # Scope Lock: $0
 
@@ -67,13 +67,13 @@ Format your output as `construction/requirements/scope-lock.md`:
 ### Constellation Review
 **Stars in Use:** [Count]
 
-List of stars from `construction/requirements/constellation-map.md`:
+List of stars from `llm/construction/requirements/constellation-map.md`:
 - **[Star Name]**: [Capability]
 - **[Star Name]**: [Capability]
 - **[Star Name]**: [Capability]
 
 ### Approved Gaps to Build
-**Total Gaps:** [Count] (from `construction/requirements/gap-analysis.md`)
+**Total Gaps:** [Count] (from `llm/construction/requirements/gap-analysis.md`)
 
 For each gap from gap analysis:
 
@@ -81,7 +81,7 @@ For each gap from gap analysis:
 **Priority:** [Critical/High/Medium/Low]
 **Status:** 🟢 Approved for implementation
 **Traceability:**
-- Documented in: `construction/requirements/gap-analysis.md`
+- Documented in: `llm/construction/requirements/gap-analysis.md`
 - Stakeholder need: [Reference to requirement]
 - Success criteria: [Reference to measurable criteria]
 
@@ -95,7 +95,7 @@ When a new feature is proposed during implementation, apply this checklist:
 
 **Evaluation Checklist:**
 - [ ] Does this feature exist in our approved gaps list above?
-- [ ] If not, has a new gap entry been filed in `construction/requirements/gap-analysis.md`?
+- [ ] If not, has a new gap entry been filed in `llm/construction/requirements/gap-analysis.md`?
 - [ ] Does the new gap trace back to documented stakeholder needs?
 - [ ] Has the new gap been validated against constellation map?
 - [ ] Has the team formally approved expanding scope?
@@ -163,7 +163,7 @@ Track all approved scope changes here:
 
 ## Validation
 
-- [ ] All gaps from `construction/requirements/gap-analysis.md` are listed above
+- [ ] All gaps from `llm/construction/requirements/gap-analysis.md` are listed above
 - [ ] All gaps trace to stakeholder needs
 - [ ] Governance process is defined
 - [ ] Review authority is established

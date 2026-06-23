@@ -259,7 +259,7 @@ Resistance 3: "We don't know what to document"
 
 Memory bank structure:
 ```
-memory-bank/
+llm/memory-bank/
 ├── systemPatterns.md          # Architectural patterns, system decisions
 ├── techContext.md             # Technical decisions, tool choices, versions
 ├── decisions/                 # Architectural decision records (ADRs)

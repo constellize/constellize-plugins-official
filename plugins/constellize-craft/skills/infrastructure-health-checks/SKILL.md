@@ -16,8 +16,8 @@ A system that can't report its own health is a system waiting to fail silently. 
 Follow this process:
 
 1. **Review constellation dependencies:**
-   - Read constellation map at `construction/requirements/constellation-map.md` for infrastructure stars
-   - Read code generation plan from `construction/design/code-generation-plan-*.md` for dependencies
+   - Read constellation map at `llm/construction/requirements/constellation-map.md` for infrastructure stars
+   - Read code generation plan from `llm/construction/design/code-generation-plan-*.md` for dependencies
    - Extract ALL infrastructure dependencies (databases, caches, APIs, filesystems)
 
 2. **Implement database health checks:**
@@ -51,8 +51,8 @@ $0
 
 **Standard Construction Folder Structure:**
 This prompt reads from:
-- `construction/requirements/constellation-map.md` (infrastructure stars)
-- `construction/design/code-generation-plan-*.md` (dependencies)
+- `llm/construction/requirements/constellation-map.md` (infrastructure stars)
+- `llm/construction/design/code-generation-plan-*.md` (dependencies)
 
 And adds health check code to the component implementation.
 </context>
@@ -72,7 +72,7 @@ Add health check endpoints/functions to component implementation:
 ```[language]
 // INFRASTRUCTURE HEALTH CHECKS: $0
 // Purpose: Verify foundational dependencies are functioning
-// Constellation map: construction/requirements/constellation-map.md
+// Constellation map: llm/construction/requirements/constellation-map.md
 //
 // Dependencies Monitored:
 // - [Infrastructure Star 1]: [What we check]
@@ -145,7 +145,7 @@ REPEAT: Health checks MUST be lightweight. Use short timeouts (5s max). Cache re
 ```typescript
 // INFRASTRUCTURE HEALTH CHECKS: PaymentProcessor
 // Purpose: Verify foundational dependencies functioning
-// Constellation map: construction/requirements/constellation-map.md
+// Constellation map: llm/construction/requirements/constellation-map.md
 //
 // Dependencies Monitored:
 // - PostgreSQL Database: Connectivity, response time, read/write

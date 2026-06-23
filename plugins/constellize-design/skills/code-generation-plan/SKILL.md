@@ -16,9 +16,9 @@ When filling gaps, AI-assisted development works best with a detailed plan that 
 Follow this process:
 
 1. **Review shaping knowledge:**
-   - Read implementation sketch for $1 from `construction/design/implementation-sketches.md`
-   - Read constellation map at `construction/requirements/constellation-map.md` for stars this connects to
-   - Read gap analysis at `construction/requirements/gap-analysis.md` for constraints and success criteria
+   - Read implementation sketch for $1 from `llm/construction/design/implementation-sketches.md`
+   - Read constellation map at `llm/construction/requirements/constellation-map.md` for stars this connects to
+   - Read gap analysis at `llm/construction/requirements/gap-analysis.md` for constraints and success criteria
    - Extract specific contracts, schemas, protocols from referenced stars
 
 2. **Plan code structure:**
@@ -45,9 +45,9 @@ $1
 
 **Standard Construction Folder Structure:**
 This prompt reads from:
-- `construction/requirements/constellation-map.md` (star catalog)
-- `construction/requirements/gap-analysis.md` (identified gaps)
-- `construction/design/implementation-sketches.md` (design approaches)
+- `llm/construction/requirements/constellation-map.md` (star catalog)
+- `llm/construction/requirements/gap-analysis.md` (identified gaps)
+- `llm/construction/design/implementation-sketches.md` (design approaches)
 
 And outputs a detailed implementation plan shaped by this constellation knowledge.
 </context>
@@ -62,7 +62,7 @@ Before creating the plan, analyze:
 </thinking>
 
 <output-format>
-Format your output as `construction/design/code-generation-plan-$1.md`:
+Format your output as `llm/construction/design/code-generation-plan-$1.md`:
 
 # Code Generation Plan: $1
 
@@ -73,9 +73,9 @@ Format your output as `construction/design/code-generation-plan-$1.md`:
 **Sketch Reference:** [Section from implementation-sketches.md]
 
 **Shaping Knowledge Sources:**
-- Constellation map: `construction/requirements/constellation-map.md`
-- Gap analysis: `construction/requirements/gap-analysis.md`
-- Implementation sketch: `construction/design/implementation-sketches.md`
+- Constellation map: `llm/construction/requirements/constellation-map.md`
+- Gap analysis: `llm/construction/requirements/gap-analysis.md`
+- Implementation sketch: `llm/construction/design/implementation-sketches.md`
 
 ---
 

@@ -16,8 +16,8 @@ Integration tests verify your component works correctly with external systems—
 Follow this process:
 
 1. **Review constellation integration points:**
-   - Read constellation map at `construction/requirements/constellation-map.md` for stars this integrates with
-   - Read code generation plan from `construction/design/code-generation-plan-*.md` for integration details
+   - Read constellation map at `llm/construction/requirements/constellation-map.md` for stars this integrates with
+   - Read code generation plan from `llm/construction/design/code-generation-plan-*.md` for integration details
    - Extract specific contracts, protocols, schemas, and failure modes to test
 
 2. **Write database integration tests:**
@@ -46,8 +46,8 @@ $0
 
 **Standard Construction Folder Structure:**
 This prompt reads from:
-- `construction/requirements/constellation-map.md` (star catalog with contracts)
-- `construction/design/code-generation-plan-*.md` (integration specifications)
+- `llm/construction/requirements/constellation-map.md` (star catalog with contracts)
+- `llm/construction/design/code-generation-plan-*.md` (integration specifications)
 
 And outputs integration tests to standard test file location.
 </context>
@@ -199,7 +199,7 @@ REPEAT: Integration tests validate constellation contracts. Use REAL dependencie
 ```typescript
 // INTEGRATION TESTS: RateLimitMiddleware
 // Purpose: Validate integration with constellation stars
-// Constellation map: construction/requirements/constellation-map.md
+// Constellation map: llm/construction/requirements/constellation-map.md
 //
 // Stars Integrated:
 // - Redis Cache: Sorted set operations (ZADD, ZCOUNT, ZPOPMIN)

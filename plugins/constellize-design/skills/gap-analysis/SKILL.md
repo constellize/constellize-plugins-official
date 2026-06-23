@@ -15,7 +15,7 @@ Even with a rich constellation of reusable stars, there will be gaps—missing p
 
 Follow this process:
 
-1. **Review the constellation map** at `construction/requirements/constellation-map.md`:
+1. **Review the constellation map** at `llm/construction/requirements/constellation-map.md`:
    - List all documented stars
    - Identify integration points between stars
    - Note architectural seams
@@ -42,7 +42,7 @@ Follow this process:
 
 <context>
 **Standard Construction Folder Structure:**
-This prompt reads from `construction/requirements/constellation-map.md` and outputs to `construction/requirements/gap-analysis.md`.
+This prompt reads from `llm/construction/requirements/constellation-map.md` and outputs to `llm/construction/requirements/gap-analysis.md`.
 
 Stakeholder requirements:
 $1
@@ -57,7 +57,7 @@ Before identifying gaps, analyze:
 </thinking>
 
 <output-format>
-Format your output as `construction/requirements/gap-analysis.md`:
+Format your output as `llm/construction/requirements/gap-analysis.md`:
 
 # Gap Analysis: $0
 

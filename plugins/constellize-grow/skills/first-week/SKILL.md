@@ -73,7 +73,7 @@ Total time: 7-9 hours across week
 **Success:** You have 2 documents, can share with team
 
 **Checkpoint:**
-- [ ] Created memory-bank/ directory
+- [ ] Created llm/memory-bank/ directory
 - [ ] Created systemPatterns.md with 3-5 patterns
 - [ ] Created techContext.md with tech decisions
 - [ ] Both files have real examples
@@ -165,7 +165,7 @@ Response: "First time slower (learning). Second time faster (pattern reuse)."
 4. Decide: Continue this practice?
 
 **Documentation:**
-- Add reflection to memory-bank/progress.md
+- Add reflection to llm/memory-bank/progress.md
 - Create issue for memory bank improvements
 - Plan next week's adoption steps
 
@@ -263,7 +263,7 @@ Context: Feature development (new payment webhook handler)
 ## DAY 1 (Monday): Minimal Memory Bank
 
 **What I did:**
-1. Created memory-bank/ directory
+1. Created llm/memory-bank/ directory
 2. Created systemPatterns.md:
    - Event sourcing pattern
    - Async processing pattern

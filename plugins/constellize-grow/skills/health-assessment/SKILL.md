@@ -264,7 +264,7 @@ Success criteria:
 Assessment Period: Q4 2025 (Oct - Dec 2025)
 Assessment Date: 2026-01-05
 Assessed By: Casey Brown, Morgan Lee
-Documentation: memory-bank/system-health/
+Documentation: llm/memory-bank/system-health/
 
 ## Executive Summary
 

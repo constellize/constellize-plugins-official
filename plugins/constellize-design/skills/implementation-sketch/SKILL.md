@@ -17,14 +17,14 @@ The goal isn't detailed task lists, but ensuring every new piece aligns with the
 
 Follow this process:
 
-1. **Review approved gaps** from `construction/requirements/gap-analysis.md`:
+1. **Review approved gaps** from `llm/construction/requirements/gap-analysis.md`:
    - List all gaps marked for implementation
    - Extract constraints and integration points for each
    - Note success criteria
 
 2. **For each gap, sketch the approach:**
    - What new functionality is actually needed (not vague)
-   - How it connects to existing stars from `construction/requirements/constellation-map.md`
+   - How it connects to existing stars from `llm/construction/requirements/constellation-map.md`
    - Key constraints and context that shaped the need
    - What can be reused vs what must be generated
    - Design decisions and trade-offs
@@ -45,11 +45,11 @@ Follow this process:
 <context>
 **Standard Construction Folder Structure:**
 This prompt reads from:
-- `construction/requirements/gap-analysis.md` (identified gaps)
-- `construction/requirements/constellation-map.md` (star catalog)
-- `construction/requirements/scope-lock.md` (scope governance)
+- `llm/construction/requirements/gap-analysis.md` (identified gaps)
+- `llm/construction/requirements/constellation-map.md` (star catalog)
+- `llm/construction/requirements/scope-lock.md` (scope governance)
 
-And outputs to: `construction/design/implementation-sketches.md`
+And outputs to: `llm/construction/design/implementation-sketches.md`
 </context>
 
 <thinking>
@@ -61,7 +61,7 @@ Before sketching implementations, analyze:
 </thinking>
 
 <output-format>
-Format your output as `construction/design/implementation-sketches.md`:
+Format your output as `llm/construction/design/implementation-sketches.md`:
 
 # Implementation Sketches: $0
 
@@ -69,15 +69,15 @@ Format your output as `construction/design/implementation-sketches.md`:
 
 **Purpose:** Rough design approaches for approved gaps, aligned with constellation
 
-**Gaps to Sketch:** [Count] (from construction/requirements/gap-analysis.md)
+**Gaps to Sketch:** [Count] (from llm/construction/requirements/gap-analysis.md)
 
-**Constellation Reference:** construction/requirements/constellation-map.md
+**Constellation Reference:** llm/construction/requirements/constellation-map.md
 
 ---
 
 ## Sketch 1: [Gap Name]
 
-**Gap Reference:** [Section from construction/requirements/gap-analysis.md]
+**Gap Reference:** [Section from llm/construction/requirements/gap-analysis.md]
 **Priority:** [Critical/High/Medium/Low]
 **Estimated Complexity:** [Simple/Moderate/Complex]
 
@@ -92,12 +92,12 @@ Format your output as `construction/design/implementation-sketches.md`:
 ### Constellation Alignment
 
 **Stars This Connects To:**
-- **[Star Name]** (from construction/requirements/constellation-map.md)
+- **[Star Name]** (from llm/construction/requirements/constellation-map.md)
   - Connection: [How we integrate - protocol/contract]
   - What we reuse: [Specific capability we're leveraging]
   - Integration point: [Specific interface/API/schema]
 
-- **[Star Name]** (from construction/requirements/constellation-map.md)
+- **[Star Name]** (from llm/construction/requirements/constellation-map.md)
   - Connection: [How we integrate]
   - What we reuse: [Specific capability]
   - Integration point: [Specific interface]
@@ -131,9 +131,9 @@ Format your output as `construction/design/implementation-sketches.md`:
 ### Constraints Shaping This Design
 
 **From Gap Analysis:**
-- [Constraint 1 from construction/requirements/gap-analysis.md]
-- [Constraint 2 from construction/requirements/gap-analysis.md]
-- [Constraint 3 from construction/requirements/gap-analysis.md]
+- [Constraint 1 from llm/construction/requirements/gap-analysis.md]
+- [Constraint 2 from llm/construction/requirements/gap-analysis.md]
+- [Constraint 3 from llm/construction/requirements/gap-analysis.md]
 
 **From Constellation:**
 - [Constraint from existing star - e.g., "PostgreSQL single-writer model"]
@@ -153,12 +153,12 @@ Format your output as `construction/design/implementation-sketches.md`:
 ### Success Validation
 
 **How This Closes the Gap:**
-- [ ] Success criterion 1 (from construction/requirements/gap-analysis.md)
+- [ ] Success criterion 1 (from llm/construction/requirements/gap-analysis.md)
 - [ ] Success criterion 2
 - [ ] Success criterion 3
 
 **Integration Validation:**
-- [ ] All referenced stars exist in construction/requirements/constellation-map.md
+- [ ] All referenced stars exist in llm/construction/requirements/constellation-map.md
 - [ ] Integration points match documented contracts
 - [ ] Design respects architectural seams
 
@@ -186,8 +186,8 @@ Format your output as `construction/design/implementation-sketches.md`:
 ## Validation Checklist
 
 For each sketch above:
-- [ ] Addresses a gap from construction/requirements/gap-analysis.md (no scope creep)
-- [ ] References only stars documented in construction/requirements/constellation-map.md
+- [ ] Addresses a gap from llm/construction/requirements/gap-analysis.md (no scope creep)
+- [ ] References only stars documented in llm/construction/requirements/constellation-map.md
 - [ ] Respects constraints from gap analysis
 - [ ] Identifies what's reused vs generated
 - [ ] Maps to gap's success criteria
@@ -229,7 +229,7 @@ REPEAT: Every sketch must align with the constellation. Design decisions must be
 ✅ Good implementation sketch:
 ## Sketch: API Rate Limiter Between Gateway and Stripe API
 
-**Gap Reference:** Gap 1 from construction/requirements/gap-analysis.md
+**Gap Reference:** Gap 1 from llm/construction/requirements/gap-analysis.md
 **Priority:** Critical
 **Estimated Complexity:** Moderate
 
@@ -244,17 +244,17 @@ API Gateway (Star) has no rate limiting capability. Stripe API (Star) enforces h
 ### Constellation Alignment
 
 **Stars This Connects To:**
-- **API Gateway** (from construction/requirements/constellation-map.md)
+- **API Gateway** (from llm/construction/requirements/constellation-map.md)
   - Connection: HTTP middleware layer
   - What we reuse: Existing request/response pipeline
   - Integration point: Express middleware chain (req, res, next)
 
-- **Stripe API** (from construction/requirements/constellation-map.md)
+- **Stripe API** (from llm/construction/requirements/constellation-map.md)
   - Connection: Wrap official Stripe SDK client
   - What we reuse: SDK's retry logic and error handling
   - Integration point: Stripe SDK methods (charges.create, etc.)
 
-- **Redis Cache** (from construction/requirements/constellation-map.md)
+- **Redis Cache** (from llm/construction/requirements/constellation-map.md)
   - Connection: Distributed queue state storage
   - What we reuse: Sorted sets for queue, atomic operations
   - Integration point: Redis commands (ZADD, ZPOPMIN)
@@ -323,7 +323,7 @@ API Gateway → RateLimitMiddleware → StripeQueueWrapper → Stripe API
 - [ ] Graceful degradation if Redis unavailable (fail open to Stripe, accept 429s)
 
 **Integration Validation:**
-- [x] All referenced stars exist in construction/requirements/constellation-map.md
+- [x] All referenced stars exist in llm/construction/requirements/constellation-map.md
 - [x] Integration points match documented contracts (Express middleware, Stripe SDK, Redis commands)
 - [x] Design respects architectural seams (connection pooling, timeouts)
 

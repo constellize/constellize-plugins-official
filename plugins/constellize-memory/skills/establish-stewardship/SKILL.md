@@ -166,7 +166,7 @@ jobs:
         run: |
           # Validate all file paths mentioned in memory bank exist
           echo "Checking file references..."
-          grep -r "src/" memory-bank/ | \
+          grep -r "src/" llm/memory-bank/ | \
             grep -o 'src/[^ ]*' | \
             sort -u | \
             while read path; do
@@ -180,7 +180,7 @@ jobs:
       - name: Check Staleness
         run: |
           # Warn if memory bank not updated recently
-          last_update=$(git log -1 --format=%cd --date=short memory-bank/)
+          last_update=$(git log -1 --format=%cd --date=short llm/memory-bank/)
           days_since=$(( ($(date +%s) - $(date -d "$last_update" +%s)) / 86400 ))
 
           if [ $days_since -gt 14 ]; then
@@ -192,11 +192,11 @@ jobs:
         run: |
           # Check internal cross-references
           echo "Checking internal links..."
-          grep -r "See .*\.md" memory-bank/ | \
+          grep -r "See .*\.md" llm/memory-bank/ | \
             grep -o "[a-zA-Z]*\.md" | \
             sort -u | \
             while read file; do
-              if [ ! -f "memory-bank/$file" ]; then
+              if [ ! -f "llm/memory-bank/$file" ]; then
                 echo "❌ Broken link to: $file"
                 exit 1
               fi
@@ -239,7 +239,7 @@ function getMemoryBankHealth() {
   ];
 
   const health = files.map(file => {
-    const filePath = `memory-bank/${file}`;
+    const filePath = `llm/memory-bank/${file}`;
     const lastUpdate = getLastUpdate(filePath);
     const daysSince = getDaysSince(lastUpdate);
 
@@ -450,7 +450,7 @@ echo "Current steward: $current_steward"
 echo "Backup: $backup_steward"
 
 # Update steward file
-cat > memory-bank/.steward << EOF
+cat > llm/memory-bank/.steward << EOF
 Current Steward: $current_steward
 Backup: $backup_steward
 Week of: $today
@@ -595,7 +595,7 @@ Benefit: Continuous reinforcement, early problem detection
 # Making Memory Bank Updates Easy
 
 ## Templates:
-Location: `memory-bank/templates/`
+Location: `llm/memory-bank/templates/`
 
 - decision-template.md (copy, fill, paste)
 - pattern-template.md (copy, fill, paste)
@@ -604,9 +604,9 @@ Location: `memory-bank/templates/`
 Usage:
 ```bash
 # Quick decision entry
-cp memory-bank/templates/decision-template.md /tmp/decision.md
+cp llm/memory-bank/templates/decision-template.md /tmp/decision.md
 # Edit /tmp/decision.md
-cat /tmp/decision.md >> memory-bank/activeContext.md
+cat /tmp/decision.md >> llm/memory-bank/activeContext.md
 ```
 
 ## Helper Scripts:
@@ -633,9 +633,9 @@ cat /tmp/decision.md >> memory-bank/activeContext.md
 ```
 
 ## Documentation:
-- memory-bank/README.md: How to update
-- memory-bank/GUIDELINES.md: What to document
-- memory-bank/EXAMPLES.md: Good update examples
+- llm/memory-bank/README.md: How to update
+- llm/memory-bank/GUIDELINES.md: What to document
+- llm/memory-bank/EXAMPLES.md: Good update examples
 
 ## Visibility:
 - Pin memory-bank folder in IDE

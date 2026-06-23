@@ -51,11 +51,11 @@ $2
 </context>
 
 <output-format>
-Format your output as `construction/requirements/constellation-map.md`:
+Format your output as `llm/construction/requirements/constellation-map.md`:
 
 **Standard Construction Folder Structure:**
 ```
-construction/
+llm/construction/
   requirements/
     constellation-map.md      # Output of this prompt
     gap-analysis.md           # Next: Gap identification

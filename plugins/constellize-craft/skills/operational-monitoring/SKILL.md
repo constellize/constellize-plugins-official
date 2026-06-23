@@ -16,8 +16,8 @@ Operational monitoring goes beyond startup validation—it tracks how your syste
 Follow this process:
 
 1. **Review runtime requirements:**
-   - Read code generation plan from `construction/design/code-generation-plan-*.md` for performance requirements
-   - Read gap analysis from `construction/requirements/gap-analysis.md` for throughput expectations
+   - Read code generation plan from `llm/construction/design/code-generation-plan-*.md` for performance requirements
+   - Read gap analysis from `llm/construction/requirements/gap-analysis.md` for throughput expectations
    - Identify resource constraints (memory, threads, connections)
 
 2. **Implement memory monitoring:**
@@ -51,8 +51,8 @@ $0
 
 **Standard Construction Folder Structure:**
 This prompt reads from:
-- `construction/design/code-generation-plan-*.md` (performance requirements)
-- `construction/requirements/gap-analysis.md` (throughput expectations)
+- `llm/construction/design/code-generation-plan-*.md` (performance requirements)
+- `llm/construction/requirements/gap-analysis.md` (throughput expectations)
 
 And adds monitoring code to component implementation.
 </context>

@@ -16,8 +16,8 @@ Contract tests validate that your component's API contracts remain stable and co
 Follow this process:
 
 1. **Review constellation contracts:**
-   - Read constellation map at `construction/requirements/constellation-map.md` for star contracts
-   - Read code generation plan from `construction/design/code-generation-plan-*.md` for API specifications
+   - Read constellation map at `llm/construction/requirements/constellation-map.md` for star contracts
+   - Read code generation plan from `llm/construction/design/code-generation-plan-*.md` for API specifications
    - Extract exact contracts (request/response formats, schemas, protocols)
 
 2. **Write API contract tests:**
@@ -42,8 +42,8 @@ $0
 
 **Standard Construction Folder Structure:**
 This prompt reads from:
-- `construction/requirements/constellation-map.md` (star contracts)
-- `construction/design/code-generation-plan-*.md` (API specifications)
+- `llm/construction/requirements/constellation-map.md` (star contracts)
+- `llm/construction/design/code-generation-plan-*.md` (API specifications)
 
 And outputs contract tests to standard test file location.
 </context>
@@ -216,7 +216,7 @@ REPEAT: Contract tests prevent breaking changes. Use STRICT schema validation. T
 ```typescript
 // CONTRACT TESTS: RateLimitMiddleware
 // Purpose: Ensure API contracts maintained across versions
-// Constellation map: construction/requirements/constellation-map.md
+// Constellation map: llm/construction/requirements/constellation-map.md
 //
 // Contracts Under Test:
 // - Queue Response v1.0: 202 Accepted with status field

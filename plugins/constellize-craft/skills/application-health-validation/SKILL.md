@@ -18,8 +18,8 @@ Application health goes beyond infrastructure—it validates that YOUR code is r
 Follow this process:
 
 1. **Review application requirements:**
-   - Read code generation plan from `construction/design/code-generation-plan-*.md` for initialization steps
-   - Read gap analysis from `construction/requirements/gap-analysis.md` for business rules
+   - Read code generation plan from `llm/construction/design/code-generation-plan-*.md` for initialization steps
+   - Read gap analysis from `llm/construction/requirements/gap-analysis.md` for business rules
    - Extract ALL required configuration, environment variables, and business constraints
 
 2. **Implement startup verification:**
@@ -53,8 +53,8 @@ $0
 
 **Standard Construction Folder Structure:**
 This prompt reads from:
-- `construction/design/code-generation-plan-*.md` (initialization requirements)
-- `construction/requirements/gap-analysis.md` (business rules to validate)
+- `llm/construction/design/code-generation-plan-*.md` (initialization requirements)
+- `llm/construction/requirements/gap-analysis.md` (business rules to validate)
 
 And adds health validation code to component implementation.
 </context>
@@ -74,7 +74,7 @@ Add readiness validation to component:
 ```[language]
 // APPLICATION HEALTH VALIDATION: $0
 // Purpose: Confirm service ready to handle requests
-// Code plan: construction/design/code-generation-plan-*.md
+// Code plan: llm/construction/design/code-generation-plan-*.md
 //
 // Validation Checks:
 // - Startup: All dependencies initialized

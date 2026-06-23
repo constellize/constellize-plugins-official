@@ -597,8 +597,8 @@ Checklist:
 ### Where to Document
 
 Add to memory bank:
-- Primary: memory-bank/systemPatterns.md#resilience
-- Secondary: memory-bank/operations/performance/load-testing.md
+- Primary: llm/memory-bank/systemPatterns.md#resilience
+- Secondary: llm/memory-bank/operations/performance/load-testing.md
 - Cross-reference: engineering-practices/code-review-checklist.md (add circuit breaker validation)
 
 ```

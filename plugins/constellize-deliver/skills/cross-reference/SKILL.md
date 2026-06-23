@@ -416,8 +416,8 @@ REMEMBER: Cross-references are only valuable if they're current. A broken link d
 ```
 System: PaymentAPI
 Dependency Scope: Direct runtime dependencies
-Development Memory: memory-bank/
-Operations Memory: memory-bank/operations/
+Development Memory: llm/memory-bank/
+Operations Memory: llm/memory-bank/operations/
 
 Discovery:
 
@@ -427,22 +427,22 @@ Database (PostgreSQL):
 - Purpose: Store payment transactions, account data
 - Criticality: CRITICAL (100% of operations require database)
 - Failure mode: Complete service outage, no degraded mode
-- Documentation: memory-bank/systemPatterns.md#database-layer
-- Operational runbook: memory-bank/operations/runbooks/database-procedures.md
+- Documentation: llm/memory-bank/systemPatterns.md#database-layer
+- Operational runbook: llm/memory-bank/operations/runbooks/database-procedures.md
 
 Card Processing API (Stripe):
 - Purpose: Process credit card payments
 - Criticality: CRITICAL (payment processing requires this)
 - Failure mode: Cannot process card payments (can still process ACH)
-- Documentation: memory-bank/systemPatterns.md#payment-providers
-- Operational runbook: memory-bank/operations/runbooks/payment-provider-failures.md
+- Documentation: llm/memory-bank/systemPatterns.md#payment-providers
+- Operational runbook: llm/memory-bank/operations/runbooks/payment-provider-failures.md
 
 Cache (Redis):
 - Purpose: Cache account lookups, rate limit tracking
 - Criticality: HIGH (degrades performance without, does not fail)
 - Failure mode: 5x increase in database load, 3x latency increase
-- Documentation: memory-bank/systemPatterns.md#caching-strategy
-- Operational runbook: memory-bank/operations/runbooks/cache-procedures.md
+- Documentation: llm/memory-bank/systemPatterns.md#caching-strategy
+- Operational runbook: llm/memory-bank/operations/runbooks/cache-procedures.md
 
 DOWNSTREAM DEPENDENCIES:
 
@@ -451,14 +451,14 @@ Mobile App:
 - Criticality: CRITICAL (customer-facing payment flow)
 - SLO impact: Our 200ms p95 directly affects their checkout UX
 - Documentation: [Mobile team's memory bank - separate repo]
-- Operational coordination: memory-bank/operations/dependencies/downstream-impacts.md#mobile-app
+- Operational coordination: llm/memory-bank/operations/dependencies/downstream-impacts.md#mobile-app
 
 Analytics Service:
 - Usage: Async payment event processing
 - Criticality: MEDIUM (not real-time critical)
 - SLO impact: Our availability affects their data freshness, not correctness
 - Documentation: [Analytics team's memory bank]
-- Operational coordination: memory-bank/operations/dependencies/downstream-impacts.md#analytics
+- Operational coordination: llm/memory-bank/operations/dependencies/downstream-impacts.md#analytics
 
 INFRASTRUCTURE DEPENDENCIES:
 
@@ -466,15 +466,15 @@ Kubernetes Cluster:
 - Purpose: Container orchestration, scaling, health management
 - Criticality: CRITICAL (deployment platform)
 - Failure mode: Cannot scale, deploy, or recover from node failures
-- Configuration: memory-bank/techContext.md#deployment-architecture
-- Operational procedures: memory-bank/operations/runbooks/deployment-runbook.md
+- Configuration: llm/memory-bank/techContext.md#deployment-architecture
+- Operational procedures: llm/memory-bank/operations/runbooks/deployment-runbook.md
 
 Application Load Balancer:
 - Purpose: Traffic routing, health checks, TLS termination
 - Criticality: CRITICAL (entry point for all traffic)
 - Failure mode: No traffic reaches service
-- Configuration: memory-bank/techContext.md#load-balancer-configuration
-- Operational procedures: memory-bank/operations/runbooks/traffic-management.md
+- Configuration: llm/memory-bank/techContext.md#load-balancer-configuration
+- Operational procedures: llm/memory-bank/operations/runbooks/traffic-management.md
 
 Dependency Map:
 
@@ -498,7 +498,7 @@ Dependency Map:
 
 Cross-References (Development → Operations):
 
-File: memory-bank/systemPatterns.md
+File: llm/memory-bank/systemPatterns.md
 
 ## Database Layer
 
@@ -515,11 +515,11 @@ Constraints:
 - Max connections per replica: 100
 
 Operational Context:
-- Procedures: memory-bank/operations/runbooks/database-procedures.md
-- Performance baseline: memory-bank/operations/performance/database-metrics.md
-- Connection troubleshooting: memory-bank/operations/runbooks/database-procedures.md#connection-troubleshooting
+- Procedures: llm/memory-bank/operations/runbooks/database-procedures.md
+- Performance baseline: llm/memory-bank/operations/performance/database-metrics.md
+- Connection troubleshooting: llm/memory-bank/operations/runbooks/database-procedures.md#connection-troubleshooting
 - Recent incidents:
-  - 2026-01-15: Connection pool exhaustion - memory-bank/operations/incidents/2026-01-15-db-connection-pool.md
+  - 2026-01-15: Connection pool exhaustion - llm/memory-bank/operations/incidents/2026-01-15-db-connection-pool.md
   - Root cause required design update (connection pool sizing strategy revised)
 
 ## Caching Strategy
@@ -537,9 +537,9 @@ Constraints:
 - No critical data in cache (always backed by database)
 
 Operational Context:
-- Procedures: memory-bank/operations/runbooks/cache-procedures.md
-- Cache failure behavior: memory-bank/operations/runbooks/incident-response.md#cache-failure
-- Performance impact: memory-bank/operations/performance/cache-metrics.md
+- Procedures: llm/memory-bank/operations/runbooks/cache-procedures.md
+- Cache failure behavior: llm/memory-bank/operations/runbooks/incident-response.md#cache-failure
+- Performance impact: llm/memory-bank/operations/performance/cache-metrics.md
 - Degraded mode: System bypasses cache, increases database load 5x
 
 ## Payment Provider Integration
@@ -557,13 +557,13 @@ Constraints:
 - Retry strategy: Exponential backoff, max 3 retries
 
 Operational Context:
-- Procedures: memory-bank/operations/runbooks/payment-provider-failures.md
-- API failure handling: memory-bank/operations/runbooks/incident-response.md#stripe-api-failures
-- Webhook monitoring: memory-bank/operations/performance/webhook-metrics.md
+- Procedures: llm/memory-bank/operations/runbooks/payment-provider-failures.md
+- API failure handling: llm/memory-bank/operations/runbooks/incident-response.md#stripe-api-failures
+- Webhook monitoring: llm/memory-bank/operations/performance/webhook-metrics.md
 
 Cross-References (Operations → Development):
 
-File: memory-bank/operations/dependencies/operational-dependencies.md
+File: llm/memory-bank/operations/dependencies/operational-dependencies.md
 
 # Operational Dependencies for PaymentAPI
 
@@ -572,24 +572,24 @@ Criticality: CRITICAL
 Failure Mode: Complete outage
 
 Design Context:
-- Architecture: memory-bank/systemPatterns.md#database-layer
-- Connection pooling: memory-bank/systemPatterns.md#connection-management
-- Schema design: memory-bank/techContext.md#database-schema
+- Architecture: llm/memory-bank/systemPatterns.md#database-layer
+- Connection pooling: llm/memory-bank/systemPatterns.md#connection-management
+- Schema design: llm/memory-bank/techContext.md#database-schema
 
 Operational Procedures:
-- Connection failures: memory-bank/operations/runbooks/database-procedures.md#connection-troubleshooting
-- Performance degradation: memory-bank/operations/runbooks/database-procedures.md#performance-investigation
-- Query timeouts: memory-bank/operations/runbooks/database-procedures.md#timeout-investigation
+- Connection failures: llm/memory-bank/operations/runbooks/database-procedures.md#connection-troubleshooting
+- Performance degradation: llm/memory-bank/operations/runbooks/database-procedures.md#performance-investigation
+- Query timeouts: llm/memory-bank/operations/runbooks/database-procedures.md#timeout-investigation
 
 Recent Incidents:
 - 2026-01-15: Connection pool exhaustion (SEV-1, 47 minutes)
-  - Incident: memory-bank/operations/incidents/2026-01-15-db-connection-pool.md
+  - Incident: llm/memory-bank/operations/incidents/2026-01-15-db-connection-pool.md
   - Root cause: Design assumption about connection reuse violated
-  - Design updated: memory-bank/systemPatterns.md#connection-management (see 2026-01-16 update)
+  - Design updated: llm/memory-bank/systemPatterns.md#connection-management (see 2026-01-16 update)
   - Runbook updated: Connection pool monitoring added
 
 Performance Baseline:
-- Query latency p95: 15ms (baseline: memory-bank/operations/performance/database-metrics.md)
+- Query latency p95: 15ms (baseline: llm/memory-bank/operations/performance/database-metrics.md)
 - Connection pool utilization: 40-60% normal (alert at 80%)
 
 ## Upstream: Cache (Redis)
@@ -597,14 +597,14 @@ Criticality: HIGH (degrades without, does not fail)
 Failure Mode: 5x database load, 3x API latency
 
 Design Context:
-- Caching strategy: memory-bank/systemPatterns.md#caching-strategy
-- Graceful degradation: memory-bank/systemPatterns.md#graceful-degradation
-- Cache invalidation: memory-bank/systemPatterns.md#cache-invalidation
+- Caching strategy: llm/memory-bank/systemPatterns.md#caching-strategy
+- Graceful degradation: llm/memory-bank/systemPatterns.md#graceful-degradation
+- Cache invalidation: llm/memory-bank/systemPatterns.md#cache-invalidation
 
 Operational Procedures:
-- Cache unavailable: memory-bank/operations/runbooks/incident-response.md#cache-failure
-- Degraded mode operation: memory-bank/operations/runbooks/incident-response.md#operating-without-cache
-- Cache warming on deployment: memory-bank/operations/runbooks/deployment-runbook.md#cache-warming
+- Cache unavailable: llm/memory-bank/operations/runbooks/incident-response.md#cache-failure
+- Degraded mode operation: llm/memory-bank/operations/runbooks/incident-response.md#operating-without-cache
+- Cache warming on deployment: llm/memory-bank/operations/runbooks/deployment-runbook.md#cache-warming
 
 Performance Impact:
 - With cache: 50ms p95 latency
@@ -616,48 +616,48 @@ Impact if PaymentAPI fails: CRITICAL (customer payments blocked)
 SLO Requirements: 99.9% availability, <200ms p95 latency
 
 Our SLO Commitment:
-- Documented: memory-bank/operations/dependencies/service-level-objectives.md#mobile-app
+- Documented: llm/memory-bank/operations/dependencies/service-level-objectives.md#mobile-app
 - Current performance: 99.95% availability, 120ms p95 latency
 - Monitoring: [Dashboard link]
 
 Operational Coordination:
 - On-call contact: Mobile team PagerDuty rotation
-- Incident escalation: memory-bank/operations/runbooks/incident-response.md#downstream-impact-notification
+- Incident escalation: llm/memory-bank/operations/runbooks/incident-response.md#downstream-impact-notification
 - Communication channel: #payments-incidents Slack channel
 
 Bidirectional Validation:
 
 ✓ Database dependency:
-  - Development memory documents design: memory-bank/systemPatterns.md#database-layer
+  - Development memory documents design: llm/memory-bank/systemPatterns.md#database-layer
   - Development memory links to operations: ✓ (runbooks, incidents, performance)
-  - Operations memory documents procedures: memory-bank/operations/runbooks/database-procedures.md
+  - Operations memory documents procedures: llm/memory-bank/operations/runbooks/database-procedures.md
   - Operations memory links to design: ✓ (architecture, connection management, schema)
   - Bidirectional: ✓
 
 ✓ Cache dependency:
-  - Development memory documents design: memory-bank/systemPatterns.md#caching-strategy
+  - Development memory documents design: llm/memory-bank/systemPatterns.md#caching-strategy
   - Development memory links to operations: ✓ (degraded mode, procedures)
-  - Operations memory documents procedures: memory-bank/operations/runbooks/cache-procedures.md
+  - Operations memory documents procedures: llm/memory-bank/operations/runbooks/cache-procedures.md
   - Operations memory links to design: ✓ (strategy, invalidation, degradation)
   - Bidirectional: ✓
 
 ✓ Stripe API dependency:
-  - Development memory documents design: memory-bank/systemPatterns.md#payment-provider-integration
+  - Development memory documents design: llm/memory-bank/systemPatterns.md#payment-provider-integration
   - Development memory links to operations: ✓ (failure handling, webhooks)
-  - Operations memory documents procedures: memory-bank/operations/runbooks/payment-provider-failures.md
+  - Operations memory documents procedures: llm/memory-bank/operations/runbooks/payment-provider-failures.md
   - Operations memory links to design: ✓ (idempotency, retry strategy, webhooks)
   - Bidirectional: ✓
 
 ✓ Mobile App downstream:
-  - Our SLO documented: memory-bank/operations/dependencies/service-level-objectives.md
-  - Our development memory acknowledges impact: memory-bank/systemPatterns.md#downstream-consumers
+  - Our SLO documented: llm/memory-bank/operations/dependencies/service-level-objectives.md
+  - Our development memory acknowledges impact: llm/memory-bank/systemPatterns.md#downstream-consumers
   - Operations memory documents coordination: ✓
   - Escalation procedures: ✓
   - Bidirectional: ✓
 
 Incident Integration Example:
 
-File: memory-bank/operations/incidents/2026-01-15-db-connection-pool.md
+File: llm/memory-bank/operations/incidents/2026-01-15-db-connection-pool.md
 
 # Incident: Database Connection Pool Exhaustion
 
@@ -677,12 +677,12 @@ Responders: @alice (primary), @bob (secondary)
 ## Dependency Context
 
 Affected Dependency: Database (PostgreSQL)
-Dependency Criticality: CRITICAL (per memory-bank/operations/dependencies/operational-dependencies.md#database)
-Design Documentation: memory-bank/systemPatterns.md#database-layer
+Dependency Criticality: CRITICAL (per llm/memory-bank/operations/dependencies/operational-dependencies.md#database)
+Design Documentation: llm/memory-bank/systemPatterns.md#database-layer
 
 ## Root Cause Analysis
 
-Design Assumption: Connection pool size of 50 adequate based on traffic estimates from memory-bank/systemPatterns.md#connection-management
+Design Assumption: Connection pool size of 50 adequate based on traffic estimates from llm/memory-bank/systemPatterns.md#connection-management
 
 Assumption Violated: Traffic pattern changed (mobile app retry behavior during network issues created connection surge)
 
@@ -693,27 +693,27 @@ Contributing Factors:
 
 ## Design Documentation Impact
 
-UPDATED: memory-bank/systemPatterns.md#connection-management
+UPDATED: llm/memory-bank/systemPatterns.md#connection-management
 Changes:
 - Added connection pool sizing calculation accounting for retry amplification
 - Added traffic pattern considerations (retry behavior, network issues)
 - Added monitoring requirements (connection pool utilization alerting)
 - Cross-referenced this incident as example
 
-UPDATED: memory-bank/systemPatterns.md#graceful-degradation
+UPDATED: llm/memory-bank/systemPatterns.md#graceful-degradation
 Changes:
 - Added backpressure signaling to mobile app during high load
 - Added circuit breaker pattern for database connections
 
 ## Operational Runbook Updates
 
-UPDATED: memory-bank/operations/runbooks/database-procedures.md#connection-troubleshooting
+UPDATED: llm/memory-bank/operations/runbooks/database-procedures.md#connection-troubleshooting
 Added:
 - Connection pool exhaustion detection procedure
 - Emergency connection pool size increase procedure (used in this incident)
 - Connection pool utilization monitoring setup
 
-UPDATED: memory-bank/operations/performance/database-metrics.md#connection-pool
+UPDATED: llm/memory-bank/operations/performance/database-metrics.md#connection-pool
 Added:
 - Connection pool utilization alerting thresholds (alert at 80%, critical at 90%)
 - Historical connection pool usage patterns
@@ -722,14 +722,14 @@ Added:
 ## Cross-Reference Updates
 
 Development → Operations:
-- memory-bank/systemPatterns.md#connection-management now references:
-  - This incident as example: memory-bank/operations/incidents/2026-01-15-db-connection-pool.md
-  - Updated runbook: memory-bank/operations/runbooks/database-procedures.md#connection-troubleshooting
+- llm/memory-bank/systemPatterns.md#connection-management now references:
+  - This incident as example: llm/memory-bank/operations/incidents/2026-01-15-db-connection-pool.md
+  - Updated runbook: llm/memory-bank/operations/runbooks/database-procedures.md#connection-troubleshooting
 
 Operations → Development:
-- memory-bank/operations/runbooks/database-procedures.md now references:
-  - Updated design: memory-bank/systemPatterns.md#connection-management
-  - Updated graceful degradation: memory-bank/systemPatterns.md#graceful-degradation
+- llm/memory-bank/operations/runbooks/database-procedures.md now references:
+  - Updated design: llm/memory-bank/systemPatterns.md#connection-management
+  - Updated graceful degradation: llm/memory-bank/systemPatterns.md#graceful-degradation
 
 Bidirectional Validation: ✓ Verified 2026-01-16
 

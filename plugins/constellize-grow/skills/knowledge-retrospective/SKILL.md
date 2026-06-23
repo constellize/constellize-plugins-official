@@ -119,14 +119,14 @@ Stuck with individuals: [Knowledge that remained siloed, why, risk, transfer pla
 
 ### Documents That Helped
 
-1. [memory-bank/path]
+1. [llm/memory-bank/path]
    - How helped: [Specific way it accelerated work]
    - Quality: [Accurate, up-to-date, clear?]
    - Impact: [Time saved, risk reduced]
 
 ### Documents That Needed Updates
 
-1. [memory-bank/path]
+1. [llm/memory-bank/path]
    - Issue: [What was wrong or missing]
    - Impact: [What happened]
    - Update needed: [What to add/change]
