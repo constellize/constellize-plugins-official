@@ -1,0 +1,8 @@
+{
+  "name": "constellize-harness-scripts",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "tsx": "^4.0.0"
+  }
+}

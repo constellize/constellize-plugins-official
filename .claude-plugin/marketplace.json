@@ -29,6 +29,11 @@
       "name": "constellize-grow",
       "source": "./plugins/constellize-grow",
       "description": "Team learning, system evolution, and adoption"
+    },
+    {
+      "name": "constellize-harness",
+      "source": "./plugins/constellize-harness",
+      "description": "Project orchestration: assess state, plan next steps, execute constellize skills"
     }
   ]
 }
