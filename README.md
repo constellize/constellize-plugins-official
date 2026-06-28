@@ -5,10 +5,10 @@ Official Constellize methodology plugins for Claude Code.
 ## Overview
 
 This marketplace provides the complete Constellize methodology as Claude Code plugins:
-- **69 Skills** across 5 plugins
+- **74 Skills** across 6 plugins
 - **14 Agents** for expert-in-role consultation
 
-## Installation
+## Quick Start
 
 Add this marketplace to Claude Code:
 
@@ -18,15 +18,49 @@ Add this marketplace to Claude Code:
 
 Then install plugins via `/plugin` and select the ones you want.
 
+To get started on any project, run:
+
+```
+/constellize-harness:orchestrate
+```
+
+This assesses your project state, proposes a plan, and walks you through executing it.
+
 ## Available Plugins
 
-| Plugin | Description |
-|--------|-------------|
-| `constellize-memory` | Knowledge persistence across context resets |
-| `constellize-design` | Planning and architecture for software projects |
-| `constellize-craft` | Code quality, testing, and continuous excellence |
-| `constellize-deliver` | Deployment, operations, and incident management |
-| `constellize-grow` | Team learning, system evolution, and adoption |
+| Plugin | Skills | Description |
+|--------|--------|-------------|
+| `constellize-harness` | 5 | **Start here.** Project orchestration — assess state, plan next steps, execute skills |
+| `constellize-memory` | 11 | Knowledge persistence across context resets |
+| `constellize-design` | 10 | Planning and architecture for software projects |
+| `constellize-craft` | 20 | Code quality, testing, and continuous excellence |
+| `constellize-deliver` | 12 | Deployment, operations, and incident management |
+| `constellize-grow` | 16 | Team learning, system evolution, and adoption |
+
+### Harness Skills
+
+| Skill | Purpose |
+|-------|---------|
+| `orchestrate` | Main entry point — assess, plan, and execute in one flow |
+| `assess` | Standalone project state diagnostic |
+| `plan` | Generate a skill sequence from assessment + intent |
+| `execute` | Run an approved plan step by step |
+| `init` | Scaffold the `llm/` directory structure |
+
+## Project Structure
+
+All LLM-generated artifacts live under `llm/` in your project:
+
+```
+project-root/
+  llm/
+    memory-bank/      # persistent project knowledge (6 core files)
+    construction/     # temporary working area for design artifacts
+      design/
+      requirements/
+      archive/
+    features/         # per-feature documentation subsets
+```
 
 ## Source
 
