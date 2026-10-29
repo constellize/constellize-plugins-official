@@ -35,5 +35,20 @@
       "source": "./plugins/constellize-harness",
       "description": "Project orchestration: assess state, plan next steps, execute constellize skills"
     }
-  ]
+  ],
+  "renames": {
+    "constellize-planning": "constellize-design",
+    "constellize-architecture": "constellize-design",
+    "constellize-quality": "constellize-craft",
+    "constellize-development": "constellize-craft",
+    "constellize-excellence": "constellize-craft",
+    "constellize-deployment": "constellize-deliver",
+    "constellize-operations": "constellize-deliver",
+    "constellize-memory-bank": "constellize-memory",
+    "constellize-learning": "constellize-grow",
+    "constellize-evolution": "constellize-grow",
+    "constellize-adoption": "constellize-grow",
+    "constellize-organization": "constellize-grow",
+    "constellize-ai-workflow": null
+  }
 }
