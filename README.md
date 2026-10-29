@@ -13,7 +13,7 @@ This marketplace provides the complete Constellize methodology as Claude Code pl
 Add this marketplace to Claude Code:
 
 ```bash
-/plugin marketplace add constellize/constellize-plugins-official
+/plugin marketplace add constellize/constellize-plugins-official#v1
 ```
 
 Then install plugins via `/plugin` and select the ones you want.
