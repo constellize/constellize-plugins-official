@@ -18,9 +18,12 @@ named in `GENERATED_FROM`, and that commit must already exist on GitHub.
 5. **Commit the regenerated files** in this repo (`plugins/...`). Name files; do not `git add -A`.
 6. **Update `GENERATED_FROM` in its own, separate commit**:
    `git -C ../prompt-factory rev-parse v1 > GENERATED_FROM`.
-   It is separate because it differs permanently between `main` and `v1` (each
-   records its own prompt-factory line). A fix commit that also edits it will
-   conflict when cherry-picked between the lines.
+   It is separate because four files differ permanently between `main` and `v1`:
+   `.claude-plugin/marketplace.json`, `GENERATED_FROM` (each line records its own
+   prompt-factory commit), `README.md` and `docs/constellize-skills-infographic.html`
+   (`v1` pins the install command to `#v1`; `main` follows the latest line). An edit
+   to any of these inside a fix commit will conflict when cherry-picked between the
+   lines, so keep such edits in their own commits.
 7. **Push this repo's `v1`.**
 
 Same fix on `main`? Cherry-pick the fix commits (not the `GENERATED_FROM` commit)
