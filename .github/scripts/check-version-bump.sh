@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# For every plugin whose plugins/<name>/skills/** changed between <base> and HEAD,
-# fail unless that plugin's .claude-plugin/plugin.json "version" differs from the
-# version at <base>. A new plugin.json (absent at <base>) passes.
+# For every plugin whose plugins/<name>/** changed between <base> and HEAD (skills,
+# agents, anything) other than its own .claude-plugin/plugin.json, fail unless that
+# plugin's .claude-plugin/plugin.json "version" differs from the version at <base>. A new plugin.json (absent at <base>) passes.
 # Usage: check-version-bump.sh <base-ref-or-sha>
 set -euo pipefail
 
@@ -31,7 +31,7 @@ version_of() { node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>c
 
 # Capture first: set -e / pipefail do not propagate out of a $(...) used as a loop word list.
 changed="$(git diff --name-only "$base" HEAD)"
-plugins="$(printf '%s\n' "$changed" | sed -n 's#^plugins/\([^/]*\)/skills/.*#\1#p' | sort -u)"
+plugins="$(printf '%s\n' "$changed" | grep -v '^plugins/[^/]*/\.claude-plugin/plugin\.json$' | sed -n 's#^plugins/\([^/]*\)/.*#\1#p' | sort -u || true)"
 
 status=0
 for plugin in $plugins; do
@@ -43,7 +43,7 @@ for plugin in $plugins; do
   old="$(git show "$base:$manifest" | version_of)"
   new="$(git show "HEAD:$manifest" | version_of)"
   if [ "$old" = "$new" ]; then
-    echo "FAIL: plugins/$plugin/skills changed but $manifest version is still $old" >&2
+    echo "FAIL: plugins/$plugin changed but $manifest version is still $old" >&2
     status=1
   else
     echo "OK: $plugin $old -> $new"
