@@ -7,16 +7,34 @@ set -euo pipefail
 
 base="${1:?usage: check-version-bump.sh <base-ref-or-sha>}"
 
-# First push of a branch (all-zero "before") or a force-push that dropped the old tip.
-if [[ "$base" =~ ^0+$ ]] || ! git cat-file -e "${base}^{commit}" 2>/dev/null; then
-  echo "SKIP: no usable base revision ($base); first push or force-push, nothing to compare"
+# All-zero "before" means the first push of a branch: there is nothing to compare.
+if [[ "$base" =~ ^0+$ ]]; then
+  echo "::warning::version-bump check SKIPPED: first push, no base revision"
+  echo "SKIP: first push (all-zero base)"
   exit 0
+fi
+
+# An unresolvable base is fatal, except on a push (set ALLOW_UNKNOWN_BASE=1), where a
+# force-push can legitimately drop the old tip.
+if ! git cat-file -e "${base}^{commit}" 2>/dev/null; then
+  if [ -n "${ALLOW_UNKNOWN_BASE:-}" ]; then
+    echo "::warning::version-bump check SKIPPED: base $base not found (force-push?)"
+    echo "SKIP: base $base not found"
+    exit 0
+  fi
+  echo "::error::version-bump check cannot run: base revision $base does not resolve" >&2
+  echo "FAIL: base revision $base does not resolve" >&2
+  exit 1
 fi
 
 version_of() { node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>console.log(JSON.parse(s).version))'; }
 
+# Capture first: set -e / pipefail do not propagate out of a $(...) used as a loop word list.
+changed="$(git diff --name-only "$base" HEAD)"
+plugins="$(printf '%s\n' "$changed" | sed -n 's#^plugins/\([^/]*\)/skills/.*#\1#p' | sort -u)"
+
 status=0
-for plugin in $(git diff --name-only "$base" HEAD | sed -n 's#^plugins/\([^/]*\)/skills/.*#\1#p' | sort -u); do
+for plugin in $plugins; do
   manifest="plugins/$plugin/.claude-plugin/plugin.json"
   if ! git cat-file -e "$base:$manifest" 2>/dev/null; then
     echo "OK: $plugin has no plugin.json at base (new plugin)"
