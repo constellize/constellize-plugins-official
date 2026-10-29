@@ -462,6 +462,54 @@ Each of these was a question the builder check raised, settled here rather than 
 
 ---
 
+## 10a. Known gaps after implementation (2026-10-29)
+
+Built and reviewed, but not pushed. A whole-branch review triaged every deferred finding; these are
+the ones it said to leave, recorded here so the triage outlives the scratch workspace.
+
+**Do these first:**
+
+1. **`loadPluginsConfig` does not validate at runtime.** A `content/schemas/plugins.json` entry
+   missing `version` would generate a `plugin.json` with no version key, the bump check would compare
+   `undefined` against the old value and pass, and the release would reach no reader — silently.
+   `claude plugin validate` does not catch it. Three lines closes it.
+2. **`website/src/data/prompts-manifest.json` has no regeneration path.** It is what the site reads
+   for prompt titles; its only generator reads `../../prompt-factory/prompts`, which does not resolve.
+   The next prompt added to prompt-factory will publish a `prompt.txt` no page can reach. Decide
+   whether `website/scripts/generate-prompts-manifest.mjs` is repointed at
+   `prompt-factory/content/prompts` and brought into the generated set, or deleted.
+3. **Watch the first GitHub Actions run.** None of the three workflows has ever executed. In
+   particular `node-version: 26` resolving in setup-node's manifest is unverified, and the new
+   "Catalog matches the plugin directories" step has only been run locally as extracted script.
+
+**Left deliberately, with reasons:**
+
+- `check-version-bump.sh`'s `|| true` is broader than needed — `grep -v` exits 1 when it filters
+  everything out, so it is required — but the `git diff` failure that mattered is caught by the
+  separate assignment above it. Wants a comment next time the file is touched.
+- No fixture test for `rewriteLlmPaths`. The drift guard regression-tests it against real content on
+  every run: all three substitution families appear in committed skills
+  (`llm/operations-memory-bank/` in 2 files, `llm/memory-bank/` in 31, `llm/construction/` in 18).
+  Only a genuinely new path shape is uncovered, which was equally true of the deleted shell script.
+- The `EXTRA` check derives plugin ids from the generator's own output, so a plugin the generator
+  emits nothing for gets no `EXTRA` scan. The catalog-versus-tree check partly covers it.
+- The catalog check does not verify that an entry's `source` points at the directory matching its own
+  `name`; an entry named A with `source: ./plugins/B` passes while both exist.
+- `website/tsconfig.app.tsbuildinfo` is tracked and churns on every build; untrack and gitignore it.
+- The website generator's CLI cannot take a version, so a `v2` run needs a programmatic call. A
+  `--prompt-version` flag completes it when `v2` arrives.
+- `PromptsIndexPage.tsx` still hardcodes `/prompts/v1/<id>`; correct today, and the second place a
+  version is now hardcoded.
+- Deleting a whole plugin directory trips the bump check with a cryptic `git show` error. Fails
+  closed.
+- `generate-website.ts` still calls `process.exit(1)` when its output directory is missing, which
+  would skip the guard's cleanup `finally`. Unreachable today.
+- Whether Claude Code re-keys a registered marketplace when its `name` field changes is undocumented
+  client behaviour, so whether the `renames` map reaches a February user is unverified. The map is
+  harmless and append-only either way.
+
+---
+
 ## 11. Evidence
 
 - `prompt-factory/build/generate-marketplace.ts`, `build/generate-website.ts`,
