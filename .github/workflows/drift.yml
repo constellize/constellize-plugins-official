@@ -32,8 +32,8 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          # 26 is the major every step of this project was verified on (v26.8.2).
-          # Moving to an LTS should be re-verified first.
+          # Verified locally on 26.8.2 only; nothing has run in Actions yet. This pin floats
+          # to the latest 26.x. Re-verify before moving to an LTS.
           node-version: 26
           cache: npm
           cache-dependency-path: prompt-factory/package-lock.json
@@ -47,7 +47,9 @@ jobs:
         run: npm run check:drift -- --target marketplace --against "$GITHUB_WORKSPACE/marketplace"
 
       - name: Skill changes bump the plugin version
+        if: ${{ !cancelled() }}
         working-directory: marketplace
         env:
+          ALLOW_UNKNOWN_BASE: ${{ github.event_name == 'push' && '1' || '' }}
           BASE: ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || github.event.before }}
         run: .github/scripts/check-version-bump.sh "$BASE"
