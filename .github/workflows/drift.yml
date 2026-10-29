@@ -2,7 +2,7 @@ name: drift
 
 on:
   push:
-    branches: [main]
+    branches: [main, v1]
   pull_request:
 
 jobs:
@@ -15,6 +15,10 @@ jobs:
           path: marketplace
           fetch-depth: 0
 
+      # Invariant: GENERATED_FROM is the prompt-factory commit whose generators produced
+      # this repo's generated files. It is NOT meant to track prompt-factory's tip; later
+      # prompt-factory commits that do not change output leave it valid. Do not "fix" it
+      # by chasing the tip. Update it only together with regenerated output.
       - name: Read the recorded prompt-factory commit
         id: source
         run: echo "sha=$(tr -d '[:space:]' < marketplace/GENERATED_FROM)" >> "$GITHUB_OUTPUT"
@@ -28,7 +32,9 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          # 26 is the major every step of this project was verified on (v26.8.2).
+          # Moving to an LTS should be re-verified first.
+          node-version: 26
           cache: npm
           cache-dependency-path: prompt-factory/package-lock.json
 
@@ -41,6 +47,7 @@ jobs:
         run: npm run check:drift -- --target marketplace --against "$GITHUB_WORKSPACE/marketplace"
 
       - name: Skill changes bump the plugin version
-        if: github.event_name == 'pull_request'
         working-directory: marketplace
-        run: .github/scripts/check-version-bump.sh "origin/${{ github.base_ref }}"
+        env:
+          BASE: ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || github.event.before }}
+        run: .github/scripts/check-version-bump.sh "$BASE"
