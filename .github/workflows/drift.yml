@@ -1,0 +1,46 @@
+name: drift
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out this repo
+        uses: actions/checkout@v4
+        with:
+          path: marketplace
+          fetch-depth: 0
+
+      - name: Read the recorded prompt-factory commit
+        id: source
+        run: echo "sha=$(tr -d '[:space:]' < marketplace/GENERATED_FROM)" >> "$GITHUB_OUTPUT"
+
+      - name: Check out prompt-factory at that exact commit
+        uses: actions/checkout@v4
+        with:
+          repository: constellize/prompt-factory
+          ref: ${{ steps.source.outputs.sha }}
+          path: prompt-factory
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: prompt-factory/package-lock.json
+
+      - name: Install prompt-factory
+        working-directory: prompt-factory
+        run: npm ci
+
+      - name: Generated files match the recorded commit
+        working-directory: prompt-factory
+        run: npm run check:drift -- --target marketplace --against "$GITHUB_WORKSPACE/marketplace"
+
+      - name: Skill changes bump the plugin version
+        if: github.event_name == 'pull_request'
+        working-directory: marketplace
+        run: .github/scripts/check-version-bump.sh "origin/${{ github.base_ref }}"
