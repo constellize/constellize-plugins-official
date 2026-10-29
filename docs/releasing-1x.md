@@ -39,3 +39,9 @@ because the marketplace's `main` CI checks out the commit its `GENERATED_FROM` n
 Then **[marketplace]** cherry-pick the regenerated-files commit (not the `GENERATED_FROM`
 commit) onto this repo's `main`, make that line's own `GENERATED_FROM` commit with
 `git -C ../prompt-factory rev-parse main > GENERATED_FROM`, and push `main`.
+
+Adding a prompt (not just fixing one)? `website/src/data/prompts-manifest.json` in the
+website repo is hand-maintained and has no regeneration path: its script,
+`website/scripts/generate-prompts-manifest.mjs`, reads a path that does not resolve and
+is not part of the pipeline. Add an entry to the manifest for the new prompt, or its
+published `prompt.txt` will be unreachable from any page.
