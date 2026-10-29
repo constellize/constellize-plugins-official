@@ -16,6 +16,9 @@ Add this marketplace to Claude Code:
 /plugin marketplace add constellize/constellize-plugins-official
 ```
 
+This command follows `main`, the 2.0 line. To stay on the stable 1.x line that the book and
+website describe, add the `#v1` ref instead: `/plugin marketplace add constellize/constellize-plugins-official#v1`.
+
 Then install plugins via `/plugin` and select the ones you want.
 
 To get started on any project, run:
