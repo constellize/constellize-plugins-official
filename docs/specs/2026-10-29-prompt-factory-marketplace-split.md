@@ -565,6 +565,53 @@ target Node 20 and are being forced onto Node 24. Both bumped to `@v5` on every 
 **Also cleared:** `website/tsconfig.app.tsbuildinfo` and `tsconfig.node.tsbuildinfo` are untracked
 and `*.tsbuildinfo` is gitignored, so builds no longer dirty the tree.
 
+### Reference cards (2026-11-03)
+
+Two cards now, built from `docs/constellize-skills-infographic.html` on `main` by
+`scripts/build-reference-card.mjs` with the install command injected per line:
+`constellize-reference-card-v1.pdf` (pinned `#v1`, footer "book edition"), `-v2.pdf`
+("latest"), and the unversioned path kept as an alias of the v1 card so the link the site has
+used since June still resolves. The footer says "book edition" / "latest" rather than v1 / v2
+because `main` has not been released as 2.0.
+
+**Two things this spec and the plan previously asserted were wrong:**
+- *"There is no build script; print it in a browser."* There was one, `docs/render-pdf.mjs`. It
+  imported `playwright`, which is not a dependency of this repo, and hardcoded a 1056x1368 page
+  -- neither the card's CSS size nor US Letter. Deleted, with its stale output. Following the
+  "print it in a browser" instruction would have reproduced the bug below, because the print
+  dialog ignores the CSS page size.
+- *"The card carries the unpinned install command."* **It carried no install command at all.**
+  The card is a fixed 816x1156px page with `overflow: hidden` and its content runs to 1196px, so
+  the footer -- the only line with the command -- fell outside the page. The shipped PDF was a
+  June artifact at US Letter across two pages. Found because the v1 and v2 cards came out with
+  all 275 PDF content streams identical. The page is now 1230px on both lines.
+
+The script refuses to write a card unless the footer carries the expected command, sits inside
+the page box, and the output is a single page at the expected size. Confirmed red by restoring
+the 1156px height. Card content verified against the tree: 6 plugins, 74 skills, 14 agents.
+
+### The book keeps the unpinned command -- decided 2026-11-03
+
+`book/appC.md:11`, in the appendix that *is* the reference card, prints
+`/plugin marketplace add constellize/constellize-plugins-official` -- unpinned. It is the only
+install command in the manuscript. (An earlier claim in this work that the book contained no
+install command was wrong.)
+
+**Steve's decision: leave it.** The manuscript is read-only to agents, the publisher has signed
+off on the words, and round 7 returned "final from our side", so changing it is a words change at
+proof stage.
+
+**The consequence, stated so it is not rediscovered later:** a reader following the printed book
+installs the **latest** line, not the pinned one. The pin therefore only reaches people who come
+via the website or a v1 reference card. `main` moving to 2.0 will change skills under exactly
+those readers.
+
+**This lands on project 2 (marketplace 2.0), which should decide how to handle it.** Options not
+taken here: keep `main` book-compatible until 2.0 actually ships; have the 2.0 line's README and
+marketplace description point book readers at `#v1`; or accept the drift. Nothing in the
+repositories can pin a reader who types what the book says, so this is a content and sequencing
+decision, not a build one.
+
 ---
 
 ## 11. Evidence
