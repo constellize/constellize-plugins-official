@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out this repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: marketplace
           fetch-depth: 0
@@ -24,13 +24,13 @@ jobs:
         run: echo "sha=$(tr -d '[:space:]' < marketplace/GENERATED_FROM)" >> "$GITHUB_OUTPUT"
 
       - name: Check out prompt-factory at that exact commit
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: constellize/prompt-factory
           ref: ${{ steps.source.outputs.sha }}
           path: prompt-factory
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           # Verified locally on 26.8.2 only; nothing has run in Actions yet. This pin floats
           # to the latest 26.x. Re-verify before moving to an LTS.
