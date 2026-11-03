@@ -33,6 +33,26 @@ prompt-factory and leave this repo's pointer stale), so check your directory fir
    lines, so keep such edits in their own commits.
 7. **[marketplace] Push `v1`.**
 
+### If the card changed
+
+The reference cards are built from `docs/constellize-skills-infographic.html` on **`main`**,
+not from `v1`, and the install command is injected per line. So a change to the card's
+content is made on `main` and the cards are rebuilt there:
+
+```
+node scripts/build-reference-card.mjs
+```
+
+That writes `constellize-reference-card-v1.pdf`, `-v2.pdf` and the unversioned alias into
+`../website/public/`, then commit them in the **website** repo. The script drives Chrome
+over the DevTools protocol and needs no dependencies; set `CHROME_PATH` if Chrome is
+somewhere unusual. It fails rather than shipping a bad card if the footer's install command
+is missing or falls outside the page, which is how the card previously shipped with the
+command clipped off entirely.
+
+The copy of the HTML on `v1` is standalone documentation for that line and keeps its own
+`#v1` footer; it is not what the cards are built from.
+
 Same fix on `main`? Repeat in this order. **[prompt-factory]** cherry-pick the fix commit
 (and its version bump) onto prompt-factory `main`, and push prompt-factory `main` first,
 because the marketplace's `main` CI checks out the commit its `GENERATED_FROM` names.
