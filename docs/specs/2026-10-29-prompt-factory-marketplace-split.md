@@ -464,8 +464,10 @@ Each of these was a question the builder check raised, settled here rather than 
 
 ## 10a. Known gaps after implementation (2026-10-29)
 
-Built and reviewed, but not pushed. A whole-branch review triaged every deferred finding; these are
-the ones it said to leave, recorded here so the triage outlives the scratch workspace.
+Built and reviewed. **Pushed 2026-11-03; follow-ups 1-3 closed the same day** -- see
+"Follow-ups as resolved" at the end of this section. A whole-branch review triaged every deferred
+finding; these are the ones it said to leave, recorded here so the triage outlives the scratch
+workspace.
 
 **Do these first:**
 
@@ -507,6 +509,61 @@ the ones it said to leave, recorded here so the triage outlives the scratch work
 - Whether Claude Code re-keys a registered marketplace when its `name` field changes is undocumented
   client behaviour, so whether the `renames` map reaches a February user is unverified. The map is
   harmless and append-only either way.
+
+### Follow-ups as resolved (2026-11-03)
+
+**1. `loadPluginsConfig` validation -- DONE.** `build/lib/parser.ts` now exports
+`validatePluginsConfig`, called from `loadPluginsConfig`. It rejects a missing or non-semver
+`version`, a blank `id`/`name`/`description`, a duplicate plugin id, an empty `plugins` array, a
+missing `marketplace.owner.name`, and malformed JSON, reporting every error at once with the
+offending entry named. Verified by running five malformed configs through it in scratch; all five
+were rejected with the right message, and both drift guards still pass byte-exact, so generated
+output is unchanged.
+
+**2. `prompts-manifest.json` -- NEITHER option taken; the choice as written was a false one.**
+Measured before deciding:
+- The manifest's `title`, `preview` and `category` do **not** exist in `content/prompts`
+  frontmatter. They came from the legacy `prompts/` tree's `-preview-callout.md` files.
+- Generating from `content/prompts` would therefore rewrite **all 71 titles** (the nearest
+  frontmatter field, `name`, is the long purpose sentence, not the short display title), **all 71
+  previews**, and **45 of 71 categories** -- the two taxonomies are different vocabularies
+  (manifest: Analysis, Quality, Review; content: planning, excellence, meta).
+- So "repoint the script" is not a path fix. It is a visible content change to the live index page.
+- Deleting the script instead leaves the index hand-maintained with nothing checking it.
+- Compounding it: the website is generated from prompt-factory **`v1`**, the frozen reader line, so
+  any generator change here would have to land on `v1`, not `main`.
+
+**Decision: the manifest stays hand-maintained, and is now guarded by tests instead of by a
+generator.** `website/src/test/promptsIndex.test.tsx` asserts `totalPrompts` matches the listed
+count, that no prompt id repeats, and that every entry has the fields the pages render.
+
+This also found and fixed a live defect: `totalPrompts` had drifted to **72** while the manifest
+listed **71**, so the index page advertised a prompt it never showed. `PromptsIndexPage.tsx` now
+derives the count from the listed prompts, which cannot drift, and the stored field was corrected.
+
+Two prompts are served but absent from the index -- `generate-prompt` (`chapter: 0, category: meta`)
+and `ch1-system-prompt-for-requirements-engineering-analysi` (`subcategory: archived`). **Both are
+correctly excluded**; the index is right at 71. Worth noting only that the website generator
+publishes a `prompt.txt` for archived and meta prompts that no page links to.
+
+**Recommended next, as its own small piece of work**: add `title`, `preview` and a display
+`category` to `content/prompts` frontmatter, seeded from the current manifest so the regenerated
+manifest is byte-identical for all 71 and the live page does not change, then generate the manifest
+from `content` and bring it under the drift guard. It is the only route that makes a new prompt
+reachable automatically. It touches the `v1` reader line and 73 content files, which is why it was
+not done unilaterally here.
+
+**3. Watch the first Actions run -- DONE, all five green.** Both `v1` pushes triggered, which
+confirms the per-branch `.github` fix. Evidence: marketplace `No drift: 88 ... files match`,
+`Catalog OK: 6 plugins match 6 plugin directories`, `OK: version-bump check passed` against base
+`e9528d0`; website `No drift: 87 ... files match` and tests 3 passed; prompt-factory both generators
+deterministic (88 and 87 files). `node-version: 26` resolved to **26.13.0**, settling that pin.
+
+**Found by watching:** every run warned that `actions/checkout@v4` and `actions/setup-node@v4`
+target Node 20 and are being forced onto Node 24. Both bumped to `@v5` on every branch.
+
+**Also cleared:** `website/tsconfig.app.tsbuildinfo` and `tsconfig.node.tsbuildinfo` are untracked
+and `*.tsbuildinfo` is gitignored, so builds no longer dirty the tree.
 
 ---
 
