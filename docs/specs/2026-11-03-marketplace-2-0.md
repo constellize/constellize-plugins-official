@@ -96,8 +96,10 @@ actually fail, and a coverage threshold you can set. The website is untouched (�
   underscore `llm/memory_bank/` layout, and `/constellize:feature:*` command names. None of that
   survives.
 - **`v1` is not touched**, in any repository. Project 1.5 decision 1 stands.
-- **The book manuscript is not edited.** §7.3 resolves the unpinned install command without a
-  words change.
+- **Nothing in the `book` repository is written to — not the manuscript, and not
+  `book/generated/`.** §5a sets out the one mechanism by which this project could touch the book,
+  why nothing would catch it, and what stops it. §7.3 resolves the unpinned install command without
+  a words change.
 - **No website files are touched** (§7.2, reversed in r3). The `/prompts/v2/` work leaves 2.0
   entirely and moves to the generated-manifest piece of work, where it belongs.
 - **No skill is removed or renamed, and no plugin is removed or renamed.** This is the constraint
@@ -217,6 +219,51 @@ dependency.
 
 **Changing a marketplace's `name` for existing users is undocumented.** The `renames` map in
 `marketplace.json` migrates *plugin* names, not the marketplace's own. This constrains §7.1.
+
+---
+
+## 5a. The book: the one way this project could touch it, and what stops it
+
+The manuscript is read-only to this work and the publisher has signed off; `book` is currently on
+`round-9-typesetting` with a round in flight. The non-goal is easy to state. What matters is that
+there **is** a live mechanism by which an implementer could write into the book repository without
+meaning to, and **nothing would catch it**. All of the following was verified on 2026-11-03.
+
+**The mechanism.** `prompt-factory/build/generate-book.ts` writes
+`../book/generated/{ch1..ch9,}-prompt-refs.md` — ten files, all **tracked** in the book repository.
+It is reachable two ways: `npm run generate:book`, and `npm run generate:all`, which chains
+`generate:website && generate:marketplace && generate:book`. An implementer adding three content
+prompts will reasonably run `generate:all`.
+
+**Nothing guards it.** `check-drift.ts` declares `type Target = 'marketplace' | 'website'` and
+refuses anything else, so there is no book target and no byte comparison. The factory's CI runs
+`npm ci`, `check-determinism.sh` and `npx jest` — and `check-determinism.sh` loops
+`for target in marketplace website`, writing to temp directories. **So the book generator never runs
+in CI, and no guard would notice if a local run changed `book/generated/`.** The absence of CI is
+what makes the absence of a guard matter.
+
+**What stops it, and it is already load-bearing for 7 existing prompts.** `generate-book.ts:35`
+emits a prompt only `if (book && book.chapter && book.description)`. So **a prompt is a book output
+only when its `outputs.book` carries both `chapter` and `description`.** All 73 prompts have an
+`outputs.book` block, and only 66 are emitted: `business-problem`,
+`ch1-system-prompt-for-requirements-engineering-analysi`, `ecosystem-map`, `specification`,
+`book-editor-constellize`, `book-review` and `generate-prompt` are excluded by exactly that test.
+`business-problem` even carries `include: true` and `format: callout` and is still excluded — so
+**`outputs.book.include` is a dead field for the book generator**, which r2's §14 named as the thing
+to avoid setting. It is not; `chapter` and `description` are.
+
+**The rule for this project**, therefore: the three new prompts carry **no `outputs.book` block at
+all**. Then `generate:book` is a provable no-op and `generate:all` is safe to run.
+
+**And it is a no-op today, which gives the test its baseline.** Regenerating from `main` into a
+scratch sibling (`git archive` into a temp tree, symlink `node_modules`, run the generator, then
+`diff -rq`) produced output **byte-identical** to the committed `book/generated/`. So the book is in
+sync with the factory right now, and any diff after this project is this project's doing.
+Acceptance 17 is that comparison.
+
+Two other factory files reference `../book` and neither writes to it: `validate-book-refs.ts` only
+reads `ch*.md`, and `migrate-book-refs.ts` reads the book's chapters but writes into
+`content/prompts/` — its one `writeFileSync` takes a path from the prompts walk, not the book walk.
 
 ---
 
@@ -627,6 +674,15 @@ course's 100% survives as the setting Copernicus turns on.
 15. **The factory's test suite covers the assessor's feature parsing and evidence check.**
 16. **`v1` is untouched in all three repositories**: prompt-factory `69dffee`, marketplace
     `8f470b2`.
+17. **The `book` repository is untouched, checked two ways** (§5a). `git status` in `book` is clean
+    after running `npm run generate:all` in the factory — not `generate:marketplace` alone, because
+    `generate:all` is the command that reaches the book generator and so is the one that proves the
+    point. And `generate-book.ts`'s output, regenerated into a scratch sibling, is byte-identical to
+    the committed `book/generated/`, as it is today. Both must hold; the first catches an
+    accidental write, the second catches a *silent* one made before the check.
+18. **The three new prompts have no `outputs.book` block**, so they can never become book outputs.
+    Checkable by reading three files, and the reason it is the right test rather than
+    `include: false` is in §5a.
 
 ---
 
@@ -869,13 +925,18 @@ changes anyway, and on a line in a generated file this project regenerates anywa
 
 ---
 
-## 14. One trap for whoever writes the prompts
+## 14. Traps for whoever writes the prompts
 
 **`generate-book.ts` hardcodes v1 in every URL it emits** (`:63`,
-`url="{SITE_BASE}/prompts/v1/${prompt.id}"`), and `PromptFrontmatter.chapter` is required. So if the
-three new prompts carry `outputs.book.include: true`, `npm run generate:book` will write dead
-`/prompts/v1/<new-id>` links into `book/generated/`. They must not be book outputs — which is
-consistent with decision 26 anyway, since they are not website outputs either.
+`url="{SITE_BASE}/prompts/v1/${prompt.id}"`). So a new prompt that became a book output would put a
+dead `/prompts/v1/<new-id>` link into `book/generated/` — doubly dead under decision 26, since the
+three publish no website page either. §5a is why that cannot happen and acceptance 18 is the check.
+
+**Corrected from r2**, which said "if the three new prompts carry `outputs.book.include: true`".
+That is the wrong field: `generate-book.ts:35` tests `book.chapter && book.description` and ignores
+`include` entirely. `business-problem` carries `include: true` and is one of the 7 prompts excluded
+from the book. Naming the wrong field would have had a builder set `include: false` and believe the
+risk was handled.
 
 Relatedly, `validate-full-chain.ts` has been stale since the versioning commit: its
 `getWebsitePromptIds()` lists directories directly under `public/prompts`, so it now reports the
@@ -930,6 +991,13 @@ Everything asserted above was checked on 2026-11-03 against the working trees at
 | The three commands appear in 12 curriculum files | `grep -rln 'feature:specify\|feature:implement\|feature:verify'` over `curriculum/course/` and `curriculum/*.md` |
 | The two marketplace names already differ by branch | `git show main:.claude-plugin/marketplace.json` → `constellize-plugins-official`; `git show v1:…` → `constellize-plugins-v1` |
 | Published install commands | the table in §7.3, each read at the line given |
+| `generate-book.ts` writes into the book repo, and `generate:all` reaches it | `:7` and `:16` (`BOOK_DIR = '../book'`), `:130`/`:140` write `../book/generated/`; `package.json` `generate:all` = `generate:website && generate:marketplace && generate:book` |
+| Those ten files are tracked in `book` | `git -C book ls-files generated/` lists `ch1..ch9-prompt-refs.md` and `prompt-refs.md` |
+| No drift target and no CI covers the book | `check-drift.ts:24` `type Target = 'marketplace' \| 'website'`, and `:159` refuses anything else; `generators.yml` runs only `npm ci`, `check-determinism.sh`, `npx jest`; `check-determinism.sh:10` loops `for target in marketplace website` |
+| The book is in sync with the factory today | `git archive main` into a scratch sibling, symlinked `node_modules`, ran `generate-book.ts`, `diff -rq` against `book/generated/` → identical, 66 prompt-refs |
+| Book output needs `chapter` and `description`, not `include` | `generate-book.ts:35` `if (book && book.chapter && book.description)`. Loaded all 73 prompts: 73 have `outputs.book`, 66 emit, and the 7 excluded are `business-problem`, `ch1-system-prompt-for-requirements-engineering-analysi`, `ecosystem-map`, `specification`, `book-editor-constellize`, `book-review`, `generate-prompt`. `business-problem`'s block is `include: true` + `format: callout` with no chapter |
+| The book repo is clean and nothing in this session touched it | `git -C book status --short` empty, `git -C book diff --stat HEAD` empty, on `round-9-typesetting` level with `origin` |
+| The other two book-aware factory files do not write to it | `validate-book-refs.ts` only reads `ch*.md`; `migrate-book-refs.ts:173`'s `writeFileSync` takes its path from the `content/prompts` walk at `:99-108`, not the `BOOK_DIR` walk at `:42-43` |
 
 ---
 
