@@ -35,12 +35,14 @@ prompt-factory and leave this repo's pointer stale), so check your directory fir
 
 ### If the card changed
 
-The reference cards are built from `docs/constellize-skills-infographic.html` on **`main`**,
-not from `v1`, and the install command is injected per line. So a change to the card's
-content is made on `main` and the cards are rebuilt there:
+The reference cards are built by `prompt-factory`, from its copy of the infographic
+(`content/literal/marketplace-docs/`; `docs/constellize-skills-infographic.html` here is
+generated from it), and the install command is injected per line. So a change to the
+card's content is made in `prompt-factory`, the marketplace is regenerated, and the cards
+are rebuilt from the factory root:
 
 ```
-node scripts/build-reference-card.mjs
+npm run build:card
 ```
 
 That writes `constellize-reference-card-v1.pdf`, `-v2.pdf` and the unversioned alias into
