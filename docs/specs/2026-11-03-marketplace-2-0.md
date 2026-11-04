@@ -1,7 +1,9 @@
 # Project 2: Marketplace 2.0 — the feature workflow
 
-**Status**: **APPROVED by Steve, 2026-11-04** (revision 3). The next step is the plan, in
-`marketplace/docs/plans/`; nothing is built before that plan is approved in its turn.
+**Status**: **APPROVED by Steve, 2026-11-04** (revision 3), and **amended 2026-11-04** in two
+places — §3's website non-goal and §8's acceptance 13 — by Steve's decision after planning found
+that acceptance 13 as first written contradicted acceptance 14. Each amendment is marked in place.
+The plan is written and approved: `marketplace/docs/plans/2026-11-04-marketplace-2-0.md`.
 **Date**: 2026-11-03; revision 3 landed 2026-11-04. All tree checks were made on 2026-11-03 against
 the commits named in §15, which is also what §5a's book baseline was measured at.
 **Sequence**: project 1 (done) → 1.5 (done) → **2** → 4 (delivery) → 3 (Copernicus)
@@ -101,8 +103,18 @@ actually fail, and a coverage threshold you can set. The website is untouched (�
   `book/generated/`.** §5a sets out the one mechanism by which this project could touch the book,
   why nothing would catch it, and what stops it. §7.3 resolves the unpinned install command without
   a words change.
-- **No website files are touched** (§7.2, reversed in r3). The `/prompts/v2/` work leaves 2.0
-  entirely and moves to the generated-manifest piece of work, where it belongs.
+- **No generated website content is touched** (§7.2, reversed in r3; narrowed by Steve on
+  2026-11-04, see below). The `/prompts/v2/` work leaves 2.0 entirely and moves to the
+  generated-manifest piece of work, where it belongs.
+
+  **Amended 2026-11-04.** This non-goal originally read "No website files are touched", which
+  contradicted acceptance 14: the v2 reference card builder
+  (`prompt-factory/scripts/build-reference-card.mjs:320`) writes into `../website/public`, and all
+  three card PDFs are tracked in the `website` repository. Planning caught the contradiction and
+  Steve decided to narrow the criterion rather than drop the card rebuild. The non-goal now covers
+  generated website **content** — nothing under `public/prompts/`, `public/personas/` or `src/`,
+  with the website drift guard still green against its unchanged `GENERATED_FROM` — and the rebuilt
+  v2 PDF is one deliberate, separately reviewed `website` commit.
 - **No skill is removed or renamed, and no plugin is removed or renamed.** This is the constraint
   the printed appendix actually imposes, and it is what "additive" means here. **Editing a skill's
   body is allowed** — r2 wrongly forbade it, which cost a worse design (§13.2).
@@ -668,8 +680,15 @@ course's 100% survives as the setting Copernicus turns on.
     malformed file.
 12. **`constellize-harness:plan` and `:orchestrate` route "Add a new feature" to the three**, and
     the six-step list no longer appears in either file.
-13. **No website file changed at all**, confirmed by a clean `git status` in `website` and by the
-    website drift guard still passing against its unchanged `GENERATED_FROM`.
+13. **No generated website content changed** — nothing under `public/prompts/`,
+    `public/personas/` or `src/` — confirmed by the website drift guard still passing against its
+    unchanged `GENERATED_FROM`, and by `git status` in `website` showing no change other than the
+    rebuilt `public/constellize-reference-card-v2.pdf` that acceptance 14 requires, which is
+    committed on its own and reviewed on its own.
+
+    *Amended 2026-11-04 by Steve's decision ("narrow 13, keep card"), after planning found that this
+    criterion as first written could not be satisfied together with acceptance 14; see §3's amended
+    non-goal and the plan's Finding F1.*
 14. **The v2 reference card is rebuilt and the v1 card is not**, verified by comparing both PDFs'
     content against their pre-change state.
 15. **The factory's test suite covers the assessor's feature parsing and evidence check.**
