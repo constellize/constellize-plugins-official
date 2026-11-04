@@ -12,7 +12,7 @@ import type {
   GitTopology,
   ProjectType,
   TemporalState,
-} from "./types.js";
+} from "./types.ts";
 
 // ---------------------------------------------------------------------------
 // Helpers

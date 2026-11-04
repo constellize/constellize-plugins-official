@@ -13,8 +13,10 @@ Assess the current project state and present a readable profile.
 Run the assessor script from the project root:
 
 ```
-npx tsx <skill-dir>/../../scripts/assess.ts --format json
+node <skill-dir>/../../scripts/assess.mjs --format json
 ```
+
+Requires Node 22.18+ (or 23.6+/24+).
 
 Parse the JSON output and render a human-readable summary following this format:
 

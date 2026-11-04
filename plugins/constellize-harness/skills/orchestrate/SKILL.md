@@ -15,8 +15,10 @@ Orchestrate a constellize session by running the full flow: assess → plan → 
 Run the assessor script from the project root:
 
 ```
-npx tsx <skill-dir>/../../scripts/assess.ts --format json
+node <skill-dir>/../../scripts/assess.mjs --format json
 ```
+
+Requires Node 22.18+ (or 23.6+/24+).
 
 Parse the JSON output and render a human-readable summary:
 

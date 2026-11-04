@@ -13,8 +13,10 @@ First, run the assessor to understand the current state:
 
 Run this from the project root:
 ```
-npx tsx <skill-dir>/../../scripts/assess.ts --format json
+node <skill-dir>/../../scripts/assess.mjs --format json
 ```
+
+Requires Node 22.18+ (or 23.6+/24+).
 
 Where `<skill-dir>` is the directory containing this SKILL.md file.
 

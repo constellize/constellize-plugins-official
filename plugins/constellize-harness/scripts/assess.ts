@@ -5,8 +5,8 @@ import {
   assessGitTopology,
   assessProjectType,
   assessTemporal,
-} from "./tier1.js";
-import type { AssessmentProfile, Recommendation } from "./types.js";
+} from "./tier1.ts";
+import type { AssessmentProfile, Recommendation } from "./types.ts";
 
 // ---------------------------------------------------------------------------
 // Flag derivation

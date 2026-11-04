@@ -13,8 +13,10 @@ Given the project assessment and the user's stated intent, propose an ordered se
 First, run the assessor if no recent assessment is available:
 
 ```
-npx tsx <skill-dir>/../../scripts/assess.ts --format json
+node <skill-dir>/../../scripts/assess.mjs --format json
 ```
+
+Requires Node 22.18+ (or 23.6+/24+).
 
 Then map the situation + intent to a skill sequence using this routing table:
 
