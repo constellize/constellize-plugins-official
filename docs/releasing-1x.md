@@ -19,9 +19,11 @@ prompt-factory and leave this repo's pointer stale), so check your directory fir
 3. **[prompt-factory] Regenerate** with this repo checked out on `v1` at `../marketplace`
    and prompt-factory on `v1`: `npm run generate:marketplace`. Run `git branch --show-current`
    in **both** checkouts first. The generator no longer refuses to write the files that differ
-   between the lines, so `main`'s generator run against a `v1` checkout overwrites `v1`'s
-   catalog, `README.md`, infographic and `.github/`. It is recoverable with `git checkout`
-   in the marketplace, but check before you run it, not after.
+   between the lines, so `main`'s generator run against a `v1` checkout overwrites the three
+   files that are both generated and divergent: the catalog, `README.md` and the infographic.
+   (`GENERATED_FROM` also differs between the lines but is not generated, so it survives.) It
+   is recoverable with `git checkout` in the marketplace, but check before you run it, not
+   after.
 4. **[prompt-factory] Check**:
    `npm run check:drift -- --target marketplace --against ../marketplace` must be clean.
 5. **[marketplace] Commit the regenerated files** (`plugins/...`). Name files; do not `git add -A`.
