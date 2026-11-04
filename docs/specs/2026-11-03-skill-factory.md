@@ -48,9 +48,13 @@ precondition for ever testing it.
    exception: human-authored prose and the provenance stamp.** Concretely, the generator owns the
    69 skills and 14 agents it already owns, plus the five harness `SKILL.md`, the harness
    TypeScript, `marketplace.json`, `README.md`, the card HTML, the card builder,
-   `.github/workflows/drift.yml` and `.github/scripts/check-version-bump.sh`. It does not own
-   `docs/` or `GENERATED_FROM`. A contributor needs one rule, not a file list: **if it is not prose
-   under `docs/` and not `GENERATED_FROM`, edit it in the factory.**
+   `.github/workflows/drift.yml`, `.github/scripts/check-version-bump.sh` and
+   `docs/constellize-skills-infographic.html`. It does not own **prose** under `docs/`
+   (`docs/specs/`, `docs/plans/`, `docs/releasing-1x.md`) or `GENERATED_FROM`. A contributor needs
+   one rule, not a file list: **if it is not prose and not `GENERATED_FROM`, edit it in the
+   factory.** (Corrected 2026-11-03 after approval: the first draft said the factory does not own
+   `docs/` while goal 1 also claimed the infographic, which lives there. The infographic is a
+   generated asset, not prose.)
 2. The `FORBIDDEN` list in `check-drift.ts` is deleted for the `main` target, because nothing is
    left for it to protect.
 3. The files that currently differ by hand between `main` and `v1` become generator inputs rather
@@ -67,8 +71,10 @@ precondition for ever testing it.
 - **No tests for the harness.** Deferred to its own piece of work, by Steve's decision.
 - **No change to what any shipped plugin produces.**
 - **No website files are touched, in `src/` or anywhere else.** Decided 2026-11-03: see §8b.
-- **`docs/` stays hand-written in the marketplace.** Design documents are about the marketplace and
-  are authored in conversation; generating them would be nonsense.
+- **Prose under `docs/` stays hand-written in the marketplace** — `docs/specs/`, `docs/plans/` and
+  `docs/releasing-1x.md`. Design documents are about the marketplace and are authored in
+  conversation; generating them would be nonsense. `docs/constellize-skills-infographic.html` is
+  not prose and is generated.
 - **The feature workflow is project 2**, not this.
 
 ## 4. Anti-goals
