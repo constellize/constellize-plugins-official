@@ -45,14 +45,14 @@ Two checkouts, siblings under `/Users/satkinson/Work/constellize/`:
 | `README.md` | `0a` | verbatim copy (task 5) |
 | `docs/constellize-skills-infographic.html` | `0a` | verbatim copy (task 6) |
 
-**Verbatim copy means `fs.copyFileSync` or a `Buffer` round-trip — never `readFileSync(p, 'utf-8')` followed by a string write**, which is what would quietly normalise a trailing byte or a CRLF.
+**Verbatim copy means `fs.copyFileSync` or a `Buffer` round-trip — never `readFileSync(p, 'utf-8')` followed by a string write**, which would corrupt bytes that are not valid UTF-8 and drop the file mode. (A UTF-8 round trip does not itself normalise a missing trailing newline or CRLF; this was tested by mutating `copyLiteralTree`, and only the non-UTF-8 and exec-bit tests failed. The trailing-byte and CRLF tests pin the contract but would not catch that mutation.)
 
 ## Review Focus
 
 Five things the spec requires that no task's main-line tests would otherwise exercise. Each has a test in the task named.
 
 1. **The harness on Node below the floor** prints a one-line message naming the required version, not a syntax error or a module-resolution stack trace. (Task 2.)
-2. **A literal source file whose last byte is not `\n`, or which contains CRLF,** is copied unchanged. A string round-trip breaks this silently and the drift guard would then fail on a file nobody edited. (Task 3.)
+2. **A literal source file whose last byte is not `\n`, or which contains CRLF,** is copied unchanged. A string round-trip would not break these two cases (tested), but it does break non-UTF-8 bytes and file mode, which are covered by their own tests. (Task 3.)
 3. **A `literal` source directory named in `plugins.json` that does not exist** fails loudly at config load, rather than emitting a plugin with an empty `skills/`. The existing `getPromptsForPlugin` returns `[]` for a plugin with no `skills` block, so a typo'd path produces a valid-looking empty plugin today. (Task 3.)
 4. **A hand-added file under `plugins/constellize-harness/scripts/` or `.github/`** is reported as `EXTRA` drift. The current `EXTRA` walk only covers `skills/`, `agents/` and `.claude-plugin/`, so these directories are unguarded the moment they become generated output. (Task 8.)
 5. **A `renames` entry dropped from `plugins.json`** fails the build. The map is how anyone still on `constellize-planning` or the 12 other old names reaches the right plugin; losing an entry silently strands them, and nothing in the catalog would look wrong. (Task 4.)
