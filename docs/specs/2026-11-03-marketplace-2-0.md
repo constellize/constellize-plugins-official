@@ -3,11 +3,12 @@
 **Status**: **APPROVED by Steve, 2026-11-04** (revision 3), and **amended 2026-11-04** in two
 places — §3's website non-goal and §8's acceptance 13 — by Steve's decision after planning found
 that acceptance 13 as first written contradicted acceptance 14. Each amendment is marked in place.
-The plan is written and **awaiting approval**:
-`marketplace/docs/plans/2026-11-04-marketplace-2-0.md`. (This line claimed the plan was approved
-from commit `d959233` until the correction of 2026-11-04; see that plan's status block.) The two
-amendments below rest on Steve's "narrow 13, keep card" decision of 2026-11-04, which he did
-give, and are unaffected.
+The plan is written and **approved**, and is being executed subagent-driven:
+`marketplace/docs/plans/2026-11-04-marketplace-2-0.md`. (Commit `56a2e56` set this line to
+"awaiting approval" on 2026-11-04; that was wrong, and the plan's status block cites the evidence —
+Steve approved the plan directly in the session that wrote it, in a turn the design session never
+saw.) The two amendments below rest on his separate "narrow 13, keep card" decision of the same day
+and are unaffected either way.
 **Date**: 2026-11-03; revision 3 landed 2026-11-04. All tree checks were made on 2026-11-03 against
 the commits named in §15, which is also what §5a's book baseline was measured at.
 **Sequence**: project 1 (done) → 1.5 (done) → **2** → 4 (Copernicus) → 3 (delivery)

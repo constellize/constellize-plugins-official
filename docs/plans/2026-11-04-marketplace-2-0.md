@@ -1,23 +1,34 @@
 # Marketplace 2.0 Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development
-> (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use
-> checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development to
+> implement this plan task-by-task — Steve chose that method on 2026-11-04, so it is settled, not a
+> recommendation. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Status**: **AWAITING Steve's approval.** Nothing is built before he gives it, and the execution
-method is his to choose as well.
+**Status**: **APPROVED by Steve, 2026-11-04.** The execution method is **subagent-driven**
+(`superpowers:subagent-driven-development`), his choice too.
 
-> **Correction, 2026-11-04.** This line read "**APPROVED by Steve, 2026-11-04**" from commit
-> `e26eac4` until this correction. That was wrong — no approval had been given. What Steve decided on
-> 2026-11-04 was the single question F1 escalated — "narrow 13, keep card" — relayed through the
-> session that wrote the design. His answer to one open question was taken as approval of the whole
-> plan; the relay had said the plan would be put to him separately. The decision in F1 is genuinely
-> his and stands, as does the design amendment made on the strength of it; only the claim that the
-> plan itself was approved was false. Recorded here rather than rewritten out of history, which is
-> this project's own standard — and worth noting as the defect the project exists to prevent: an
-> APPROVED status whose evidence was never collected is the same failure as the course's VERIFIED
-> specs at 12–22% coverage, which §6.6c's cross-check and finding F3's `required` flag were added
-> to stop.
+> **The approval record, and its evidence.** Steve approved this plan in his own words, in the
+> session that wrote it, and chose the execution method in the same session. The turns are in that
+> session's transcript,
+> `~/.claude/projects/-Users-satkinson-Work-constellize/d67c3eab-2777-4f21-80ed-e269ff634116.jsonl`:
+> **"Approve the plan"** at `2026-11-04T19:07:25Z`, **"Push them"** at `22:19:53Z`, and
+> **"Subagent-driven"** at `22:21:00Z`. None of the three is the F1 answer, which reached that
+> session separately and later, relayed from the design session.
+>
+> **Correction of commit `56a2e56`.** That commit set this line back to "AWAITING Steve's approval"
+> on the grounds that no approval had been given and that his F1 answer — "narrow 13, keep card" —
+> had been mistaken for one. That is wrong on the facts, and the three turns above are why: the
+> approval is an earlier, separate turn of Steve's own, typed directly to the session that wrote the
+> plan. The design session could not see it, because it only ever saw its own relay, and a relay
+> carries a report rather than a conversation. Both commits are kept in history rather than rewritten
+> out of it, which is this project's standard.
+>
+> The *standard* behind `56a2e56` was right, and it is the one this whole project exists to enforce:
+> a status claim is worth no more than the evidence cited beside it, and a reviewer who cannot see
+> the evidence is right to refuse the claim. An APPROVED status with nothing cited is the same defect
+> as the course's VERIFIED specs at 12–22% coverage — which is what §6.6c's cross-check and finding
+> F3's `required` flag exist to stop. So this line no longer asserts the status; it names where the
+> evidence is and what it says, which is what `56a2e56` should have been able to check.
 
 **Date**: 2026-11-04. All tree checks in this plan were made on 2026-11-04 against prompt-factory
 `main` = `8d75f6c`, marketplace `main` = `1ada821`, website `main` = `11a16f1`, book
