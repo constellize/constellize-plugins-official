@@ -4,7 +4,8 @@
 > (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use
 > checkbox (`- [ ]`) syntax for tracking.
 
-**Status**: awaiting Steve's approval. Nothing is built before that.
+**Status**: **APPROVED by Steve, 2026-11-04**, including the narrowing of acceptance 13 that
+F1 records. The execution method is still Steve's to choose; nothing is built before that.
 **Date**: 2026-11-04. All tree checks in this plan were made on 2026-11-04 against prompt-factory
 `main` = `8d75f6c`, marketplace `main` = `1ada821`, website `main` = `11a16f1`, book
 `round-9-typesetting` = `18c83e5`.
@@ -145,9 +146,10 @@ narrowed to match.
 nothing under `public/prompts/`, `public/personas/` or `src/`, and the website drift guard still
 green against `GENERATED_FROM` = `0d97085`. The v2 PDF is a single deliberate website commit,
 made and reviewed on its own (Task C8), with the v1 PDF proved byte-identical afterwards.
-**This narrows an approved acceptance criterion, so it needs Steve's agreement.** The alternative is
-to drop the card rebuild from 2.0 and leave the printed-card-vs-marketplace drift to a later
-release; say the word and Task C8 becomes a deferred item instead.
+**This narrows an approved acceptance criterion, so it needed Steve's agreement; he gave it on
+2026-11-04 by approving this plan.** The alternative offered and declined was to drop the card
+rebuild from 2.0 and leave the printed-card-vs-marketplace drift to a later release. Task C8 stands
+as written, and the narrowed reading of acceptance 13 above is the one the release is judged against.
 
 **F2 — the card command in §7.3 does not work, and the release doc's version rebuilds the wrong
 card.** §7.3 gives `npm run build:card --line v2`. npm (11.19.1, verified by running it) consumes
