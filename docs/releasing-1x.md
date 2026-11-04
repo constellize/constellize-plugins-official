@@ -39,6 +39,18 @@ prompt-factory and leave this repo's pointer stale), so check your directory fir
    lines, so keep such edits in their own commits.
 7. **[marketplace] Push `v1`.**
 
+### If `.github/` or `README.md` changed
+
+On `main` both are generated: the workflow and the version-bump script come from
+prompt-factory's `content/literal/marketplace-github/`, and `README.md` from
+`content/literal/marketplace-root/`. So a fix to either is a **factory** change, made there
+and regenerated here. Editing them in this repo on `main` does not survive: the next
+`npm run generate:marketplace` overwrites the file, and the drift job fails in the meantime.
+
+On `v1` both are still hand-written, so the same fix on that line is an edit in this repo.
+(`.github/` happens to be byte-identical on the two branches today; `README.md` is not,
+because each line carries its own install command.)
+
 ### If the card changed
 
 The reference cards are built by `prompt-factory`, from its copy of the infographic
