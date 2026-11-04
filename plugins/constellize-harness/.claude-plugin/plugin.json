@@ -1,6 +1,6 @@
 {
   "name": "constellize-harness",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Project orchestration: assess state, plan next steps, execute constellize skills",
   "author": {
     "name": "Constellize"
