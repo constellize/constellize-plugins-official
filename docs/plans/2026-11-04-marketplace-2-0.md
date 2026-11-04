@@ -4,8 +4,9 @@
 > (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use
 > checkbox (`- [ ]`) syntax for tracking.
 
-**Status**: **APPROVED by Steve, 2026-11-04**, including the narrowing of acceptance 13 that
-F1 records. The execution method is still Steve's to choose; nothing is built before that.
+**Status**: **APPROVED by Steve, 2026-11-04**, including his decision to narrow acceptance 13 and
+keep the card rebuild (F1); the design document was amended to match in a separate commit. The
+execution method is still Steve's to choose; nothing is built before that.
 **Date**: 2026-11-04. All tree checks in this plan were made on 2026-11-04 against prompt-factory
 `main` = `8d75f6c`, marketplace `main` = `1ada821`, website `main` = `11a16f1`, book
 `round-9-typesetting` = `18c83e5`.
@@ -56,6 +57,10 @@ Every task's requirements implicitly include this section.
   `content/schemas/plugins.json`, never in a literal file: `constellize-craft` `1.0.0` → `1.1.0`,
   `constellize-deliver` `1.0.0` → `1.1.0`, `constellize-design` `1.0.0` → `1.1.0`,
   `constellize-harness` `1.1.1` → `1.2.0`, `constellize-feature` new at `1.0.0`.
+- **Every command in this plan runs from the `prompt-factory` repository root** unless the step
+  says otherwise. That is where `package.json` lives — `marketplace` has none at all — so
+  `npm run generate:marketplace`, `npm run check:drift` and `npm run build:card` only work there,
+  and sibling repositories are reached as `../marketplace`, `../website`, `../book`.
 - **No skill or plugin is renamed or removed**, and the Harness plugin keeps exactly its five skills
   (`orchestrate`, `assess`, `plan`, `execute`, `init`). This is what `book/appC.md:33`,
   `book/ch9.md:324` and `book/appA.md:48` bind (§5).
@@ -135,31 +140,47 @@ code, not the prose.
 **F1 — acceptance 13 and acceptance 14 contradict each other, and the non-goal with them.**
 Acceptance 14 requires the v2 reference card to be rebuilt. Acceptance 13 requires "**No website
 file changed at all**, confirmed by a clean `git status` in `website`". But
-`scripts/build-reference-card.mjs:320` writes to `path.join(REPO_ROOT, '..', 'website', 'public')`
+`prompt-factory/scripts/build-reference-card.mjs:320` writes to `path.join(REPO_ROOT, '..', 'website', 'public')`
 by default, and `public/constellize-reference-card-v2.pdf` **is tracked in the `website` repo**
 (`git ls-files` in `website` lists `-v1.pdf`, `-v2.pdf` and an unversioned
 `constellize-reference-card.pdf`). Satisfying 14 therefore breaks 13 as written, and breaks the §3
 non-goal "No website files are touched" too. §7.3 already half-acknowledges this — it calls the card
 rebuild "a release-time step … not something CI will catch" — but the acceptance criteria were not
 narrowed to match.
-**Resolution taken in this plan:** acceptance 13 is read as *no generated website content changes* —
-nothing under `public/prompts/`, `public/personas/` or `src/`, and the website drift guard still
-green against `GENERATED_FROM` = `0d97085`. The v2 PDF is a single deliberate website commit,
-made and reviewed on its own (Task C8), with the v1 PDF proved byte-identical afterwards.
-**This narrows an approved acceptance criterion, so it needed Steve's agreement; he gave it on
-2026-11-04 by approving this plan.** The alternative offered and declined was to drop the card
-rebuild from 2.0 and leave the printed-card-vs-marketplace drift to a later release. Task C8 stands
-as written, and the narrowed reading of acceptance 13 above is the one the release is judged against.
+**Steve's decision, 2026-11-04 — "narrow 13, keep card".** Acceptance 13 now reads *no generated
+website content changes*: nothing under `public/prompts/`, `public/personas/` or `src/`, with the
+website drift guard still green against `GENERATED_FROM` = `0d97085`. The rebuilt v2 PDF is a single
+deliberate website commit, made and reviewed on its own (Task C8), with the v1 PDF and its
+unversioned alias both proved byte-identical afterwards. The alternative he was offered and declined
+was to drop the card rebuild from 2.0 and leave the printed-card-vs-marketplace drift to a later
+release. This changes an acceptance criterion in a design Steve had already approved, so it is
+recorded here as **his decision**, not as a reading taken by the plan's author; Task C8 stands as
+written, and the narrowed acceptance 13 is what the release is judged against.
 
-**F2 — the card command in §7.3 does not work, and the release doc's version rebuilds the wrong
-card.** §7.3 gives `npm run build:card --line v2`. npm (11.19.1, verified by running it) consumes
+The design document was amended to match, as a separate commit on `marketplace` `main`: §3's
+non-goal and §8's acceptance 13 now carry the narrowed wording and name it as Steve's 2026-11-04
+decision. Before that amendment the spec on `main` (`1ada821`) still carried the un-narrowed
+acceptance 13 and the flat non-goal "No website files are touched", which would have left the two
+documents contradicting each other — the same way the design carried two wrong claims through a
+revision each.
+
+**F2 — the card command in §7.3 does not work, and the release doc's documented procedure
+rebuilds the frozen v1 artifacts.** The card builder is
+`prompt-factory/scripts/build-reference-card.mjs`, and `build:card` is defined in
+`prompt-factory/package.json:23`; neither is in the `marketplace` repo, which has no `package.json`.
+§7.3 gives `npm run build:card --line v2`. npm (11.19.1, verified by running it) consumes
 `--line` as its own config and passes only `v2` to the script, whose `parseArgs` has
 `default: throw new Error(\`Unknown argument: ${argv[i]}\`)` — so the command fails loudly. That is
-the safe failure; the unsafe one is in `docs/releasing-1x.md:63`, which gives a bare
-`npm run build:card`. With no `--line`, `main()` builds **every** line (`:317-325`), so that command
-rebuilds the **v1** card as well and violates acceptance 14. The correct invocation is
+the safe failure. The unsafe one is `marketplace/docs/releasing-1x.md:63`, which gives a bare
+`npm run build:card` from the factory root. That doc is not wrong about the script — it says plainly
+that the bare command writes all three PDFs — but the procedure it documents is unsafe for **this**
+release, because with no `--line` `main()` maps over every entry in `LINES`
+(`build-reference-card.mjs:321-325`, default out-dir `:324`) and the `v1` entry carries
+`alsoWriteAs: 'constellize-reference-card.pdf'` (`:51-59`). A bare run therefore rewrites **two**
+v1-pinned artifacts: `-v1.pdf` and the unversioned alias the printed book's readers follow. That
+violates acceptance 14 and touches an artifact `v1` is frozen to protect. The correct invocation is
 `npm run build:card -- --line v2 --out ../website/public/constellize-reference-card-v2.pdf`.
-Task C8 uses it and corrects `docs/releasing-1x.md`.
+Task C8 uses it and narrows the release doc's procedure for the frozen-`v1` case.
 
 **F3 — §6.6c's cross-check is unverifiable as specified.** The assessor is to report `VERIFIED` only
 when the block "carries a verdict for every gate that was required to run". Nothing in the design
@@ -742,7 +763,7 @@ gains one. In the infographic, the `<div class="number">74</div>` stat becomes `
 - [ ] **Step 2: Confirm the card still fits one page**
 
 Run: `npm run build:card -- --line v2 --out /tmp/card-probe-v2.pdf`
-Expected: success. The builder asserts exactly one page (`build-reference-card.mjs:338`,
+Expected: success. The builder asserts exactly one page (`prompt-factory/scripts/build-reference-card.mjs:338`,
 `if (pages !== 1)`) against `@page { size: 816px 1230px }`, so a chip that overflows fails here
 rather than shipping a two-page card. If it fails, tighten the infographic's craft section — do not
 raise the page size, and do not remove a chip.
@@ -1844,23 +1865,30 @@ Expected: no drift; `OK: constellize-harness 1.1.1 -> 1.2.0`,
 - [ ] **Step 10: Correct the card command in the release doc — Finding F2**
 
 In `marketplace/docs/releasing-1x.md`, replace the bare `npm run build:card` at `:63` with the
-per-line form and say why: a bare run rebuilds **every** line, including v1, and
-`npm run build:card --line v2` without the `--` is swallowed by npm. Add a 2.0 note recording that
-the v1 card must never be rebuilt while the book is in print.
+per-line form and say why. The doc is accurate for a 1.x release that changes both lines' card
+content — it already states that the bare command writes all three PDFs — so this is not correcting
+an error but narrowing the procedure: while `v1` is frozen, a bare run rewrites
+`constellize-reference-card-v1.pdf` **and** the unversioned alias it is also written as, both of
+which the printed book's readers follow. Record that, and that `npm run build:card --line v2`
+without the `--` is swallowed by npm (Finding F2).
 
 - [ ] **Step 11: Rebuild the v2 card, and only the v2 card — acceptance 14**
 
 Run:
 ```bash
-cp website/public/constellize-reference-card-v1.pdf /tmp/card-v1-before.pdf
+# from the prompt-factory root, as everywhere else in this plan
+cp ../website/public/constellize-reference-card-v1.pdf /tmp/card-v1-before.pdf
+cp ../website/public/constellize-reference-card.pdf /tmp/card-alias-before.pdf
 npm run build:card -- --line v2 --out ../website/public/constellize-reference-card-v2.pdf
-cmp /tmp/card-v1-before.pdf website/public/constellize-reference-card-v1.pdf
-git -C website status --short
+cmp /tmp/card-v1-before.pdf ../website/public/constellize-reference-card-v1.pdf
+cmp /tmp/card-alias-before.pdf ../website/public/constellize-reference-card.pdf
+git -C ../website status --short
 ```
-Expected: `cmp` is silent (v1 byte-identical), and `git -C website status --short` shows exactly one
-modified file, `public/constellize-reference-card-v2.pdf`, plus the pre-existing untracked `.mp4`.
-The unversioned `public/constellize-reference-card.pdf` must also be unchanged — it is a copy of the
-v1 card and the per-line invocation does not touch it.
+Expected: both `cmp`s are silent, and `git -C ../website status --short` shows exactly one modified
+file, `public/constellize-reference-card-v2.pdf`, plus the pre-existing untracked `.mp4`. The
+unversioned `public/constellize-reference-card.pdf` is the `v1` entry's `alsoWriteAs` target
+(`build-reference-card.mjs:51-59`), so it is written only when v1 is built; the second `cmp` is what
+proves the per-line invocation did not touch it.
 
 - [ ] **Step 12: Ask Steve before any push, then push the three repos in order**
 
