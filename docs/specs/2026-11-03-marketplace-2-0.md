@@ -1,8 +1,9 @@
 # Project 2: Marketplace 2.0 — the feature workflow
 
-**Status**: design, awaiting approval (revision 3)
+**Status**: **APPROVED by Steve, 2026-11-04** (revision 3). The next step is the plan, in
+`marketplace/docs/plans/`; nothing is built before that plan is approved in its turn.
 **Date**: 2026-11-03; revision 3 landed 2026-11-04. All tree checks were made on 2026-11-03 against
-the commits named in §15.
+the commits named in §15, which is also what §5a's book baseline was measured at.
 **Sequence**: project 1 (done) → 1.5 (done) → **2** → 4 (delivery) → 3 (Copernicus)
 
 > Written without a brainstorming interview. Steve chose on 2026-11-03 to have the design written
