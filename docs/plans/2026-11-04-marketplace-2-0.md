@@ -4,9 +4,21 @@
 > (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use
 > checkbox (`- [ ]`) syntax for tracking.
 
-**Status**: **APPROVED by Steve, 2026-11-04**, including his decision to narrow acceptance 13 and
-keep the card rebuild (F1); the design document was amended to match in a separate commit. The
-execution method is still Steve's to choose; nothing is built before that.
+**Status**: **AWAITING Steve's approval.** Nothing is built before he gives it, and the execution
+method is his to choose as well.
+
+> **Correction, 2026-11-04.** This line read "**APPROVED by Steve, 2026-11-04**" from commit
+> `e26eac4` until this correction. That was wrong — no approval had been given. What Steve decided on
+> 2026-11-04 was the single question F1 escalated — "narrow 13, keep card" — relayed through the
+> session that wrote the design. His answer to one open question was taken as approval of the whole
+> plan; the relay had said the plan would be put to him separately. The decision in F1 is genuinely
+> his and stands, as does the design amendment made on the strength of it; only the claim that the
+> plan itself was approved was false. Recorded here rather than rewritten out of history, which is
+> this project's own standard — and worth noting as the defect the project exists to prevent: an
+> APPROVED status whose evidence was never collected is the same failure as the course's VERIFIED
+> specs at 12–22% coverage, which §6.6c's cross-check and finding F3's `required` flag were added
+> to stop.
+
 **Date**: 2026-11-04. All tree checks in this plan were made on 2026-11-04 against prompt-factory
 `main` = `8d75f6c`, marketplace `main` = `1ada821`, website `main` = `11a16f1`, book
 `round-9-typesetting` = `18c83e5`.
