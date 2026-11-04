@@ -435,17 +435,17 @@ Headless Chrome stamps a creation date into every PDF, so `git status` will alwa
 ```bash
 cd /Users/satkinson/Work/constellize/website/public
 for f in constellize-reference-card-v1.pdf constellize-reference-card-v2.pdf; do
-  echo "--- $f"; grep -ac '/Type */Page[^s]' "$f"; strings "$f" | grep -c 'MediaBox'
+  echo "--- $f"; pdfinfo "$f" | grep -E '^(Pages|Page size)'
 done
 git diff --stat constellize-reference-card-v1.pdf
 ```
 
-Expected: one page each; the page box present; and `git diff --stat` showing a small delta consistent with a timestamp, not a wholesale rewrite. The builder's own assertions in step 3 are the real check — they already verify the page count, the page box and that the footer carries the expected install command.
+Expected: `Pages: 1` and `Page size: 612 x 923.04 pts` for each; and `git diff --stat` showing a small delta consistent with a timestamp, not a wholesale rewrite. Needs poppler (`brew install poppler`). **Do not** reach for `grep` or `strings` on these PDFs: they keep their objects in compressed streams, so a byte grep matches nothing and so reports success on *any* input -- including a card with no install command at all, which is the exact failure this step exists to catch. The builder's own assertions in step 3 are the real check — they already verify the page count, the page box and that the footer carries the expected install command.
 
 Then confirm the v1 card is still the pinned one and v2 still unpinned:
 
-Run: `for l in v1 v2; do echo -n "$l: "; strings constellize-reference-card-$l.pdf | grep -o 'constellize-plugins-official#\?v\?1\?' | head -1; done`
-Expected: `v1:` shows the `#v1` suffix, `v2:` shows the bare repository name. If both look alike, the per-line injection broke — the failure that shipped a card with no install command at all once before.
+Run: `for l in v1 v2; do printf '%s: ' "$l"; pdftotext -q constellize-reference-card-$l.pdf - | grep -o 'constellize/constellize-plugins-official\(#v1\)\?' | head -1; done`
+Expected: `v1:` shows `constellize/constellize-plugins-official#v1`, `v2:` the bare `constellize/constellize-plugins-official`. If both look alike, the per-line injection broke — the failure that shipped a card with no install command at all once before.
 
 - [ ] **Step 5: Verify drift**
 
