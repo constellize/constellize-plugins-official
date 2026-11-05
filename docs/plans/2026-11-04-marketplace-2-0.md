@@ -383,6 +383,34 @@ committed, which is exactly what the `diff -rq` compares.
 empty, but as an observation of a checkout nothing has written to rather than as the readout of a
 write. Acceptance 17 is met by the comparison, not by the rewrite.
 
+**F11 — found during execution, 2026-11-05: `specify` and `implement` both delegate `gap-analysis`
+into the same artifact, and nothing says what becomes of the first result.** §6.1 gives `specify` a
+phase *"What exists that can be reused, and what is missing | `constellize-design:gap-analysis`,
+feature-scoped, output path set to the feature's own artifact"*, and §6.2 gives `implement` a phase
+*"Gap, then plan | `constellize-design:gap-analysis` → `:implementation-sketch` →
+`:code-generation-plan`"*. Both write `## Gap Analysis` into `llm/features/<name>.md`. §6.6b
+settles the collision between a feature-scoped run and the project-level path; it does not settle
+this one, between two feature-scoped runs into the same section of the same file. The same holds
+for `## Implementation Sketch`, which both phases also delegate.
+
+C5's implementer found this and raised it rather than quietly picking a side, which is the correct
+handling.
+
+**Resolution — the later run replaces the section in place, and the prompt says so.** Three things
+settle it. Preserving both results would require `implement` to intercept what the delegated skill
+produced and rewrite its heading, which is exactly r2's capture mode — *"asking those skills to do
+something their own prose does not describe"* — and r3 rejected it by name in §6.6b; reintroducing
+it for a history record would undo that decision for a much smaller reason than the one it was made
+for. The artifact is a living state document whose whole structure is a status moving
+SPECIFIED → IMPLEMENTED → VERIFIED, not an audit log. And the design already has somewhere for
+history: the final phase of both §6.1 and §6.2 delegates `constellize-memory:update`.
+
+The implementation-time analysis is also the better of the two, because §6.2 runs it *after* the
+constellation map that §6.1 had no access to — so what is replaced is a less-informed answer to the
+same question. What the design does require is that the supersession be stated rather than silent,
+and `content/prompts/feature/implement-feature.md:76` states it: *"it supersedes whatever the
+specification phase recorded there."*
+
 ---
 
 # Release A — the four gates become assertions
