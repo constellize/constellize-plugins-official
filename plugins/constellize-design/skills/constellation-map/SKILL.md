@@ -4,7 +4,7 @@ description: Map constellation of trusted components and their integration point
 allowed-tools: Read, Glob, Grep, Write, Bash
 metadata:
   prompt-id: constellation-map
-  argument-hint: "[system_name] [system_description] [known_components]"
+  argument-hint: "[system_name] [system_description] [known_components] [output_path]"
   model: sonnet
 ---
 
@@ -43,6 +43,11 @@ Follow this process:
 </task>
 
 <context>
+This prompt outputs to `llm/construction/requirements/constellation-map.md`.
+
+**Optional output path (`$3`):**
+`output_path` is a markdown file. When it is given, the artifact goes there instead of the default path: this skill owns the one section in that file titled `## Constellation Map`, replaces that section in place and leaves the rest of the file untouched. The owned section runs from its `## Constellation Map` line to the next heading at the same level or the end of the file. Inside the owned section the artifact's own headings are demoted one level (`###` and deeper, never a second `##`), so the section cannot be split by its own content. If the owned section is not present in the file, it is appended; if `output_path` itself does not exist, it is created with that one section and nothing else. It has no prerequisite artifact; it proceeds with the context the caller supplied inline. When `output_path` is absent, every path is exactly as stated above. This skill never creates a project-level file it was not asked for, and never scaffolds `llm/construction/`.
+
 System description:
 $1
 
