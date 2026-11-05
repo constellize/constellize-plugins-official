@@ -309,6 +309,36 @@ This is the same class as F6: a brief instruction that is wrong in a way that pr
 wrong result rather than an error — here, a task that looks complete while leaving a red suite that
 the next two tasks would be expected to inherit and explain away.
 
+**F8 — found during execution, 2026-11-05: Task C4's Interfaces paragraph puts the constellation map
+in `specify`, where §6.1 does not have it and where it would duplicate a marketplace capability.**
+C4's Interfaces paragraph says the artifact carries "`## Constellation Map`, `## Gap Analysis` and
+`## Implementation Sketch` sections written by the delegated design skills". But §6.1's normative map
+for `specify` has no constellation-map phase, and §6.2's map for `implement` opens with exactly that
+phase: *"Identify stars (reference implementations) | `constellize-design:constellation-map`,
+feature-scoped"*. The constellation map belongs to `implement`, which is also why B1 gave
+`constellation-map` an `output_path` slot.
+
+C4's implementer found the contradiction and resolved it by having the `specify` skill write the
+section itself. That resolution is wrong three times over: it adds a row to a table the brief calls
+normative; it duplicates a capability the marketplace already has, which is an anti-goal whose own
+illustration is this shape ("if `specify` writes its own adversarial questions instead of calling
+`requirements-analysts`, the project has produced a fourth convention"); and it puts two writers on
+one section, since `implement` delegates `constellation-map` into the same artifact — the precise
+collision §6.6b exists to prevent.
+
+**Resolution — §6.1 stands; the Interfaces paragraph is wrong.** `specify` writes no
+`## Constellation Map`. The artifact at SPECIFIED carries `## Gap Analysis` and
+`## Implementation Sketch` only, and `implement` creates the constellation map. The concern that
+`gap-analysis` needs the sibling section is already answered by the rule B1 put in that prompt and
+which is verified present in `content/prompts/03-architecture/gap-analysis.md`: *"when that section
+is absent it says so and proceeds with the context the caller supplied inline."* The absent-sibling
+path is designed for exactly this moment, so `specify` supplies its feature-scoped context to
+`gap-analysis` inline instead.
+
+**Check C5 and C6 for the same wording.** The Interfaces paragraphs were written together and may
+carry the same claim; C5's own map legitimately includes the constellation map, so the error does not
+simply repeat.
+
 ---
 
 # Release A — the four gates become assertions
