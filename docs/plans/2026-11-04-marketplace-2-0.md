@@ -339,6 +339,28 @@ path is designed for exactly this moment, so `specify` supplies its feature-scop
 carry the same claim; C5's own map legitimately includes the constellation map, so the error does not
 simply repeat.
 
+**F9 — found during execution, 2026-11-05: Task C6 Steps 5 and 6 run the generator into the live
+marketplace checkout and then reset that checkout's whole working tree.** Step 5 is
+`npm run generate:marketplace && ls ../marketplace/plugins/constellize-feature/skills/`, and Step 6
+restores it with `git -C ../marketplace checkout -- . && git -C ../marketplace clean -fd plugins`.
+
+Three things are wrong with that pair. `git checkout -- .` is not scoped to what the generator
+wrote: it discards every uncommitted change in that repository, so any work in progress there at
+that moment is destroyed with no recovery. The checkout is shared and live, which means "the tree
+was clean when I looked" is not a fact that survives the minutes between the look and the reset.
+And a destructive restore is only needed because the check was aimed at the live tree in the first
+place: `generate(outputDir)` is exported at `build/generate-marketplace.ts:377` and the module's
+own entry point is gated behind `require.main === module` at `:426`, so the generator runs against
+any directory given to it.
+
+**Resolution — Steps 5 and 6 are replaced by one step that generates into a scratch directory.**
+Call the exported `generate()` with a path under the session's scratch directory and list
+`<scratch>/plugins/constellize-feature/skills/`. That verifies exactly what Step 5 set out to
+verify, which is that `deriveShortSkillName` turns the three prompt ids into `specify`, `implement`
+and `verify`, and it leaves no restore to perform: nothing is written outside the scratch
+directory, and no sibling repository is touched. The release task is where generated output
+legitimately lands in the marketplace tree, under that task's own commits.
+
 ---
 
 # Release A — the four gates become assertions
