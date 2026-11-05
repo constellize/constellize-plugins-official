@@ -287,6 +287,28 @@ fixture it names. This is the only occurrence in the plan — checked across eve
 other step inherits it. Whoever re-runs C2 Step 3 should use the form above; a `--root`-less run
 that reports no features is reporting on `prompt-factory`, not on the fixture.
 
+**F7 — found during execution, 2026-11-05: Task C4's shared test table asserts against three prompts
+when only one of them exists at that point, so the suite cannot be green when C4 commits.** C4 Step 1
+opens the shared table with `const FEATURE_IDS = ['specify-feature', 'implement-feature',
+'verify-feature']` and runs a seven-test `describe.each` over it, and C4 Step 2 states the expected
+failure as "none of the three prompts exists". But C4 Step 3 creates only
+`content/prompts/feature/specify-feature.md`. Tasks C5 and C6 create the other two. So as written,
+the shared table leaves fourteen tests failing when C4 commits and seven still failing when C5
+commits, going green only at C6 — while this plan's method requires each task to commit with a green
+suite, and each task's review asserts one.
+
+**Resolution — the seeding, not the table.** The shared table is the right design: these seven
+properties are identical for all three prompts and should be asserted once. It is simply built up
+across the three tasks rather than written whole in the first. `FEATURE_IDS` is seeded with
+`['specify-feature']` in C4, and **C5 and C6 each append their own id** when they create their
+prompt, so every task commits green and the table covers all three by the end of C6. C4 carries a
+comment to that effect so the next implementer sees the intent. Nothing about the seven assertions
+changes.
+
+This is the same class as F6: a brief instruction that is wrong in a way that produces a confident
+wrong result rather than an error — here, a task that looks complete while leaving a red suite that
+the next two tasks would be expected to inherit and explain away.
+
 ---
 
 # Release A — the four gates become assertions
