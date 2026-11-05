@@ -361,6 +361,28 @@ and `verify`, and it leaves no restore to perform: nothing is written outside th
 directory, and no sibling repository is touched. The release task is where generated output
 legitimately lands in the marketplace tree, under that task's own commits.
 
+**F10 — found during execution, 2026-11-05: Task C8 Step 5 proves the book is untouched by running
+a writer into it.** The step is `npm run generate:all && git -C ../book status --short`, expecting
+empty. `generate:all` is `generate:website && generate:marketplace && generate:book`, and
+`generate:book` writes the ten tracked files under `book/generated/`. So the check establishes that
+the book is unchanged by rewriting it and then looking for a diff: when the answer is the expected
+one the write was redundant, and when it is not, the step has already modified ten tracked files in
+a manuscript the publisher has signed off on with a typesetting round in flight. That is the one
+unguarded writer into the manuscript, used here as an instrument.
+
+The step does not need it. Its own second half is the stronger check and writes nothing into
+`book/`: `git archive` the factory into a scratch sibling outside the five repos, run
+`generate-book.ts` there, and `diff -rq` its output against the committed `book/generated/`. The
+brief says so itself — *"the first check catches an accidental write; the second catches one made
+silently before the check."* A check that catches the silent case catches the accidental one too,
+because both are a difference between what the current factory generates and what the book has
+committed, which is exactly what the `diff -rq` compares.
+
+**Resolution — Step 5 keeps the scratch-sibling generation and the `diff -rq`, and drops the
+`npm run generate:all`.** `git -C ../book status --short` is still run and still expected to be
+empty, but as an observation of a checkout nothing has written to rather than as the readout of a
+write. Acceptance 17 is met by the comparison, not by the rewrite.
+
 ---
 
 # Release A — the four gates become assertions
