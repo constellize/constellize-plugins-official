@@ -231,6 +231,40 @@ missing section is recorded, never scaffolded. Two smaller additions fall out of
 `memory-bank/` and `construction/` but **not** `features/`, so every prompt must write
 `llm/features/` in full or the generated skill will point at a bare `features/`.
 
+**F5 — found during execution, 2026-11-05: `generate:website` writes the v1-pinned prompt text, so
+`generate:all` dirties the `website` repo whenever a prompt body changes.** This plan's A5 Step 5,
+B2 Step 2 and C8 Step 7 all expect `git status` in `website` to show nothing but the pre-existing
+untracked `.mp4` after `npm run generate:all`. That expectation is wrong, and Task A5 proved it:
+`generate:all` chains `generate:website`, and `generate-website.ts:20` hardcodes
+`DEFAULT_PROMPT_VERSION = 'v1'`, writing every prompt's text to
+`website/public/prompts/v1/<id>/prompt.txt`. Its own comment at `:19` says why the directory is
+versioned — "The book links to /prompts/v1/<id>, so v1 must keep resolving" — but the version is
+a constant, not a function of the content, so running the generator from `main` overwrites the
+v1 line's published prompt text with 2.0 content. After Release A's twelve verdict sections, the
+run left **12 modified files** under `public/prompts/v1/`, `16 0` each.
+
+This is the same hazard class as §5a's `generate-book.ts`: an unguarded generator writing into a
+sibling repository that this project is forbidden to change. Nothing was committed, and the twelve
+files were restored (`git checkout -- public/prompts/v1`), leaving `website` at `11a16f1` =
+`origin/main` with only the untracked `.mp4`.
+
+**Resolution — the procedure, not the criterion.** Acceptance 13 as narrowed is unaffected and was
+verified the way it is written: with the factory archived at the website's own unchanged
+`GENERATED_FROM` (`0d97085`), `check-drift --target website --against ../website` reports
+*"No drift: 87 generated website files match"*. The website's CI guard checks out prompt-factory at
+that commit, so the committed website remains consistent with the line it is generated from. What
+changes is the three steps' expectation: after `npm run generate:all`, the website check is
+
+1. the only modified paths are under `public/prompts/v1/` — **nothing** under `public/personas/` and
+   nothing under `src/`, either of which would be a real finding;
+2. restore them (`git -C ../website checkout -- public/prompts/v1`);
+3. confirm `git -C ../website status --short` shows only the untracked `.mp4`; and
+4. confirm the drift guard above is still green against `0d97085`.
+
+`website` is therefore a repo that `generate:all` dirties and that must be restored, exactly as
+`marketplace` is in Tasks A1, C3, C4 and C6 — and unlike `book`, where a dirty tree is a stop
+condition because its output genuinely does not change.
+
 ---
 
 # Release A — the four gates become assertions
