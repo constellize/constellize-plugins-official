@@ -265,6 +265,28 @@ changes is the three steps' expectation: after `npm run generate:all`, the websi
 `marketplace` is in Tasks A1, C3, C4 and C6 — and unlike `book`, where a dirty tree is a stop
 condition because its output genuinely does not change.
 
+**F6 — found during execution, 2026-11-05: the assessor command in Task C2 Step 3 does not take a
+positional root, so as written it assesses the wrong directory and reports success.** Task C2 Step 3
+(this plan, line 1250) says to run `node content/literal/constellize-harness/scripts/assess.mjs
+<scratch-root>`. The assessor does not parse a positional argument: `assess.ts:233-238` reads
+`process.argv.slice(2)`, takes the root from `--root <path>` and otherwise falls back to
+`process.cwd()`. A positional path is silently ignored, so the command as written assesses
+`prompt-factory` itself — which has no `llm/features/` — and prints a perfectly well-formed report
+about the wrong project. Nothing errors, which is what makes it worth recording: the step would
+have been marked passed on output that never looked at the fixture.
+
+**Resolution — the command, not the step.** The fixture and the expectation are right; only the
+invocation is wrong. The correct form is
+
+```
+node content/literal/constellize-harness/scripts/assess.mjs --format json --root <scratch-root>
+```
+
+Task C2's implementer found this and used the correct form, so the step was verified against the
+fixture it names. This is the only occurrence in the plan — checked across every task brief — so no
+other step inherits it. Whoever re-runs C2 Step 3 should use the form above; a `--root`-less run
+that reports no features is reporting on `prompt-factory`, not on the fixture.
+
 ---
 
 # Release A — the four gates become assertions
