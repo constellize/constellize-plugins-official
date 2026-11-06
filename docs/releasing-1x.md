@@ -69,8 +69,9 @@ release that changes the card content of both lines. While `v1` is frozen, thoug
 run rewrites the `v1` PDF and the unversioned alias, and the printed book's readers follow
 both, so rebuild only the line you changed. Keep the `--`: `npm run build:card --line v2`
 without it is swallowed by npm, the flag never reaches the script, and it behaves as the
-bare command. Pass `--out <path>` to write somewhere other than `../website/public/`, for
-example to probe the page count first. Then commit the rebuilt PDF in the **website** repo. The script drives Chrome
+bare command. Pass `--out-dir <dir>` to write somewhere other than `../website/public/`, for
+example to probe the page count first; `--out <file.pdf>` names a single output file
+instead and fails without `--line`. Then commit the rebuilt PDF in the **website** repo. The script drives Chrome
 over the DevTools protocol and needs no dependencies; set `CHROME_PATH` if Chrome is
 somewhere unusual. It fails rather than shipping a bad card if the footer's install command
 is missing or falls outside the page, which is how the card previously shipped with the
