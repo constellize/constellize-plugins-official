@@ -38,7 +38,7 @@ Gates 1, 2 and 4 always run, and they are always required — gate 2 because its
 
 ### Phase 1: Spec, report and project context
 
-Resolve the feature name to `llm/features/<feature-name>.md` and read it. Then read the artifact's **first** `**Status:**` line that is not inside a fenced code block. If that line does not read `**Status:** IMPLEMENTED` — or there is no artifact, or no such line — apply **the status gate** in the context below and stop there, except for the one status the gate sends back here for a second run.
+Resolve the feature name to `llm/features/<feature-name>.md` and read it. Then read the artifact's **first recognised** `**Status:**` line — one carrying `SPECIFIED`, `IMPLEMENTED` or `VERIFIED`, not inside a fenced code block, which is the line the harness's assessor reads too. A line such as `**Status:** blocked on review` is skipped, not returned. If that line does not read `**Status:** IMPLEMENTED` — or there is no artifact, or no such line — apply **the status gate** in the context below and stop there, except for the one status the gate sends back here for a second run.
 
 With the gate passed, read for context:
 
@@ -127,7 +127,7 @@ The status is written last because it attests to the block above it. A status li
 **The status gate.** This skill measures a finished implementation and nothing else:
 
 - **No artifact at `llm/features/<feature-name>.md`**: refuse. Name the exact path you looked for, list what `llm/features/` does hold, and say to run `constellize-feature:specify` and then `constellize-feature:implement` first.
-- **An artifact with no `**Status:**` line outside a fenced block**: refuse. This is an interrupted specification run, not a contract, and the assessor reports it as `unknown`. Say which sections it already holds and say to finish it with `constellize-feature:specify`.
+- **An artifact with no recognised `**Status:**` line outside a fenced block** — none carrying `SPECIFIED`, `IMPLEMENTED` or `VERIFIED`, which includes one whose only status line carries some other value: refuse. This is an interrupted specification run, not a contract, and the assessor reports it as `unknown`. Say which sections it already holds and say to finish it with `constellize-feature:specify`.
 - **`**Status:** SPECIFIED`**: refuse, name the status you found, and say that `constellize-feature:implement` is the skill to run next. There is no implementation to measure: every gate would have to invent something to look at, and a gate run against nothing returns a pass that means nothing.
 - **`**Status:** IMPLEMENTED`**: proceed.
 - **`**Status:** VERIFIED`**: **re-run**. This is the one status that sends you back into Phase 1 rather than out. Code changes after a pass, so a gate that could only ever run once would be a single-use gate, and the evidence in the artifact would go stale while still reading as current. Say that you are re-verifying, and replace the existing `## Gate Results` section in place.
@@ -155,7 +155,7 @@ In every refusal, name the status you found — or its absence — and the skill
 
 The procedure for your own section:
 
-1. **Read the artifact first** — re-read the whole of it immediately before this write, and leave every other byte of the file alone. Never write to a path you have not just read: five delegating phases sit between the Phase 1 read and this one, and a gate skill that writes anything of its own writes it into the same file.
+1. **Read the artifact first** — re-read the whole of it immediately before this write, and leave every other byte of the file alone. Never write to a path you have not just read: five delegating phases sit between the Phase 1 read and this one, and this is a whole-file write into a file whose other sections belong to other skills, which the user may have touched between runs.
 2. If a `## Gate Results` section is **already present** — a re-run, or an interrupted run of this skill — **replace that section in place, keeping its position**: the heading and everything under it, up to the next heading at the same level or above, or the end of the file. **Never write a second `## Gate Results` section.** The artifact carries exactly one `## Gate Results` section, and two of them are not a stale record beside a current one: the assessor reads two unfenced headings as a **malformed** block and reports the feature as `VERIFIED (unsubstantiated)` even when the newer block is perfect.
 3. If it is absent, **append it at the end of the file**, after `## Implementation Report`. It is the last section of the artifact.
 4. The heading is exactly `## Gate Results` — two hashes, a space, that text, and nothing after it. A heading that reads `## Gate Results (re-run)`, or that sits inside a fenced block, is not the section the assessor reads, so the evidence is absent and the status is unsubstantiated.
@@ -163,7 +163,7 @@ The procedure for your own section:
 The procedure for the status line:
 
 1. **Re-read the whole artifact now**, immediately before this write — the `## Gate Results` section landed in it since your Phase 1 read. **Never reconstruct it from an earlier read**: a Phase 1 buffer written back here deletes your own block and the four sections other skills own, and leaves a status standing over the deletion.
-2. Find the **first** `**Status:**` line in the file that is not inside a fenced code block. That is the one `readDeclaredStatus` in the harness's `tier1.ts` returns.
+2. Find the **first recognised** `**Status:**` line in the file — one carrying `SPECIFIED`, `IMPLEMENTED` or `VERIFIED`, not inside a fenced code block. A line such as `**Status:** blocked on review` is skipped, not returned. That is the one `readDeclaredStatus` in the harness's `tier1.ts` returns.
 3. Change **that one line**, in place, to the status Phase 7 decided, and **write every other byte of the file back** exactly as you just read it — every section above and below it, including every section you did not write.
 4. **Never append a second status line**, anywhere in the file, and never leave the old one standing beside a new one. A second status line is dead text — the assessor returns on the first match and never reaches it — and a reader who finds two has no way to tell which is current.
 
@@ -275,7 +275,7 @@ NEVER:
 - NEVER verify an artifact that is not at `**Status:** IMPLEMENTED`, except a VERIFIED one, which is a re-run. Refuse, name the status you found or its absence, and name the sibling skill to run instead.
 - NEVER leave a VERIFIED line standing when this run failed a gate or could not substantiate one. A failing re-run of a VERIFIED artifact writes `**Status:** IMPLEMENTED` over it and says so: the artifact that was verified last week is not verified now.
 - Write a second `## Gate Results` section, or leave an old one beside a new one. Two unfenced headings make the block malformed, which is worse than a stale record: it discards evidence that was correct.
-- Append a second `**Status:**` line, or leave the old one beside a new one. Rewrite the first unfenced one in place.
+- Append a second `**Status:**` line, or leave the old one beside a new one. Rewrite the first recognised unfenced one in place.
 - Reconstruct the artifact from an earlier read. Your own block lands in it between your reads, and four of its sections were written by other skills.
 - Write the `## Constellation Map`, `## Gap Analysis`, `## Implementation Sketch` or `## Implementation Report` sections, or edit the contract above them. You write two things: your section and the status line.
 - Record the same gate twice, or leave a required gate out of the array. One gate, one verdict.
