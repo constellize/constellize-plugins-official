@@ -10,9 +10,25 @@ export interface ConstructionState {
   missingArtifacts: string[];
 }
 
+export type FeatureStatus =
+  | "SPECIFIED"
+  | "IMPLEMENTED"
+  | "VERIFIED"
+  | "VERIFIED (unsubstantiated)"
+  | "unknown";
+
+export interface FeatureEntry {
+  name: string; // the artifact's basename without .md, or the directory name
+  status: FeatureStatus;
+  evidence: "complete" | "incomplete" | "malformed" | "absent";
+  missingGates: number[]; // gates marked required with no verdict; [] otherwise
+  failedGates: number[]; // gates marked required whose verdict is present but not PASS; [] otherwise
+}
+
 export interface FeaturesState {
   count: number;
-  entries: string[];
+  entries: string[]; // kept, and still the names — existing readers are unaffected
+  features: FeatureEntry[];
 }
 
 export interface LlmArtifacts {

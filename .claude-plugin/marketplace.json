@@ -31,6 +31,11 @@
       "description": "Team learning, system evolution, and adoption"
     },
     {
+      "name": "constellize-feature",
+      "source": "./plugins/constellize-feature",
+      "description": "The feature workflow: specify, implement and verify one feature with tracked state"
+    },
+    {
       "name": "constellize-harness",
       "source": "./plugins/constellize-harness",
       "description": "Project orchestration: assess state, plan next steps, execute constellize skills"

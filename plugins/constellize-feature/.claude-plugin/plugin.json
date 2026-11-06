@@ -1,0 +1,8 @@
+{
+  "name": "constellize-feature",
+  "version": "1.0.0",
+  "description": "The feature workflow: specify, implement and verify one feature with tracked state",
+  "author": {
+    "name": "Constellize"
+  }
+}
