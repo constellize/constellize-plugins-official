@@ -411,6 +411,24 @@ same question. What the design does require is that the supersession be stated r
 and `content/prompts/feature/implement-feature.md:76` states it: *"it supersedes whatever the
 specification phase recorded there."*
 
+**F12 — found during execution, 2026-11-05: Task C8 pushes in Step 8, four steps before Step 12
+gates every push on Steve's go-ahead.** Step 12 is titled "Ask Steve before any push" and opens
+*"Nothing in this step happens without Steve's go-ahead"*. Step 8 opens with
+`git -C prompt-factory push origin main`. One of the two is wrong, and a plan carrying both will be
+followed by whichever the reader reaches first — which is Step 8.
+
+**Resolution — Step 8 makes its two marketplace commits but does not push; all three pushes happen
+in Step 12, behind the gate, in the order that step already gives.** Nothing is lost by deferring.
+The release invariant is not about when the factory is pushed relative to `GENERATED_FROM` being
+*written* — it is about never publishing a marketplace whose `GENERATED_FROM` names a commit absent
+from the factory's remote. Writing the file from `git -C prompt-factory rev-parse main` records a
+SHA that is stable whether or not it has been pushed, and Step 12 pushes the factory before the
+marketplace, so at no moment does a pushed marketplace point at an unpushed factory commit.
+`docs/releasing-1x.md:30` orders the two pushes relative to each other, which this honours.
+
+This is the only step in the plan with an irreversible, outward-facing side effect, so the
+conservative reading of the contradiction is the binding one.
+
 ---
 
 # Release A — the four gates become assertions
