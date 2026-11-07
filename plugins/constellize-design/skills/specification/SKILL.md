@@ -4,11 +4,12 @@ description: Generate software specification document. When creating detailed fu
 allowed-tools: Read, Glob, Grep, Bash
 metadata:
   prompt-id: specification
+  argument-hint: "[product_name]"
   model: sonnet
 ---
 
 <task>
-Generate a comprehensive software specification document for {{product_name}}.
+Generate a comprehensive software specification document for $0.
 
 The specification should include:
 
@@ -41,7 +42,7 @@ Format this specification as a structured markdown document with numbered sectio
 
 Use this structure:
 
-# Software Specification: {{product_name}}
+# Software Specification: $0
 
 ## 1. Functional Requirements
 ### 1.1 [Feature Category]
