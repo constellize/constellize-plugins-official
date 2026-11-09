@@ -2315,10 +2315,15 @@ and the suite at 325, since a manifest version is not a generated skill body. Th
 skill fix is therefore **four** steps, not three: bump the plugin version in the factory's
 `plugins.json`, push the factory, bump `GENERATED_FROM`, push the marketplace.
 
-**CI green at the final tips**, read from the run output rather than inferred: factory `generators`
-run 42655147912 success at `f880236`; marketplace `drift` run 42655193141 success at `f398e7d`,
-with all three of its guard steps passing — "Generated files match the recorded commit", "Catalog
-matches the plugin directories" and "Skill changes bump the plugin version".
+**Final tips, and CI green at them**, read from the run output rather than inferred:
+prompt-factory `main` = **`f880236`**, marketplace `main` = **`90756da`** with `GENERATED_FROM` =
+`f880236`. `f398e7d` shipped the fix; `aef7bc4` and `90756da` are docs-only corrections to this
+ledger entry, which is why the marketplace tip is two commits past the one the handshake above
+names. Runs: factory `generators` 42655147912 at `f880236`; marketplace `drift` 42655193141 at
+`f398e7d`, 42655570463 at `aef7bc4` and 42655634389 at `90756da` — all success, each passing all
+three guard steps ("Generated files match the recorded commit", "Catalog matches the plugin
+directories", "Skill changes bump the plugin version"). The one failure in the sequence is
+42654627368 at `f305c71`, the missed version bump.
 
 **Left open, and deliberately not widened into.**
 
