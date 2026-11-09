@@ -2309,11 +2309,16 @@ re-verified at the handshake commit before the marketplace commit was made.
 `.claude-plugin/plugin.json` version changing, and `constellize-craft` was still at `1.1.0`. That
 third invariant is not in this release's handshake description and was missed: **a skill fix is also
 a plugin release.** Fixed by bumping `constellize:craft` to `1.1.1` in
-`content/prompts/../content/schemas/plugins.json` — the factory owns the manifest, so the version is
+`content/schemas/plugins.json` — the factory owns the manifest, so the version is
 never edited in the marketplace — then regenerating and re-running every guard. Drift stayed at 109
 and the suite at 325, since a manifest version is not a generated skill body. The handshake for a
 skill fix is therefore **four** steps, not three: bump the plugin version in the factory's
 `plugins.json`, push the factory, bump `GENERATED_FROM`, push the marketplace.
+
+**CI green at the final tips**, read from the run output rather than inferred: factory `generators`
+run 42655147912 success at `f880236`; marketplace `drift` run 42655193141 success at `f398e7d`,
+with all three of its guard steps passing — "Generated files match the recorded commit", "Catalog
+matches the plugin directories" and "Skill changes bump the plugin version".
 
 **Left open, and deliberately not widened into.**
 
