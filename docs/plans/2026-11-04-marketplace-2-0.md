@@ -2231,3 +2231,97 @@ block, `types.ts`'s three new types, `deriveShortSkillName`'s `export` keyword a
 `specialCases` lines. Each has a test written before it and is given as a signature, not a body.
 Everything else the project ships is prose in a prompt, which is why so many verification steps are
 greps and drift runs rather than unit tests.
+
+---
+
+# Post-ship ledger
+
+Entries appended after the three releases shipped on 2026-11-06. Each one names what was fixed,
+what it closes, and the commands whose output was read.
+
+## 2026-11-09 — acceptance 6, the `$0` half: `test-coverage`'s report path
+
+**Defect.** `constellize-craft:test-coverage` wrote its report to
+`llm/construction/quality/coverage-report-$0.md` in 7 of 12 live verify runs on 2026-11-06, once as
+`coverage-report-expand-codes:.md` with a colon in the filename. `$0` is the generated form of
+`{{component_name}}`; a delegated skill is invoked by name and receives no positional arguments, so
+the placeholder survived into the filename. This is the second half of acceptance 6's SPLIT — the
+first half, `code-generation-plan` adding its per-gap plan, is by design per spec §6.6b and is a
+defect in the criterion, not in the prompt.
+
+**Fix.** A slug-and-fixed-name rule in `content/prompts/04-quality/validate-test-coverage.md`, at
+the two places that named the output path (`:111` in `<context>`, `:124` in `<output-format>`). The
+filename is `coverage-report-<slug>.md`, where `<slug>` is the component name reduced to letters,
+digits and hyphens — which is what rejects the stray colon — and the report goes to the fixed
+`llm/construction/quality/coverage-report.md` when no component name was supplied. The
+per-component default path is unchanged for a caller that passes one.
+
+**Why not an `output_path`, which is Release B's pattern.** Two things in the code rule it out, and
+both were read before deciding:
+
+1. Release B's three design skills have *fixed* default paths
+   (`construction/requirements/constellation-map.md` and the like). This skill's default path
+   *interpolates a variable*, which is the whole reason it can be undefined. An `output_path` does
+   not touch the default path, so a caller passing nothing would still have got
+   `coverage-report-$0.md`. The bug would have survived the fix.
+2. Release B's `output_path` exists so `specify-feature` and `implement-feature` can assemble one
+   feature artifact out of three owned `## Section`s. The only caller that delegates
+   `test-coverage` is `constellize-feature:verify`, whose Phase 3 "consumes that verdict; it never
+   runs a coverage command of its own" (`verify-feature.md:85`) and which is forbidden from writing
+   the feature artifact's other sections (`:292-302`). There is no section for this skill to own and
+   no caller to pass one. An `output_path` here would be apparatus with no caller.
+
+**Verification, by reading the output of each command.**
+
+- `build/__tests__/coverage-report-path.test.ts` added, asserting against the **real generated**
+  `SKILL.md`, because `$0` only exists after generation. Checked the instrument: 7 of its 10 tests
+  fail against the previous source, and the 3 that pass there are the invariants that should hold
+  both sides of the fix.
+- `npx jest` → **325 tests in 15 suites**, all pass (was 315 in 14).
+- `npm run check:drift -- --target marketplace --against ../marketplace` → "No drift: **109**
+  generated marketplace files match", byte-exact, same count as before — the fix changes one
+  generated file's contents, not the file set.
+- `.github/scripts/check-determinism.sh` → both generators deterministic (109 marketplace, 87
+  website).
+- **Generated line 14 byte-identical**, verified by sha256 before and after
+  (`4e58845b30cf76821e3a97a7082bd4e9aa9bb46517f50cc6f0316b5d19615456`). `book/ch4.md:50` quotes that
+  threshold sentence, lower-cased, by way of this prompt's `outputs.book.preview`; two of the ten
+  new tests pin the body sentence and the preview so a typesetting round in flight cannot be
+  disturbed by a later edit here.
+- `book` clean after `npm run generate:all` — the ten tracked files under `book/generated/` came
+  back byte-identical.
+- `website` dirtied exactly as finding F5 predicts: 16 files, all under `public/prompts/v1/`,
+  restored with `git checkout --` and nothing committed. Guard judged at the recorded baseline
+  instead: the factory archived at `website/GENERATED_FROM` = `0d97085` →
+  "No drift: **87** generated website files match".
+- `v1` frozen and unmoved, local and remote: marketplace `v1` = `8f470b2`, marketplace `v1.0.0` =
+  `43212a2`, factory `v1` = `69dffee`.
+
+**Shipped as the two-repo handshake.** prompt-factory `main` = `5c08d0b`, pushed first; then
+`marketplace/GENERATED_FROM` bumped to `5c08d0b` and marketplace `main` = `f305c71` pushed. Drift
+re-verified at the handshake commit before the marketplace commit was made.
+
+**The first marketplace push failed CI, and the guard was right.**
+`check-version-bump.sh` fails any plugin whose `plugins/<name>/**` changed without its own
+`.claude-plugin/plugin.json` version changing, and `constellize-craft` was still at `1.1.0`. That
+third invariant is not in this release's handshake description and was missed: **a skill fix is also
+a plugin release.** Fixed by bumping `constellize:craft` to `1.1.1` in
+`content/prompts/../content/schemas/plugins.json` — the factory owns the manifest, so the version is
+never edited in the marketplace — then regenerating and re-running every guard. Drift stayed at 109
+and the suite at 325, since a manifest version is not a generated skill body. The handshake for a
+skill fix is therefore **four** steps, not three: bump the plugin version in the factory's
+`plugins.json`, push the factory, bump `GENERATED_FROM`, push the marketplace.
+
+**Left open, and deliberately not widened into.**
+
+- `# Test Coverage Report: $0` is still the generated report's H1 (generated `:71`). It is a heading,
+  not a path, so nothing lands at an undefined filename; it is cosmetic and separate.
+- `code-generation-plan.md:120` has the same *shape* of interpolated output path
+  (`construction/design/code-generation-plan-{{gap_to_implement}}.md`) and
+  `implement-feature.md:78` hands it the gap **inline**, which is how `test-coverage` got its `$0`.
+  Not observed failing in the acceptance runs, and not fixed here. Worth a look.
+- `npm run validate:chain` fails with 209 issues, every one of the form "Missing
+  `../website/public/prompts/<id>/prompt.txt`". `validate-full-chain.ts:111` builds that path
+  without the `v1/` segment, so it predates the version layout. It is not in any CI workflow
+  (factory CI runs the determinism script and jest only), and it failed identically before this
+  change. Stale validator, pre-existing, out of scope here.
