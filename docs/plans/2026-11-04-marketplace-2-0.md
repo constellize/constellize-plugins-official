@@ -2284,10 +2284,13 @@ both were read before deciding:
 - `.github/scripts/check-determinism.sh` → both generators deterministic (109 marketplace, 87
   website).
 - **Generated line 14 byte-identical**, verified by sha256 before and after
-  (`4e58845b30cf76821e3a97a7082bd4e9aa9bb46517f50cc6f0316b5d19615456`). `book/ch4.md:50` quotes that
-  threshold sentence, lower-cased, by way of this prompt's `outputs.book.preview`; two of the ten
-  new tests pin the body sentence and the preview so a typesetting round in flight cannot be
-  disturbed by a later edit here.
+  (`4e58845b30cf76821e3a97a7082bd4e9aa9bb46517f50cc6f0316b5d19615456`). One correction to the brief
+  this fix was given: `book/ch4.md:50` does **not** quote generated line 14 verbatim. That line of
+  the chapter is byte-identical to this prompt's `outputs.book.preview`, an independently authored,
+  lower-cased excerpt of the body sentence ("minimum thresholds" vs "Minimum thresholds", "critical
+  business logic" vs "CRITICAL business logic"). The book therefore tracks the **preview field**, not
+  the body, and the two are not mechanically coupled. Two of the ten new tests pin the body sentence
+  *and* the preview, so a later edit to either cannot disturb a typesetting round in flight.
 - `book` clean after `npm run generate:all` — the ten tracked files under `book/generated/` came
   back byte-identical.
 - `website` dirtied exactly as finding F5 predicts: 16 files, all under `public/prompts/v1/`,
