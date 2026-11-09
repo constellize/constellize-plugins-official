@@ -54,6 +54,9 @@ This prompt reads from:
 - Gap analysis from `llm/construction/requirements/gap-analysis.md`
 
 And outputs coverage report to `llm/construction/quality/coverage-report-$0.md`
+
+**The report path when no component name was supplied:**
+The report filename is `coverage-report-<slug>.md`, where `<slug>` is the component name `$0` lowercased, with every character that is not a letter, a digit or a hyphen replaced by a hyphen and any leading or trailing hyphens removed. When no component name was supplied the slug is empty, and the report goes to the fixed path `llm/construction/quality/coverage-report.md` instead — not to a name ending in a hyphen, and not to a name built out of the placeholder. That is the ordinary case when another skill delegates to this one, because a delegated skill is invoked by name and receives no positional arguments at all: validate the coverage of whatever that caller described inline, and write the report at the fixed path. Never write a report whose filename contains a literal `$0`, a `$` followed by a digit, or any character the slug rule removes — a colon, for instance. A placeholder or a stray character surviving into a path means the component name was absent, and the fixed path is what its absence means.
 </context>
 
 <thinking>
@@ -66,7 +69,7 @@ Before validating coverage, analyze:
 </thinking>
 
 <output-format>
-Generate coverage report to `llm/construction/quality/coverage-report-$0.md`:
+Generate coverage report at the report path named in the context above — `llm/construction/quality/coverage-report-$0.md`, or `llm/construction/quality/coverage-report.md` when no component name was supplied:
 
 # Test Coverage Report: $0
 
