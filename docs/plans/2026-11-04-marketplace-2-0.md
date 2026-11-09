@@ -2326,6 +2326,65 @@ recorded commit", "Catalog matches the plugin directories", "Skill changes bump 
 version"). The one failure in the sequence is 42654627368 at `f305c71`, the missed version bump.
 `git log --oneline f398e7d..main -- docs/plans/` lists the corrections.
 
+## 2026-11-09 — the same defect in `code-generation-plan`, found by sweeping for it
+
+Steve asked for this one after the `test-coverage` fix above named it as the most likely next
+instance. The fix is prompt-factory **`b0a0a3f`** and the marketplace commit that bumps
+`GENERATED_FROM` to it.
+
+**Defect.** `constellize-design:code-generation-plan`'s output path interpolated
+`{{gap_to_implement}}` (`$1` once generated), and `implement-feature.md:78` hands it the gap
+**inline** while passing no `output_path`. A delegated skill receives no positional arguments, so
+the plan would land at `llm/construction/design/code-generation-plan-$1.md`. **Not** observed
+failing in the 2026-11-06 acceptance runs, unlike `test-coverage` — this was found by sweeping
+every interpolated output path under `content/prompts/`, not by a live run.
+
+**Why the assessor never surfaced it.** `tier1.ts:338` matches
+`f === "code-generation-plan.md" || /^code-generation-plan-.+\.md$/.test(f)`. The broken
+`code-generation-plan-$1.md` satisfies that regex, so the assessor counted it as a completed design
+artifact. A guard that accepts the defect cannot report it.
+
+**The fix is deliberately *not* the one `test-coverage` got**, and this is the substance of the
+task. `test-coverage` runs once per verify, so an argument-less run can safely collapse onto one
+fixed name. `code-generation-plan` is invoked **once per gap** and each plan is read back
+(`implement-feature.md:78`, spec §6.6b), so the same treatment would have made two gaps overwrite
+each other — a new bug in place of the old one, and a direct violation of the per-gap behaviour the
+spec requires. So the slug is taken from the gap *however it was supplied*: from `$1` when it is an
+argument, otherwise from the gap the caller described inline, because **an absent argument does not
+mean an absent gap**. The fixed `code-generation-plan.md` is reached only when no gap can be
+identified at all — and that name is not a new convention, it is the one `tier1.ts` already accepts.
+
+**The sweep, so the next person need not repeat it.** `grep -rnoE
+'[A-Za-z0-9_./-]*\{\{[a-z_]+\}\}[A-Za-z0-9_./-]*\.(md|json|txt|ts|py|yaml|yml)'` over
+`content/prompts/` and `content/literal/` returns three categories, and only the first is this
+defect:
+
+1. **Output paths the skill writes** — `validate-test-coverage.md` (fixed above) and
+   `code-generation-plan.md:120` (fixed here). **Those are the only two.**
+2. **Examples inside sample output**, which interpolate harmlessly because nothing writes them:
+   `implement-rollback-capability.md:207` (`config/{{component_name}}-config-v1.1.0.yaml`, inside a
+   `kubectl` command example) and the `$3/dependencies/...` line in `cross-reference`'s fenced
+   "Cross-Reference Pattern" block.
+3. **Memory-bank root variables** — `{{memory_bank_structure}}`, `{{memory_bank_location}}`,
+   `{{operations_memory_location}}` across four `07-operations/` prompts. These are path
+   *prefixes* a caller supplies, not filename components, and several generate to concrete
+   `llm/memory-bank/...` paths through the generator's placeholder substitution. They are read
+   paths, not writes, so an unsubstituted one fails a lookup rather than creating a junk file.
+   **Not fixed, and not the same severity — but they are the remaining `$N`-in-a-path instances.**
+
+**Verification, by reading the output.** Suite **334 tests in 15 suites** (was 325); 6 of the 7 new
+behaviour assertions fail against the previous source, and the 7th pins the `tier1.ts` contract so
+it holds both sides. Drift byte-exact at **109**, count unchanged. Determinism green for both
+generators. Website guard green at `0d97085` (**87** files), the 16 `public/prompts/v1/` files
+restored, nothing committed in `website`. `book` clean. **Four pinned lines verified byte-identical
+by sha256**: this prompt's `outputs.book.preview` (which contains the literal `{{gap_to_implement}}`
+placeholder), the body sentence it excerpts, `book/ch3.md:335` which quotes the preview, and
+`test-coverage`'s generated line 14 from the previous fix. `v1` unmoved in both repos.
+
+**`constellize:design` bumped 1.1.1 → 1.1.2 in the factory commit**, before the push rather than
+after a CI failure — the four-step handshake recorded above, applied.
+
+
 **Left open, and deliberately not widened into.**
 
 - `# Test Coverage Report: $0` is still the generated report's H1 (generated `:71`). It is a heading,
