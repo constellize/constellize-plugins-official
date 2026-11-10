@@ -2904,6 +2904,78 @@ and both turned out to be load-bearing:
 The general point: **drift measured against a shared working tree is not drift against a commit.**
 Check which one the number describes before acting on it.
 
+## 2026-11-10 — defect 4 closed: gate 1 now asks whether the threshold is enforced
+
+Factory **`210d1ad`**, marketplace **`d57b81e`**, `GENERATED_FROM` `210d1ad`. craft 1.1.3 →
+**1.1.4**, feature 1.0.1 → **1.1.0**, harness 1.2.0 → **1.3.0**. 338 → **368 tests**, all green;
+no drift across 109 files; version-bump guard passes against base `744578a`.
+
+The previous entry left defect 4 open as Steve's call, because closing it changes gate 1's
+contract rather than its prose. He took it.
+
+### What was wrong
+
+Gate 1 consumed `test-coverage`'s verdict and asked only whether the numbers cleared the threshold
+**on the day of the run**. Nothing asked whether the threshold was *enforced* — whether the
+project's own test command fails when a dimension drops below it. So a project could declare a
+threshold its tooling did not keep, and every later run would measure against a number no commit
+had to satisfy. Phase 3 compounded it by comparing only when a declaration was *stricter* than the
+default, which made "declared nothing" and "declared the default" indistinguishable exactly where
+it mattered.
+
+### Where the teeth went, and why not further
+
+| Case | Verdict | Why |
+|---|---|---|
+| **Declared**, not enforced | **FAIL gate 1** | The project named a number its own tooling does not keep. A broken promise. |
+| **Undeclared**, not enforced | PASS, recorded | No promise was made, so none is broken. Recorded as `enforced: false` and said out loud as *measured, not guarded*. |
+| Either, enforced | PASS | — |
+
+Failing the undeclared case was the tempting option and is the wrong one: it fails a *feature* for
+a *project-level* gap, against §10's own rule that a gate requirement "must be answerable for a
+feature rather than for a whole project" — and it would push people to declare a threshold they do
+not guard, which is this defect wearing a disguise.
+
+### The contract change, and the back-compatibility that makes it safe
+
+The block gains `threshold.enforced` and becomes **schema 2**. The assessor now reads **schema 1
+and 2** — schema 1 *exactly* as before. Without that, this release would have silently turned every
+artifact verified to date into `VERIFIED (unsubstantiated)`: a demotion caused by a field those
+runs could not have known about. Proven on a real artifact rather than a synthetic string — the
+acceptance-7 fixture's schema-1 block still reads `{"evidence":"complete"}` at `**Status:**
+VERIFIED` under the new assessor.
+
+**The rule is enforced in the assessor, not only in the skill**, for the reason the coverage floor
+already is: a rule only the writer applies is a rule a writer can drift on. So `enforced: true`
+written without a basis cannot launder a declaration, exactly as a loose number cannot escape by
+being relabelled `"default"`.
+
+**`test-coverage` reports the fact and explicitly does not judge it.** It runs coverage, so it is
+the one that can see the project's test configuration; but whether an unenforced threshold is a
+defect turns on a *declaration* that only `verify` reads. Same division as the existing threshold
+comparison, which the prompt already calls "the aggregate owner's".
+
+### On the tests, because one of them would have passed while proving nothing
+
+Nine new assessor tests cover schema 2 and back-compat. But pinning the prompt's schema to the
+literal `"schema": 2` proves only that the prompt *says* 2 — not that the assessor *reads* 2, which
+is the thing that breaks in the field. So a **coupling test** extracts the number the prompt tells
+writers to emit, builds a block at that schema, and asserts the assessor reads it as `complete`.
+Bumping one without the other now fails here instead of in a user's repository.
+
+Each new rule was **sabotaged individually** to confirm the tests detect it, rather than trusting a
+green suite: neutering the declared-threshold rule failed exactly 1 test, neutering the
+recorded-boolean rule failed exactly 2, and pushing the prompt's schema past what the assessor
+knows failed 2. Restored, 368 pass.
+
+### Note for whoever releases next
+
+This landed while another session was committing to the same shared checkout — its `2b1dda3` /
+marketplace `744578a` arrived mid-change. Nothing was lost; its `deliver 1.1.2` bump and these
+three are all present. But `content/schemas/plugins.json` and `GENERATED_FROM` are the two files
+where concurrent releases clobber **silently**, and the version-bump guard would not catch it,
+because it only compares plugins whose own files changed.
+
 ## Left open after the 2026-11-09/10 entries above
 
 This section was written as part of the first entry and is kept here, consolidated, because the
