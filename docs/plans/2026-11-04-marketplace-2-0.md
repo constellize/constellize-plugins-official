@@ -2696,12 +2696,22 @@ sentence cannot return (`not.toMatch`), and cover the whitespace rule. Both book
 pass. Drift stayed at 109 with no drift. The version bump went in the **factory** commit, before the
 factory push, so `check-version-bump.sh` had nothing to catch this time.
 
-**The escape's rendered behaviour: VERIFIED 2026-11-10** by the acceptance-7 session, after this
-entry was written. The premise above had already lapsed: `~/.claude/plugins/cache/` holds
-`constellize-design/1.1.3` and `constellize-craft/1.1.2`, and
-`~/.claude/plugins/installed_plugins.json` points at both — the update had landed, so no action from
-Steve was needed. A session that began before the release stays pinned to its old version, which is
-why the session that shipped this saw only pre-fix copies.
+**The escape's rendered behaviour: VERIFIED 2026-11-10**, by the acceptance-7 session and then
+independently by the shipping session. `~/.claude/plugins/cache/` holds `constellize-design/1.1.3`
+and `constellize-craft/1.1.2`, and `~/.claude/plugins/installed_plugins.json` points at both.
+
+**Two corrections to how that came about**, since the first account of it got the cause wrong. The
+premise above did not "already" lapse — it lapsed *afterwards*. The timeline from file mtimes and
+commit times: marketplace pushed **10:57:25**, the cache check run **~10:58**, this entry committed
+**10:59:20**, and the cache gained `1.1.3` at **11:08:59** — nine and a half minutes later. The
+listing was accurate when written. Nor is session pinning the explanation: that check was a
+directory listing, `ls` on the cache, and `1.1.3` was simply not there yet — pinning would govern
+which version a session *loads*, not what a directory *contains*. And a subagent spawned later in
+that same pre-release session loaded `1.1.3` without difficulty, so it was not pinned either.
+Whether the refresh at 11:08:59 was Steve acting on the request in that session's next-step box or
+something automatic is not determinable from mtimes, so this entry does not claim either — only
+that it happened after the entry, which is the part that matters for anyone reasoning about how
+quickly a release becomes invokable.
 
 Two headless probes, each **self-controlling**, because a literal `$1` on its own proves nothing — an
 *unbound* `$1` also stays literal. Each probe bound distinctive arguments and asked for a verbatim
@@ -2715,6 +2725,14 @@ transcription of both a genuine substitution point and the escaped one:
 So in the same render, the arguments substituted **and** the escaped placeholder survived as a bare
 literal. **The backslash is consumed, not leaked** — no `\$0` or `\$1` reached the model. The single
 backslash the docs prescribe is correct.
+
+**Reproduced independently** by the shipping session with different arguments, which matters because
+the two accounts were written by sessions with opposite expectations. A probe passing `ZEBRASYS
+QUAGGAGAP`, loading `…/constellize-design/1.1.3/skills/code-generation-plan`, received `Create a
+detailed implementation plan for "QUAGGAGAP" in ZEBRASYS` — binding live — while the same render
+gave ``Take the gap name from the `$1` argument when one was supplied`` and ``Never write a filename
+containing a literal `$1`, a `$` followed by a digit``. Both escaped placeholders bare literals, no
+backslash leaked. Same conclusion, different arguments, different session.
 
 **The whitespace-fragment rule is verified too**, by an uninformed run in a scratch fixture judged on
 disk — nothing in the prompt mentioned filenames or placeholders. `code-generation-plan` was given
@@ -2746,9 +2764,10 @@ second entry closed one of its items. It is the current open list, not a histori
   "receives no positional arguments" justification — were approved and shipped on 2026-11-10 as
   factory `44e8aae` / marketplace `d2e5923`, craft 1.1.2 and design 1.1.3, CI green. Listed only so
   the trail from "found" to "shipped" is visible. **Fully closed 2026-11-10:** the escape's
-  *rendered* behaviour and the new whitespace-fragment rule were both verified by the acceptance-7
-  session once it found the update had already landed in `~/.claude/plugins/cache/`. See the sixth
-  entry above for the probes and their evidence.
+  *rendered* behaviour was verified by the acceptance-7 session and reproduced independently by the
+  shipping session, and the new whitespace-fragment rule was verified by an uninformed run judged on
+  disk. See the sixth entry above for the probes, their evidence, and the corrected timeline of when
+  the plugin update actually landed.
 - **Acceptance 7 and Task C9 Step 3 are being driven by another session**, which is running a full
   `specify` → `implement` → `verify` cycle on a TypeScript fixture and will record its own result.
   Not duplicated here. The headless-`claude -p` blocker described in the fourth entry applies to
