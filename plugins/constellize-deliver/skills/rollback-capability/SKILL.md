@@ -318,7 +318,7 @@ class MigrationManager {
       // Remove from migration tracking table
       await this.queryRunner.query(`
         DELETE FROM migrations
-        WHERE name = $1
+        WHERE name = \$1
       `, [lastMigration.name]);
 
       console.log(`✓ Migration rolled back: ${lastMigration.name}`);
@@ -358,8 +358,8 @@ NAMESPACE="production"
 PREVIOUS_VERSION="${1:-}"
 
 if [ -z "$PREVIOUS_VERSION" ]; then
-  echo "Usage: $0 <previous-version>"
-  echo "Example: $0 v1.1.0"
+  echo "Usage: \$0 <previous-version>"
+  echo "Example: \$0 v1.1.0"
   exit 1
 fi
 
