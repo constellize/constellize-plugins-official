@@ -2970,11 +2970,43 @@ knows failed 2. Restored, 368 pass.
 
 ### Note for whoever releases next
 
-This landed while another session was committing to the same shared checkout — its `2b1dda3` /
-marketplace `744578a` arrived mid-change. Nothing was lost; its `deliver 1.1.2` bump and these
-three are all present. But `content/schemas/plugins.json` and `GENERATED_FROM` are the two files
-where concurrent releases clobber **silently**, and the version-bump guard would not catch it,
-because it only compares plugins whose own files changed.
+This landed while two other sessions were working in the same shared checkouts — factory `2b1dda3`
+/ marketplace `744578a` arrived mid-change. Nothing was lost; that session's `deliver 1.1.2` bump
+and these three are all present, checked before committing rather than assumed.
+
+**`content/schemas/plugins.json` and `GENERATED_FROM` are where concurrent releases clobber each
+other silently, and `check-version-bump.sh` cannot catch it.** Not "does not happen to": *cannot*.
+Read the script — it derives the plugins to check from the changed paths, after this filter:
+
+```sh
+plugins="$(printf '%s\n' "$changed" | grep -v '^plugins/[^/]*/\.claude-plugin/plugin\.json$' \
+  | sed -n 's#^plugins/\([^/]*\)/.*#\1#p' | sort -u || true)"
+```
+
+Two consequences, both confirmed by feeding synthetic change lists through that exact pipeline:
+
+| Changed files | Plugins checked |
+|---|---|
+| `plugins/constellize-craft/.claude-plugin/plugin.json` | **none** |
+| `GENERATED_FROM` | **none** |
+| both of the above | **none** |
+| `plugins/constellize-craft/skills/test-coverage/SKILL.md` | `constellize-craft` |
+
+1. **A version-only change is actively filtered out**, not merely unchecked for want of company.
+   A diff that reverts a plugin's version and touches nothing else under `plugins/<name>/` yields
+   an empty list, the loop never runs, and the script prints `OK: version-bump check passed`.
+2. **`GENERATED_FROM` is not under `plugins/`**, so the `sed` never matches it. It is outside the
+   guard's reach in every diff.
+
+So a green version-bump check is **no evidence** against a clobbered bump or a reverted
+`GENERATED_FROM`. The practical check is manual and belongs immediately before the push: diff both
+files against the remote whenever anyone else is in the same checkouts. The guard cannot do it for
+you, and the handshake's four steps do not mention it.
+
+The inverse hazard is worth the same line. Had this factory commit been based on `614ef6e` rather
+than on the other session's tip, regeneration would have **reverted** its two `07-operations`
+skills while the marketplace kept `deliver 1.1.2` — and the guard would have stayed green, because
+`deliver`'s own files would not appear in the diff at all.
 
 ## Left open after the 2026-11-09/10 entries above
 
