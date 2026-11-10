@@ -2170,6 +2170,13 @@ Record `sha256` of every file under `llm/construction/` before a full feature ru
 
 Then specify and verify a second feature and confirm neither feature's artifact mentions the other.
 
+> **Partly done 2026-11-10; the box stays unchecked.** Eight probe runs against the installed,
+> sha256-verified plugin bodies confirmed the file-level expectations above — the four files
+> byte-identical, only the two named additions, no placeholder in any filename, and the second
+> feature's artifact untouched. What they did **not** do is drive `constellize-feature:implement`
+> and `verify` themselves, which is what "a full feature run" in this step means, so this step is
+> not complete. The blocker and the two ways out are in the 2026-11-10 re-run entry below.
+
 - [ ] **Step 4: Run it again with the siblings uninstalled — acceptance 8**
 
 Install `constellize-feature` alone, without `constellize-design`, `:craft`, `:deliver`,
@@ -2443,7 +2450,87 @@ quoted phrases in the amendment were grepped against their sources before commit
 **No code, no generated output, no version bump.** This entry touches two documents under
 `docs/`, so `check-version-bump.sh` does not apply and drift is unaffected.
 
-## Left open after the three 2026-11-09/10 entries above
+## 2026-11-10 — acceptance 6 re-run against the amended criterion
+
+**Steve approved the re-run on 2026-11-10**, the step the entry above left open. Eight runs, each in
+its own fresh copy of a purpose-built fixture, judged **on disk** rather than from the runs' own
+reports.
+
+**The instrument was checked first.** The runs exercised the *installed* plugin copies, and those
+were confirmed byte-identical by sha256 to the pushed tree before anything ran — `constellize-craft`
+1.1.1 and `constellize-design` 1.1.2, the two plugin versions that carry the fixes, generated from
+factory `b0a0a3f`, which `GENERATED_FROM` names. So a clean result cannot be the old prompt bodies
+passing by accident, and no plugin isolation was needed.
+
+**A commit reference corrected while checking this.** The two entries above, and the first draft of
+this one, cite factory `f880236` as the `test-coverage` fix. It is not: `f880236` is the *version
+bump* that CI demanded afterwards, and the prose fix is **`5c08d0b`**. `b0a0a3f` for
+`code-generation-plan` is right, because there the prose fix and the bump are one commit. The shape
+of the trap is the same one the four-step handshake lesson is about — the bump is a separate commit,
+so the newest hash is easy to mistake for the fix.
+
+**The fixture.** A zero-dependency Node ESM link shortener, `llm/constellize.json` with the four
+coverage thresholds, three pre-existing artifacts under `llm/construction/`, a memory bank, and
+**two** SPECIFIED features — the second one present solely so cross-feature contamination has
+something to show up in. Its tests are genuinely at 100% line/branch/function, verified before any
+run, so a coverage verdict is not confounded by a broken fixture. Baseline sha256 of all twelve
+`llm/` files captured up front; a script classifies every file afterwards as pre-existing-unchanged,
+pre-existing-**changed**, expected addition, or **unexpected** addition.
+
+**What each run wrote under `llm/construction/`:**
+
+| runs | skill invoked | artifact written |
+|---|---|---|
+| 5 | `constellize-craft:test-coverage` | `quality/coverage-report.md` in all five |
+| 1 | `constellize-design:code-generation-plan`, one gap | `design/code-generation-plan-entries-never-expire.md` |
+| 1 | the same skill, **two** gaps in one run | `…-entries-never-expire.md` **and** `…-input-urls-are-not-normalised.md` |
+| 1 | `gap-analysis` + `implementation-sketch` with `output_path` | nothing — both appended to the feature artifact |
+
+**The result.** In all eight runs the four files the criterion requires byte-identical were
+byte-identical; the other feature's artifact was untouched; and a `find` for any name containing `$`
+or `:` anywhere under `llm/` returned nothing. Every addition was one of the two the amended
+criterion names as expected. No unexpected additions.
+
+**The two fixes are confirmed to behave differently, as intended.** `test-coverage` collapsed to the
+fixed path in 5 of 5 — the condition the defect needed, since no run supplied a component argument.
+`code-generation-plan` took its slug from the gap named **inline in prose**, not from an argument,
+which is exactly what its fix specifies and why it could not take the same treatment: the two-gap
+run produced two distinct filenames, so the overwrite hazard that ruled out a shared fixed name was
+tested directly rather than argued.
+
+**How much the five clean runs are worth.** The original defect was intermittent — `coverage-report-$0.md`
+in 7 of 12 live runs. If the per-run failure probability were still 7/12, five consecutive clean runs
+would occur about **1.3%** of the time. That is strong, not conclusive; repetition was the point of
+running five rather than one.
+
+**What this re-run does NOT cover, and why.** It exercised the two delegated skills under the
+condition that broke them, but **not** a full `constellize-feature:implement` → `verify` cycle. Two
+things blocked that, neither worked around:
+
+- Spawning `claude -p` with tool grants is refused by the auto-mode classifier, both with
+  `--permission-mode bypassPermissions` and with a narrow `--allowed-tools` list. A bare `claude -p`
+  is permitted but cannot write files, so it cannot exercise a criterion about files.
+- `constellize-feature` is not installed at user scope, so the workflow is reachable only through
+  `--plugin-dir`, which is what the blocked route needed.
+
+In the probes the delegation was therefore performed by a briefed agent supplying the caller's
+context inline, rather than by `implement` and `verify` themselves. **So the path behaviour of both
+skills is confirmed; the orchestrators' own delegation is not re-confirmed here.** The 2026-11-06
+live run covered that half, pre-fix, and neither fix changed a delegation map. Unblocking a true
+end-to-end run needs one of two things, both Steve's call: a Bash permission rule for headless
+`claude -p`, or installing `constellize-feature` at user scope — which the earlier acceptance runs
+deliberately avoided doing to Steve's environment.
+
+**The briefs were deliberately uninformed.** No run was told what was under test — no mention of
+output paths, placeholders, `$0`/`$1`, or acceptance 6 — because an agent told what the criterion is
+can satisfy it without the prompt doing the work. Each was briefed as a developer with a job, and
+asked to report filenames "character for character, even if a name looks odd or malformed", so a
+broken name would be reported rather than tidied. The disk was then checked anyway.
+
+**No code, no generated output, no version bump.** The fixture and probes live in the session
+scratchpad, outside both repos; this entry is the only change.
+
+## Left open after the four 2026-11-09/10 entries above
 
 This section was written as part of the first entry and is kept here, consolidated, because the
 second entry closed one of its items. It is the current open list, not a historical one.
