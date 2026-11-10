@@ -2696,13 +2696,35 @@ sentence cannot return (`not.toMatch`), and cover the whitespace rule. Both book
 pass. Drift stayed at 109 with no drift. The version bump went in the **factory** commit, before the
 factory push, so `check-version-bump.sh` had nothing to catch this time.
 
-**What is NOT yet verified, and why.** The escape is confirmed present in the generated and pushed
-artifact, and the syntax is the docs'. Its **rendered** behaviour is not confirmed, because
-`~/.claude/plugins/cache/` is version-keyed and still holds only 1.1.1 (craft) and 1.1.2 (design),
-both pre-fix — so this session cannot invoke the fixed bodies. Confirming it needs a plugin update,
-which is Steve's action. The **known positive** half of the instrument check is already done: the
-currently installed unescaped versions were shown to render `` `$0` `` as the substituted value, so
-the mechanism is established and only the escape's effect awaits a refresh.
+**The escape's rendered behaviour: VERIFIED 2026-11-10** by the acceptance-7 session, after this
+entry was written. The premise above had already lapsed: `~/.claude/plugins/cache/` holds
+`constellize-design/1.1.3` and `constellize-craft/1.1.2`, and
+`~/.claude/plugins/installed_plugins.json` points at both — the update had landed, so no action from
+Steve was needed. A session that began before the release stays pinned to its old version, which is
+why the session that shipped this saw only pre-fix copies.
+
+Two headless probes, each **self-controlling**, because a literal `$1` on its own proves nothing — an
+*unbound* `$1` also stays literal. Each probe bound distinctive arguments and asked for a verbatim
+transcription of both a genuine substitution point and the escaped one:
+
+| Skill | Base directory it loaded | Genuine point (proves binding was live) | Escaped point |
+|---|---|---|---|
+| `constellize-design:code-generation-plan` | `…/constellize-design/1.1.3/…` | `Create a detailed implementation plan for "SENTINELGAP" in SENTINELSYS` | ``Take the gap name from the `$1` argument when one was supplied`` |
+| `constellize-craft:test-coverage` | `…/constellize-craft/1.1.2/…` | `Validate test coverage for SENTINELCOMP in SENTINELSYS` | ``Never write a report whose filename contains a literal `$0` `` |
+
+So in the same render, the arguments substituted **and** the escaped placeholder survived as a bare
+literal. **The backslash is consumed, not leaked** — no `\$0` or `\$1` reached the model. The single
+backslash the docs prescribe is correct.
+
+**The whitespace-fragment rule is verified too**, by an uninformed run in a scratch fixture judged on
+disk — nothing in the prompt mentioned filenames or placeholders. `code-generation-plan` was given
+`output_path: /tmp/does-not-matter.md the gap is Retry backoff in src/retry.ts`, so `$0` arrived as
+`output_path:` and `$1` as `/tmp/does-not-matter.md`. It wrote
+`code-generation-plan-retry-backoff-in-src-retry-ts.md`, titled
+`# Code Generation Plan: Retry backoff in src/retry.ts` — no placeholder, no colon, no fragment in
+the filename — and said so unprompted: *"Your arguments were split up on the way in, so I took the
+gap from your description rather than the argument fragment."* That is the exact failure that gave
+the acceptance-7 session an artifact titled "output_path:", and it is closed.
 
 **CI green on `d2e5923`** — the drift workflow passed every step, including "Generated files match
 the recorded commit", "Catalog matches the plugin directories" and **"Skill changes bump the plugin
@@ -2723,9 +2745,10 @@ second entry closed one of its items. It is the current open list, not a histori
 - **Closed by the sixth entry.** The two prose defects — the `\$0`/`\$1` escape and the false
   "receives no positional arguments" justification — were approved and shipped on 2026-11-10 as
   factory `44e8aae` / marketplace `d2e5923`, craft 1.1.2 and design 1.1.3, CI green. Listed only so
-  the trail from "found" to "shipped" is visible. **One piece remains:** the escape's *rendered*
-  behaviour is unconfirmed until a plugin update lands the new versions in
-  `~/.claude/plugins/cache/`, which still holds only pre-fix copies.
+  the trail from "found" to "shipped" is visible. **Fully closed 2026-11-10:** the escape's
+  *rendered* behaviour and the new whitespace-fragment rule were both verified by the acceptance-7
+  session once it found the update had already landed in `~/.claude/plugins/cache/`. See the sixth
+  entry above for the probes and their evidence.
 - **Acceptance 7 and Task C9 Step 3 are being driven by another session**, which is running a full
   `specify` → `implement` → `verify` cycle on a TypeScript fixture and will record its own result.
   Not duplicated here. The headless-`claude -p` blocker described in the fourth entry applies to
