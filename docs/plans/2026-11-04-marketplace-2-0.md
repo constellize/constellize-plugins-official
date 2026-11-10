@@ -2752,6 +2752,80 @@ version"**, which is the step that failed on 2026-11-09 when the bump was omitte
 factory `v1` = `69dffee`. Nothing committed in `website`; its `public/prompts/v1/` generator dirt was
 restored, and `book` stayed clean.
 
+## 2026-11-10 — the three skill-text defects from the acceptance-7 run, fixed and shipped
+
+Factory **`614ef6e`**, marketplace **`d83a42f`**, `GENERATED_FROM` `614ef6e`. Versions: craft
+1.1.2 → **1.1.3**, deliver 1.1.0 → **1.1.1**, feature 1.0.0 → **1.0.1**. Baseline before the
+change was clean (338/338 tests, no drift across 109 files) and is clean after it; the
+version-bump guard passes against base `a81e532` for all three plugins. These are defects 1–3 of
+the four the acceptance-7 entry recorded; **defect 4 is deliberately not fixed** — see below.
+
+### 1. `rollback-capability`: `$0` and `$1` unescaped inside the SQL and shell samples
+
+Both are genuine literals in their own languages — `$1` is a PostgreSQL parameter placeholder,
+`$0` is bash's script name — but argument substitution is blind to the surrounding language. This
+one is now **verified in both directions against real renders**, which also settles the question
+the previous entry left open about fenced code blocks:
+
+| | `WHERE name =` | `echo "Usage:` | control, same render |
+|---|---|---|---|
+| **before** (cached 1.1.0) | `ZEBRASYS2` | `KUDUCOMP` | — |
+| **after** (this build) | `$1` | `$0` | `COMPONENT="KUDUCOMP"` |
+
+Arguments bound were `KUDUCOMP ZEBRASYS2` (`$0` → component, `$1` → system). So the defect was
+live, the escape fixes it, **the backslash is consumed inside a fenced code block exactly as
+inside a code span**, and substitution was demonstrably live in the same render that left the
+escaped placeholders bare. The "before" row is the instrument check: it proves the probe can see
+the defect it is looking for.
+
+Isolating the build took a project-scoped `.claude/settings.json` with
+`enabledPlugins: {"constellize-deliver@constellize-plugins-official": false}` plus
+`--plugin-dir` at the local plugin directory. `--plugin-dir` alone is **not** enough — the first
+attempt loaded the cached 1.1.0 and reported its cache path, which is how the "before" row got
+measured.
+
+**Not changed:** the two `maps-to: "$0"` / `"$1"` lines in the prompt's frontmatter. Those are
+argument *declarations*, not literals, and the ~20 other `$0` occurrences in the generated skill
+are `{{component_name}}` doing its job. Only three lines were literals meant to survive.
+
+### 2. `defensive-programming` step 7 contradicted `verify` Phase 6
+
+Step 7 said "Fix what you find, then report the verdict"; Phase 6 says "You report what the gate
+found. You do not fix it, here or in any other gate." The contradiction was not academic:
+`defensive-programming` is the one gate-2 member that runs on **every** feature, so the standalone
+reading would have it edit code mid-verification and leave the gate measuring work the run did to
+itself.
+
+Deleting the fixing behaviour would have been the wrong fix — fixing what it finds *is* the point
+when the skill runs on its own, and every craft gate skill is explicitly built to run outside a
+verification. Step 7 now turns on how the skill was reached, says how to tell, and resolves the
+ambiguous case toward reporting: an unfixed finding is recoverable, an unreviewed fix inside the
+evidence is not.
+
+### 3. `verify` Phase 2 made one trigger imply both surfaces
+
+"**Either** surface is touched when **any** of these is true" is a disjunction over a single list,
+so a touched deployment artifact asserted an *operational* surface too — sending the run at four
+structurally inapplicable health-check members and burying the verdict that matters among them.
+The triggers are now split per surface, with the shared ones kept on both.
+
+This is a **builder decision, not just a wording fix**, and worth recording as one: §10 leaves
+"how `verify` decides a feature touched the operational or deployment surface" to the builder, and
+decision 6 names only *a dependency, a service call or a config value* — three triggers, for both
+conditional gates. "A touched deployment artifact" was added beyond the spec, and it is the one
+trigger that misfires, so it is now confined to the deployment surface, the only surface it speaks
+to. The fail-safe below it is untouched: ambiguous evidence still runs both gates.
+
+### Defect 4 is NOT fixed, and should not be fixed quietly
+
+AC-14 of the fixture's feature spec named "the project default of 80%" that nothing enforced, and
+gate 1 did not notice because it consumes `test-coverage`'s verdict and never asks whether the
+declared threshold is real. Phase 3 only compares when a project declares a threshold *stricter*
+than the default, so a project declaring nothing is indistinguishable from one declaring the
+default. Closing that means adding a requirement — gate 1 must read the project's own config and
+say whether the threshold it reports is enforced — which changes the gate contract rather than
+correcting its prose. **Steve's call, not a text fix.**
+
 ## Left open after the six 2026-11-09/10 entries above
 
 This section was written as part of the first entry and is kept here, consolidated, because the
