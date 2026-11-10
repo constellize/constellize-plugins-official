@@ -3008,6 +3008,75 @@ than on the other session's tip, regeneration would have **reverted** its two `0
 skills while the marketplace kept `deliver 1.1.2` — and the guard would have stayed green, because
 `deliver`'s own files would not appear in the diff at all.
 
+## 2026-11-10 — the location roots: 50 prefix uses in one file, 18 labels in twelve, fixed and shipped
+
+Factory `5d6fb15`, marketplace `9a4810d`, deliver 1.1.2 → 1.1.3, grow 1.0.0 → 1.0.1, 53 new tests
+(421 total). This closes the last open item of the sweep's category 3.
+
+**The sizing in the "Left open" bullet below was right about the numbers and wrong about the
+shape of the work.** 68 uses across 12 prompts is correct, but the distribution matters more than
+the total: **all 50 prefix uses are in one file**, `cross-reference-operational-dependencies.md`
+(17 `memory_bank_location` + 33 `operations_memory_location`). The other eleven prompts carry only
+label lines. So "12 prompts, 68 uses" reads as work spread across a dozen files when it is really
+one file with a separator problem and eleven with a one-sentence omission. Record the distribution,
+not just the count.
+
+**The bullet's own test — "does the documented value work?" — had not actually been run on the
+prefix form, and the answer is no.** Each of the 50 uses was written `{{memory_bank_location}}/systemPatterns.md`,
+supplying its own separator, while the documented example is `memory-bank/`, which already ends in
+one. The documented value therefore produced `llm/memory-bank//systemPatterns.md` — a double slash,
+which POSIX resolves but which is not correct behaviour, and nothing in the prompt or the tests
+would have caught it. Worse, `create-knowledge-contribution` advertised
+`memory-bank/systemPatterns.md`, a **file**, as the value of a variable the family treats as a root;
+that prompt happens to use it only in label lines, so it never concatenated, but the example was
+telling callers to pass something that could not work in the other shape. The severity call stands
+— these are read paths, not write paths — but "a caller who passes the documented value gets
+correct behaviour" was too generous and is corrected here.
+
+**Two shapes, two fixes, deliberately different.**
+
+- **The prefix shape** adopts the convention already shipped for `memory_bank_structure`: the root
+  ends in a slash and the use appends a relative path directly. The 50 uses lost their separator.
+  This removes the double slash instead of documenting around it, and it means one rule now covers
+  every root variable in `07-operations/` rather than two variables in the same family disagreeing
+  about who owns the separator. The alternative — redefine the root as having no trailing slash and
+  change two examples — was cheaper by 48 edits and was rejected because it leaves the trap in
+  place: every other example in the corpus ends in a slash, so the natural value a caller passes
+  would still double it.
+- **The label shape** gets no separator convention, because there is nothing to concatenate. It
+  gets only what it was missing: a sentence stating that the value is a path rather than a label,
+  and the fallback to `llm/memory-bank/` when the index arrives unsupplied. Examples were left
+  alone, `memory-bank/systemPatterns.md` included — a specific file is a legitimate answer to
+  "where to contribute knowledge", and changing it would have been a guidance decision disguised as
+  a defect fix.
+
+Each prompt names **its own** index, escaped, where it describes the unsupplied case, and leaves it
+unescaped where it uses the value. The indices differ per prompt (`$2` in five, `$3` in seven), so
+this is eleven different sentences, not one pasted eleven times.
+
+**Two verification notes worth keeping.**
+
+1. **A per-file anchor has to be checked per file.** The insertion was anchored on the label line
+   inside each `<context>` block. Two prompts use `Location:` there and nine use `Documentation:` —
+   but `onboard-team-to-memory-banks.md` uses **`Documentation:` in its context block and
+   `Location:` in its output template**, so anchoring it on `Location:` dropped the paragraph into
+   the template the model fills in, 38 lines from where it belonged. Caught by asserting that every
+   inserted paragraph falls between `<context>` and `</context>`, which is a property of the result
+   rather than of the patch. A check that only counted insertions would have passed.
+2. **The instrument was checked.** Reverting the twelve prompts fails 41 of the 53 new tests. The
+   12 that still pass are the invariants the fix preserves — the label lines themselves, which the
+   fix does not move, and the example format, which was already passable. A suite where everything
+   failed would have told me less.
+
+**`constellize-feature` is now installed, which unblocks Task C9 Step 3.** It was never a defect in
+this repo: the plugin was created on 2026-11-05 (`759aba3`), and the six installed constellize
+plugins were installed in a single batch on 2026-06-24, months earlier. Adding a plugin to a
+marketplace catalog does not install it for anyone who already has that marketplace, so it sat in
+the catalog and in `plugins/` while `installed_plugins.json` had no entry for it. Installed at
+1.1.0 with its three orchestrator skills (`specify`, `implement`, `verify`), each byte-identical to
+this repo's copy. The earlier note that "the three orchestrators ran from the pushed marketplace
+text while their delegates ran from the cache" no longer applies to future runs.
+
 ## Left open after the 2026-11-09/10 entries above
 
 This section was written as part of the first entry and is kept here, consolidated, because the
@@ -3024,6 +3093,9 @@ second entry closed one of its items. It is the current open list, not a histori
   shipping session, and the new whitespace-fragment rule was verified by an uninformed run judged on
   disk. See the sixth entry above for the probes, their evidence, and the corrected timeline of when
   the plugin update actually landed.
+- **`constellize-feature` is installed as of 2026-11-10**, so the gap that blocked Task C9
+  Step 3 — orchestrators running from repo text while their delegates ran from the cache — is
+  closed. It was a missing local install, not a repo defect; see the entry above.
 - **Acceptance 7 and Task C9 Step 3 are being driven by another session**, which is running a full
   `specify` → `implement` → `verify` cycle on a TypeScript fixture and will record its own result.
   Not duplicated here. The headless-`claude -p` blocker described in the fourth entry applies to
@@ -3035,8 +3107,11 @@ second entry closed one of its items. It is the current open list, not a histori
   severities. **`{{memory_bank_structure}}` is closed** — it was unconditionally broken rather than
   lower severity, and was fixed and shipped on 2026-11-10 as factory `2b1dda3` / marketplace
   `67e9d02`, deliver 1.1.2; see the entry above for why no argument value worked.
-  **`{{memory_bank_location}}` / `{{operations_memory_location}}` remain open and are still lower
-  severity, but the count below was wrong and the shape is two shapes.** 12 prompts across
+  **`{{memory_bank_location}}` / `{{operations_memory_location}}` are now closed too** — fixed
+  and shipped on 2026-11-10 as factory `5d6fb15` / marketplace `9a4810d`, deliver 1.1.3 and grow
+  1.0.1; see the entry above for the two shapes, why they were fixed differently, and the
+  double-separator defect the sizing below did not catch. The sizing itself is kept as written,
+  because the counts are right and the reason the first count was wrong is worth keeping. 12 prompts across
   `07-operations/`, `08-learning/` and `09-adoption/`. **68 uses, not 50** — 34 of each variable,
   confirmed two ways:
 
