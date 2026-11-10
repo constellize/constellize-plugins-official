@@ -18,6 +18,8 @@ Severity: $1
 Time Constraint: $2
 Memory Bank Structure: $3
 
+Every operational path below is formed by prefixing this root to a relative path, so the root must be a path ending in a slash — `llm/operations-memory-bank/` when operational knowledge is kept separate from development knowledge, `llm/memory-bank/` when the two are integrated. The root encodes that distinction; it is not a label, and a value such as `Separate: llm/operations-memory-bank/` is wrong. An indexed placeholder that receives no argument stays in the text literally, so a bare `\$3` surviving where the root belongs means no root was supplied: fall back to `llm/operations-memory-bank/` when that directory exists and `llm/memory-bank/` otherwise, and state which you used. Arguments are split on whitespace, so a root that arrives with a colon in it, or as a single word of prose, is a label passed where a path belongs — apply the same fallback.
+
 During incidents, engineers need rapid access to relevant operational knowledge: which runbooks apply, what similar incidents occurred, what dependencies might be affected, what architectural constraints matter. The challenge is filtering vast operational knowledge to incident-specific context without information overload while under time pressure.
 
 Effective operational knowledge querying during incidents requires:
