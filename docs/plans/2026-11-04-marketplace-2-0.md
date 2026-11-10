@@ -2530,7 +2530,78 @@ broken name would be reported rather than tidied. The disk was then checked anyw
 **No code, no generated output, no version bump.** The fixture and probes live in the session
 scratchpad, outside both repos; this entry is the only change.
 
-## Left open after the four 2026-11-09/10 entries above
+## 2026-11-10 — two prose defects *inside* the two fixed prompts, found after the re-run
+
+Raised by the session driving acceptance 7, verified independently here against the installed
+skills and the official docs. **Neither is fixed** — a skill change is a plugin release. Both are
+**latent**: every run observed so far still wrote the correct filename.
+
+### 1. `$N` is substituted inside backtick code spans, so two sentences invert their own rule
+
+`test-coverage/SKILL.md:59` and `code-generation-plan/SKILL.md:67` each say "Never write a filename
+containing a literal `$0`" (resp. `$1`). Because `$N` is a live substitution site **even inside
+backticks**, what the model receives when an argument *is* supplied is, verbatim from a real
+invocation:
+
+> Never write a filename containing a literal `entries-never-expire`, a `$` followed by a digit, …
+
+— the exact **inverse** of the slug rule three sentences earlier, which derives the slug *from* the
+gap name. The same substitution turns "Take the gap name from `$1` when it was supplied as an
+argument" into a tautology that loses the instruction.
+
+**Verified, not inferred.** Two probes invoked the *installed* skills with arguments bound and
+transcribed the passages back verbatim; `` `$0` `` arrived as `` `shortener` ``. The official docs
+are silent on whether code spans are exempt, which is why this was tested rather than argued.
+
+**Why it is latent.** Both runs still produced the right filename
+(`coverage-report-shortener.md`, `code-generation-plan-entries-never-expire.md`). The sentence's
+*second* clause — "a `$` followed by a digit" — survives substitution intact, because `$` before a
+space or backtick is not a placeholder, so the rule still reaches the model even as its first clause
+contradicts it.
+
+**Scope is exactly these two lines**, out of 511 `$<digit>` occurrences across 70 skill files. They
+are the only prose in the marketplace that *names* a placeholder as a token instead of *using* its
+value — which is why the `output_path` mentions in `constellation-map`, `gap-analysis` and
+`implementation-sketch` are benign: they render as the real path and read correctly. The eleven
+currency-shaped amounts (`$10`, `$15`, `$24`, `$1000`, `$10000`…) are benign too, parsing as absent
+high indices and so staying literal; there is no `$1.00`-shaped amount anywhere, which is the one
+currency form the docs flag.
+
+**The fix, when approved:** escape as `\$0` / `\$1` in the two factory prompts — the docs give a
+single backslash, and **nothing in the marketplace escapes a dollar anywhere today**. Neither
+sentence is quoted in the book, and both sit far from the protected generated line 14, so a fix is
+clear of the manuscript freeze. It is a full four-step handshake with both plugin versions bumped.
+
+### 2. The justification shipped in both prompts is false
+
+Both prompts assert "a delegated skill is invoked by name and receives **no positional arguments at
+all**". That is wrong, and it is wrong in this plan's two earlier entries and in the fix commits'
+messages. The docs say "**Both you and Claude can pass arguments when invoking a skill**", and the
+`Skill` tool takes an `args` parameter. The acceptance-7 session bound positionals in eleven
+delegated invocations across four skills.
+
+**The true mechanism** is narrower and is what the original defect actually was: "An indexed
+placeholder with no corresponding argument … **stays in the content unchanged**." An *unsupplied*
+argument, never an unsuppliable one. So the risk runs the other way as well — pass free-form prose
+as arguments and `$0` captures only its first token, which is how the acceptance-7 session got an
+artifact titled "output_path:".
+
+**This does not weaken either fix.** Both filename rules stay correct; only the reason given for
+them is wrong, and `test-coverage`'s fixed-path rule is still exactly right for the no-argument case
+that produced `coverage-report-$0.md`. Placeholder indices are **0-based** (`$0` is the first
+argument), which the two prompts already assume correctly.
+
+### 3. One claim checked and NOT confirmed
+
+The suggestion that `argument-hint` "reads 1-based while the body is 0-based" does not hold. Both
+hints match their 0-based bodies: `test-coverage` has `[component_name] [system_name]` with
+`$0`=component and `$1`=system; `code-generation-plan` has `[system_name] [gap_to_implement]` with
+`$0`=system and `$1`=gap. Separately, `argument-hint` here is nested under `metadata:` rather than
+being a top-level field, so Claude Code ignores it outright — display-only *and* inert.
+
+**No code, no generated output, no version bump.** This entry is the only change.
+
+## Left open after the five 2026-11-09/10 entries above
 
 This section was written as part of the first entry and is kept here, consolidated, because the
 second entry closed one of its items. It is the current open list, not a historical one.
@@ -2538,6 +2609,15 @@ second entry closed one of its items. It is the current open list, not a histori
 - **Closed by the second entry.** `code-generation-plan.md:120`, named here as having the same
   shape of interpolated output path, was fixed on 2026-11-09 (factory `b0a0a3f`). It is listed only
   so the trail from "worth a look" to "fixed" is visible.
+- **The two prose defects in the fifth entry above are OPEN and need Steve's decision**, because a
+  skill change is a plugin release: the `\$0`/`\$1` escape at `test-coverage` line 59 and
+  `code-generation-plan` line 67, and the false "receives no positional arguments" justification in
+  both. Latent, not active — every run so far wrote the correct filename. Fixing them is one factory
+  commit, both plugin versions bumped, the full four-step handshake.
+- **Acceptance 7 and Task C9 Step 3 are being driven by another session**, which is running a full
+  `specify` → `implement` → `verify` cycle on a TypeScript fixture and will record its own result.
+  Not duplicated here. The headless-`claude -p` blocker described in the fourth entry applies to
+  *this* session's route, not to that one.
 - `# Test Coverage Report: $0` and `# Code Generation Plan: $1` remain as report **headings** in
   the two generated skills. They are headings, not paths, so nothing lands at an undefined
   filename; cosmetic and separate.
