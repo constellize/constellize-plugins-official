@@ -18,6 +18,8 @@ Size: $1
 Timeline: $2
 Documentation: $3
 
+This location is a path, not a label — a directory ending in a slash, or the file to add to. An indexed placeholder that receives no argument stays in the text literally, so a bare `\$3` surviving where the location belongs means none was supplied: fall back to `llm/memory-bank/` and state that you did. Arguments are split on whitespace, so a location that arrives with a colon in it, or as a single word of prose, is a label passed where a path belongs — apply the same fallback.
+
 Successful team adoption requires more than introducing a tool or process. It requires:
 1. Hands-on experience (learn by doing, not by reading)
 2. Gradual complexity increase (start minimal, build mastery)

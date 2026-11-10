@@ -18,6 +18,8 @@ Dependency Scope: $1
 Development Memory: $2
 Operations Memory: $3
 
+Both memory locations are roots: every path below is formed by prefixing one of them to a relative path, so each must be a path ending in a slash — `llm/memory-bank/` for development knowledge and `llm/operations-memory-bank/` for operational knowledge. A root is not a label and not a single file. An indexed placeholder that receives no argument stays in the text literally, so a bare `\$2` or `\$3` surviving where a root belongs means none was supplied: fall back to `llm/memory-bank/` for development knowledge, and for operational knowledge to `llm/operations-memory-bank/` when that directory exists and `llm/memory-bank/` otherwise, and state which you used. Arguments are split on whitespace, so a root that arrives with a colon in it, or as a single word of prose, is a label passed where a path belongs — apply the same fallback.
+
 Operational dependencies include runtime service dependencies, data flow dependencies, infrastructure dependencies, and shared resource dependencies. These must connect to design documentation explaining why dependencies exist, what constraints they impose, and how they affect operational behavior.
 
 Cross-references enable engineers to traverse from operational context (runbook, incident) to development context (architecture, design decisions) and back, supporting rapid understanding during incidents and ensuring operational knowledge evolves with system changes.
@@ -100,9 +102,9 @@ Operational Impact:
 - $0 failure: Impacts [downstream services]
 
 Documentation Links:
-Architecture: $2/systemPatterns.md#dependencies
-Design Decisions: $2/systemPatterns.md#cache-strategy
-Operational Runbooks: $3/runbooks/incident-response.md#dependency-failures
+Architecture: $2systemPatterns.md#dependencies
+Design Decisions: $2systemPatterns.md#cache-strategy
+Operational Runbooks: $3runbooks/incident-response.md#dependency-failures
 ```
 
 ---
@@ -110,7 +112,7 @@ Operational Runbooks: $3/runbooks/incident-response.md#dependency-failures
 ## Cross-Reference Pattern (Development → Operations)
 
 ```
-File: $2/systemPatterns.md
+File: $2systemPatterns.md
 
 ## System Architecture
 
@@ -120,25 +122,25 @@ File: $2/systemPatterns.md
 Design rationale: [Why this dependency exists]
 Constraints: [Performance characteristics, limitations]
 Operational context:
-- Runbook: $3/runbooks/database-procedures.md
-- Performance baseline: $3/performance/database-metrics.md
-- Recent incidents: $3/incidents/2026-01-15-db-connection-pool.md
-- Failover procedures: $3/runbooks/database-failover.md
+- Runbook: $3runbooks/database-procedures.md
+- Performance baseline: $3performance/database-metrics.md
+- Recent incidents: $3incidents/2026-01-15-db-connection-pool.md
+- Failover procedures: $3runbooks/database-failover.md
 
 **Cache API (Redis):**
 Design rationale: [Why this dependency exists]
 Constraints: [Cache invalidation strategy, TTLs]
 Operational context:
-- Runbook: $3/runbooks/cache-procedures.md
-- Performance baseline: $3/performance/cache-metrics.md
-- Degradation behavior: $3/runbooks/incident-response.md#cache-failure
+- Runbook: $3runbooks/cache-procedures.md
+- Performance baseline: $3performance/cache-metrics.md
+- Degradation behavior: $3runbooks/incident-response.md#cache-failure
 
 **Downstream Impact:**
 This service is depended on by:
-- [ServiceA]: $3/dependencies/downstream-impacts.md#serviceA
-- [ServiceB]: $3/dependencies/downstream-impacts.md#serviceB
+- [ServiceA]: $3dependencies/downstream-impacts.md#serviceA
+- [ServiceB]: $3dependencies/downstream-impacts.md#serviceB
 
-SLO implications documented: $3/dependencies/service-level-objectives.md
+SLO implications documented: $3dependencies/service-level-objectives.md
 ```
 
 ---
@@ -146,7 +148,7 @@ SLO implications documented: $3/dependencies/service-level-objectives.md
 ## Cross-Reference Pattern (Operations → Development)
 
 ```
-File: $3/dependencies/operational-dependencies.md
+File: $3dependencies/operational-dependencies.md
 
 # Operational Dependencies for $0
 
@@ -157,38 +159,38 @@ Criticality: CRITICAL
 Failure Mode: Complete service outage
 
 Design Context:
-- Architecture: $2/systemPatterns.md#database-layer
-- Connection pooling design: $2/systemPatterns.md#connection-management
-- Schema design: $2/techContext.md#database-schema
+- Architecture: $2systemPatterns.md#database-layer
+- Connection pooling design: $2systemPatterns.md#connection-management
+- Schema design: $2techContext.md#database-schema
 
 Operational Procedures:
-- Connection failures: $3/runbooks/database-procedures.md#connection-troubleshooting
-- Performance degradation: $3/runbooks/database-procedures.md#performance-investigation
-- Failover: $3/runbooks/database-failover.md
+- Connection failures: $3runbooks/database-procedures.md#connection-troubleshooting
+- Performance degradation: $3runbooks/database-procedures.md#performance-investigation
+- Failover: $3runbooks/database-failover.md
 
 Recent Incidents:
 - 2026-01-15: Connection pool exhaustion
-  - Incident: $3/incidents/2026-01-15-db-connection-pool.md
+  - Incident: $3incidents/2026-01-15-db-connection-pool.md
   - Root cause: Design assumption about connection reuse
-  - Design updated: $2/systemPatterns.md#connection-management (see revision note)
+  - Design updated: $2systemPatterns.md#connection-management (see revision note)
 
 Performance Baseline:
-- Query latency: $3/performance/database-metrics.md
-- Connection pool usage: $3/performance/database-metrics.md#connection-pool
+- Query latency: $3performance/database-metrics.md
+- Connection pool usage: $3performance/database-metrics.md#connection-pool
 
 ### Cache API (Redis)
 Criticality: HIGH (degrades without, does not fail)
 Failure Mode: 3x latency increase, increased database load
 
 Design Context:
-- Caching strategy: $2/systemPatterns.md#caching-strategy
-- Invalidation design: $2/systemPatterns.md#cache-invalidation
-- Degradation handling: $2/systemPatterns.md#graceful-degradation
+- Caching strategy: $2systemPatterns.md#caching-strategy
+- Invalidation design: $2systemPatterns.md#cache-invalidation
+- Degradation handling: $2systemPatterns.md#graceful-degradation
 
 Operational Procedures:
-- Cache unavailable: $3/runbooks/incident-response.md#cache-failure
-- Cache warming: $3/runbooks/deployment-runbook.md#cache-warming
-- Performance monitoring: $3/performance/cache-metrics.md
+- Cache unavailable: $3runbooks/incident-response.md#cache-failure
+- Cache warming: $3runbooks/deployment-runbook.md#cache-warming
+- Performance monitoring: $3performance/cache-metrics.md
 
 ---
 
@@ -203,12 +205,12 @@ Their Documentation:
 - Their degradation: [How they handle our failures]
 
 Our SLO:
-- Documented: $3/dependencies/service-level-objectives.md
+- Documented: $3dependencies/service-level-objectives.md
 - Monitoring: [Link to SLO dashboard]
 
 Operational Coordination:
 - On-call contact: [PagerDuty rotation or contact method]
-- Incident escalation: $3/runbooks/incident-response.md#escalation
+- Incident escalation: $3runbooks/incident-response.md#escalation
 
 ### Analytics Service
 Impact if we fail: MEDIUM (delayed analytics, not real-time critical)
@@ -219,26 +221,26 @@ Their Documentation:
 - Their degradation: Queue events, replay later
 
 Our SLO:
-- Documented: $3/dependencies/service-level-objectives.md#analytics
+- Documented: $3dependencies/service-level-objectives.md#analytics
 
 ---
 
 ## Infrastructure Dependencies
 
 ### Container Orchestration (Kubernetes/ECS/etc.)
-- Deployment procedures: $3/runbooks/deployment-runbook.md
-- Design decisions: $2/techContext.md#deployment-architecture
-- Scaling policies: $3/performance/capacity-planning.md
+- Deployment procedures: $3runbooks/deployment-runbook.md
+- Design decisions: $2techContext.md#deployment-architecture
+- Scaling policies: $3performance/capacity-planning.md
 
 ### Load Balancer
-- Health check design: $2/systemPatterns.md#health-checks
-- Routing policies: $3/runbooks/deployment-runbook.md#traffic-routing
-- Failover behavior: $3/runbooks/incident-response.md#load-balancer-issues
+- Health check design: $2systemPatterns.md#health-checks
+- Routing policies: $3runbooks/deployment-runbook.md#traffic-routing
+- Failover behavior: $3runbooks/incident-response.md#load-balancer-issues
 
 ### Monitoring & Observability
-- Metrics design: $2/systemPatterns.md#observability
-- Alert thresholds: $3/runbooks/alert-response.md
-- Logging strategy: $2/techContext.md#logging
+- Metrics design: $2systemPatterns.md#observability
+- Alert thresholds: $3runbooks/alert-response.md
+- Logging strategy: $2techContext.md#logging
 ```
 
 ---
@@ -282,7 +284,7 @@ Automated Validation (if applicable):
 ## Incident Integration Pattern
 
 ```
-File: $3/incidents/2026-01-15-db-connection-pool.md
+File: $3incidents/2026-01-15-db-connection-pool.md
 
 # Incident: Database Connection Pool Exhaustion
 
@@ -294,7 +296,7 @@ Duration: 47 minutes
 
 Affected Dependency: Database (PostgreSQL)
 Dependency Criticality: CRITICAL
-Design Documentation: $2/systemPatterns.md#database-layer
+Design Documentation: $2systemPatterns.md#database-layer
 
 ## Root Cause
 
@@ -302,7 +304,7 @@ Design assumption: Connection pool size adequate based on traffic estimates
 Reality: Traffic pattern changed, connection reuse assumption violated
 
 Design Documentation Impact:
-- UPDATED: $2/systemPatterns.md#connection-management
+- UPDATED: $2systemPatterns.md#connection-management
   - Added: Connection pool sizing calculation
   - Added: Traffic pattern considerations
   - Added: Monitoring requirements
@@ -310,21 +312,21 @@ Design Documentation Impact:
 ## Operational Changes
 
 Runbook Updates:
-- $3/runbooks/database-procedures.md#connection-troubleshooting
+- $3runbooks/database-procedures.md#connection-troubleshooting
   - Added: Connection pool exhaustion detection
   - Added: Emergency pool size increase procedure
 
 Performance Baseline Updates:
-- $3/performance/database-metrics.md#connection-pool
+- $3performance/database-metrics.md#connection-pool
   - Added: Connection pool utilization alerting thresholds
 
 ## Cross-Reference Updates
 
 Development → Operations:
-- $2/systemPatterns.md now references this incident as example
+- $2systemPatterns.md now references this incident as example
 
 Operations → Development:
-- $3/runbooks/database-procedures.md now references updated design
+- $3runbooks/database-procedures.md now references updated design
 
 Bidirectional: ✓ Verified
 ```
