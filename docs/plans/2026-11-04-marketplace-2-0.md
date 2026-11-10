@@ -2142,12 +2142,75 @@ Expected: prompt-factory `69dffee…` twice, marketplace `8f470b2…` twice.
 - Produces: the evidence for acceptances 3, 6, 7, 8, 9 and 10 — the six that no amount of reading the
   text can substitute for.
 
-- [ ] **Step 1: Install the marketplace and take one feature to VERIFIED on a non-Python project — acceptance 7**
+- [x] **Step 1: Install the marketplace and take one feature to VERIFIED on a non-Python project — acceptance 7**
 
 A TypeScript or Go repository, no Constellize scaffolding to begin with, no skill edits. Run
 `constellize-harness:init`, then `specify` → `implement` → `verify`.
 Expected: `llm/features/<name>.md` at `**Status:** VERIFIED` with a complete `## Gate Results` block.
 `defensive-programming` is part of what this exercises.
+
+> **MET 2026-11-10.** `tabula`, a real TypeScript 5.3 strict / CommonJS / Node 20 CSV summariser
+> (jest 29 + ts-jest, eslint 8, no Python anywhere), taken from `specify` through `implement` to
+> `**Status:** VERIFIED` with **no skill edits**. Final state: 120 tests across 6 suites green,
+> lint and typecheck clean, 91.42% branch coverage against a threshold now enforced at 80%.
+> The `## Gate Results` block validates: one heading, gates 1-4 each exactly once, all three
+> required gates PASS, gate 3 SKIPPED and `required: false`, both surface booleans recorded,
+> threshold at the default floor, one status line rewritten in place.
+>
+> **Two deviations from this step as written, neither affecting the spec §8 criterion:**
+> 1. `constellize-harness:init` was **not** run. The fixture already carried a committed
+>    `llm/memory-bank/` (four files) and `llm/features/.gitkeep`, so it did not begin with no
+>    Constellize scaffolding. `llm/constellize.json`, `llm/features/json-output.md`,
+>    `llm/memory-bank/progress.md` and everything under `llm/construction/` were created during the
+>    run. A from-zero `init` run is still untested on a non-Python project.
+> 2. `constellize-feature` is **not in the installed plugin cache** — the cache holds
+>    `constellize-craft`, `-deliver`, `-design`, `-grow`, `-harness` and `-memory` (all at the
+>    released versions, design at 1.1.2) but not `-feature`. The three feature skills were
+>    therefore driven from the **pushed marketplace text** in the working checkout, while every
+>    delegate they call ran as an installed plugin. So delegation was exercised for real; the three
+>    orchestrators were not loaded through the marketplace.
+>
+> **Two verification runs, which exercised the re-run path.** Run 1 failed gate 2 and left the
+> artifact at IMPLEMENTED with the gate named — incidental evidence for acceptance 9's first half.
+> The finding was addressed between runs and run 2 replaced the block in place and passed. Note
+> that a sweep after the first fix found a **second instance of the same defect class** that run 1
+> had not reported; the finding list was incomplete, not the gate.
+>
+> **Supporting evidence for acceptance 6.** `llm/construction/` holds exactly the two expected
+> additions — `design/code-generation-plan-<slug>.md` (twice, one per gap, with clean distinct
+> slugs) and `quality/coverage-report-tabula.md`. No `constellation-map.md`, `gap-analysis.md`,
+> `implementation-sketches.md` or `scope-lock.md` exists, which is correct for the `output_path`
+> route: those four skills wrote into the artifact's own sections. **No placeholder in any
+> filename**, so the 2026-11-09 output-path fixes hold on a TypeScript project.
+>
+> **Four defects found in the skill text, none of which required editing a skill to work around:**
+> 1. `constellize-deliver/skills/rollback-capability/SKILL.md` has **unescaped `$0` and `$1`** in
+>    its examples. With arguments supplied, the migration sample's SQL placeholder renders as
+>    `WHERE name = <the whole second argument>`, and the shell sample's usage lines render as
+>    `Usage: <component> <previous-version>`. Same class as the two output-path defects fixed on
+>    2026-11-09, in a different plugin and in SQL/shell rather than a filename — more evidence for
+>    the pending `\$0`/`\$1` escape decision.
+> 2. `constellize-feature:verify` Phase 6 says "You do not fix what a gate reports", while
+>    `constellize-craft:defensive-programming` step 7 says "Fix what you find, then report the
+>    verdict." Directly contradictory. The orchestrator's rule is the better one and was followed;
+>    a gate skill run standalone will still fix things, and a later verification then measures
+>    unreviewed code.
+> 3. `constellize-feature:verify` Phase 2 reads "**Either** surface is touched when **any** of
+>    these is true", so a touched deployment artifact literally implies an *operational* surface
+>    too. Almost certainly not intended — a Dockerfile change says nothing about health checks —
+>    and it pushes a run toward four structurally inapplicable operational members.
+> 4. AC-14 of the feature spec named "the project default of 80%" that nothing enforced: the
+>    project configured no `coverageThreshold`. Not a marketplace defect, but the kind of
+>    unenforced prose criterion the workflow should be catching, and gate 1 did not — the gate
+>    consumes `test-coverage`'s verdict and never asks whether the declared threshold is real.
+>
+> **Two project-level gaps found by gate 3's members although the gate was not required**, both
+> properties of the fixture: `package.json` declares no `dependencies` and no `devDependencies` and
+> there is no lockfile (`node_modules` is a gitignored symlink to `prompt-factory/node_modules`),
+> so a clean checkout installs nothing and no `npm audit` is possible; and no rollback procedure is
+> written down or exercised. A feature in this fixture that *does* touch a deployment surface would
+> fail gate 3 on both. If acceptance 3 Step 2 is run here, fix these first or gate 3 will fail for
+> the wrong reason.
 
 - [ ] **Step 2: Make each gate fail, one at a time — acceptance 3**
 

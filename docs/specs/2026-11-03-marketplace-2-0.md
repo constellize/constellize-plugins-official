@@ -11,7 +11,7 @@ saw.) The two amendments below rest on his separate "narrow 13, keep card" decis
 and are unaffected either way.
 **Date**: 2026-11-03; revision 3 landed 2026-11-04. All tree checks were made on 2026-11-03 against
 the commits named in §15, which is also what §5a's book baseline was measured at.
-**Sequence**: project 1 (done) → 1.5 (done) → **2** → 4 (Copernicus) → 3 (delivery)
+**Sequence**: project 1 (done) → 1.5 (done) → **2** → 4 (delivery) → 3 (Copernicus)
 
 > Written without a brainstorming interview. Steve chose on 2026-11-03 to have the design written
 > from the memory bank rather than answer questions first, so **every decision below is the
