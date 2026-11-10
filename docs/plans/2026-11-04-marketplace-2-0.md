@@ -2160,8 +2160,15 @@ Expected: each is left at `**Status:** IMPLEMENTED` with that gate named. This i
 - [ ] **Step 3: Prove the project's design artifacts are untouched — acceptance 6**
 
 Record `sha256` of every file under `llm/construction/` before a full feature run and compare after.
-Expected: byte-identical. Then specify and verify a second feature and confirm neither feature's
-artifact mentions the other.
+
+> **Expectation revised 2026-11-10, with acceptance 6 itself.** This step originally said "Expected:
+> byte-identical", which was the criterion before Steve narrowed it. Expect
+> `constellation-map.md`, `gap-analysis.md`, `implementation-sketches.md` and `scope-lock.md` to be
+> byte-identical, and expect exactly two additions:
+> `design/code-generation-plan-<slug>.md` and `quality/coverage-report*.md`. Anything else under
+> `llm/construction/` is a regression. See spec §8 acceptance 6 and decision 31.
+
+Then specify and verify a second feature and confirm neither feature's artifact mentions the other.
 
 - [ ] **Step 4: Run it again with the siblings uninstalled — acceptance 8**
 
@@ -2385,16 +2392,74 @@ placeholder), the body sentence it excerpts, `book/ch3.md:335` which quotes the 
 after a CI failure — the four-step handshake recorded above, applied.
 
 
-**Left open, and deliberately not widened into.**
+## 2026-11-10 — acceptance 6's criterion amended, which closes the other half
 
-- `# Test Coverage Report: $0` is still the generated report's H1 (generated `:71`). It is a heading,
-  not a path, so nothing lands at an undefined filename; it is cosmetic and separate.
-- `code-generation-plan.md:120` has the same *shape* of interpolated output path
-  (`construction/design/code-generation-plan-{{gap_to_implement}}.md`) and
-  `implement-feature.md:78` hands it the gap **inline**, which is how `test-coverage` got its `$0`.
-  Not observed failing in the acceptance runs, and not fixed here. Worth a look.
+The two entries above fixed the prompts. This one fixes the **criterion**, which is where the
+remaining half of acceptance 6's SPLIT actually lived. **Steve approved the amendment on
+2026-11-10**; it is spec decision **31** and an inline `**Amended 2026-11-10.**` block on
+acceptance 6 in §8, following the convention the 2026-11-04 non-goal amendment set.
+
+**What was wrong with the criterion.** It read "**`llm/construction/` is byte-identical before and
+after a full feature run**" — and cited §6.6b, which contradicts it. Checking which skills the
+feature workflow actually delegates and which of those declare a write under `construction/` turns
+up **two**, not one:
+
+- `constellize-design:code-generation-plan`, invoked once per gap by `implement`, which §6.6b
+  deliberately exempts from the output-path change because it "already does this".
+- `constellize-craft:test-coverage`, delegated by `verify` at Gate 1, whose coverage report is its
+  own declared output.
+
+So a full run can never leave `llm/construction/` byte-identical, and the criterion was unsatisfiable
+by design rather than unsatisfied by the implementation. **This corrects the first entry above**,
+which named only `code-generation-plan` as the deliberate writer; `test-coverage` writes there too,
+and still does after its fix — the fix changed where its report lands when no component is named,
+not whether it writes one.
+
+The other four writers under `construction/` do not apply: `gap-analysis`,
+`implementation-sketch` and `constellation-map` are delegated **with** an `output_path`, so they
+write the feature artifact instead — that is Release B working, and it is the half the 2026-11-06
+run confirmed — and `lock-constellation` is in no feature delegation map at all, so `scope-lock.md`
+is untouched for the simpler reason that nothing writes it.
+
+**What it says now.** No feature-scoped run writes a project-level design artifact, and two
+features never share an artifact path. `constellation-map.md`, `gap-analysis.md`,
+`implementation-sketches.md` and `scope-lock.md` byte-identical; `design/code-generation-plan-<slug>.md`
+and `quality/coverage-report*.md` named as **expected additions**, so a future run can tell an
+expected write from a regression; anything else under `llm/construction/` fails. That is the
+isolation §6.6b exists to provide, which is what the criterion was always testing.
+
+**Status of acceptance 6.** The isolation half was verified by the 2026-11-06 live run. That run
+predates the two output-path fixes, so the criterion is **not** being claimed MET off the back of
+it: a re-run would confirm it end to end as amended, and Task Step 3 above now carries the revised
+expectation. What is settled is that the criterion no longer contradicts the design.
+
+**One prose correction made while writing the amendment**, in the spirit of this project's own
+rule about checking changed prose against the code it describes. A first draft said the coverage
+report "is the measurement Gate 1 reads". It is not: `verify` "consumes that verdict; it never runs
+a coverage command of its own" (`verify-feature.md:85`) — Gate 1 reads the verdict and numbers the
+skill *reports*, not the file. The file is written all the same, which is what matters here. Both
+quoted phrases in the amendment were grepped against their sources before committing.
+
+**No code, no generated output, no version bump.** This entry touches two documents under
+`docs/`, so `check-version-bump.sh` does not apply and drift is unaffected.
+
+## Left open after the three 2026-11-09/10 entries above
+
+This section was written as part of the first entry and is kept here, consolidated, because the
+second entry closed one of its items. It is the current open list, not a historical one.
+
+- **Closed by the second entry.** `code-generation-plan.md:120`, named here as having the same
+  shape of interpolated output path, was fixed on 2026-11-09 (factory `b0a0a3f`). It is listed only
+  so the trail from "worth a look" to "fixed" is visible.
+- `# Test Coverage Report: $0` and `# Code Generation Plan: $1` remain as report **headings** in
+  the two generated skills. They are headings, not paths, so nothing lands at an undefined
+  filename; cosmetic and separate.
+- **The memory-bank root variables** — `{{memory_bank_structure}}`, `{{memory_bank_location}}`,
+  `{{operations_memory_location}}` across four `07-operations/` prompts — are the remaining
+  `$N`-in-a-path instances. They are path *prefixes* on **read** paths, so an unsubstituted one
+  fails a lookup rather than writing a junk file. Lower severity; not fixed.
 - `npm run validate:chain` fails with 209 issues, every one of the form "Missing
   `../website/public/prompts/<id>/prompt.txt`". `validate-full-chain.ts:111` builds that path
   without the `v1/` segment, so it predates the version layout. It is not in any CI workflow
-  (factory CI runs the determinism script and jest only), and it failed identically before this
-  change. Stale validator, pre-existing, out of scope here.
+  (factory CI runs the determinism script and jest only), and it failed identically before these
+  changes. Stale validator, pre-existing, out of scope.

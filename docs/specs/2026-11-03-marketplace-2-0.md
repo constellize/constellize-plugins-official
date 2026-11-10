@@ -666,8 +666,36 @@ course's 100% survives as the setting Copernicus turns on.
    is additive: a verdict section appended, nothing removed or reworded. Checkable mechanically.
 5. **Every existing caller of the three artifact skills is unaffected** by the new output-path
    argument: invoked without it, each writes exactly the path and bytes it writes today.
-6. **`llm/construction/` is byte-identical before and after a full feature run** (§6.6b), and two
-   features can be specified and verified without either one's artifacts appearing in the other's.
+6. **No feature-scoped run writes a project-level design artifact, and two features never share an
+   artifact path** (§6.6b). Concretely: `constellation-map.md`, `gap-analysis.md`,
+   `implementation-sketches.md` and `scope-lock.md` under `llm/construction/` are byte-identical
+   before and after a full feature run, and two features can be specified and verified without
+   either one's artifacts appearing in the other's. Two paths under `llm/construction/` are
+   **expected additions**, named here so a future run can tell an expected write from a regression:
+   `design/code-generation-plan-<slug>.md` and `quality/coverage-report*.md`. Anything else
+   appearing under `llm/construction/` fails this criterion.
+
+   **Amended 2026-11-10.** This criterion originally read "**`llm/construction/` is byte-identical
+   before and after a full feature run**", which contradicted §6.6b — the section it cites. Two
+   skills the feature workflow delegates write their own outputs under `llm/construction/` by
+   design, so a full run can never leave it byte-identical:
+   `constellize-design:code-generation-plan`, which `implement` invokes once per gap and which
+   §6.6b deliberately exempts from the output-path change because it "already does this"; and
+   `constellize-craft:test-coverage`, whose coverage report is its own declared output (§6.3).
+   Gate 1 reads the verdict and numbers that skill *reports*, not the file — `verify` "consumes
+   that verdict; it never runs a coverage command of its own" — but the file is written all the
+   same, and writing it is the skill's job. The live acceptance run on 2026-11-06 recorded this
+   criterion SPLIT for exactly those two reasons — which is the criterion failing its own design,
+   not the design failing the criterion. **Steve amended it on 2026-11-10** rather than change either skill, because both
+   writes are the behaviour the workflow wants: the per-gap plan is what makes one plan per gap
+   possible, and the coverage report is the durable record behind a Gate 1 verdict.
+
+   What the criterion was always testing is the isolation §6.6b exists to provide — that a
+   feature-scoped run cannot overwrite the project's own `gap-analysis.md` or make two features
+   clobber each other — and that is what it now says. The isolation half was verified by the
+   2026-11-06 run. Note that run predates the two output-path fixes of 2026-11-09, which removed
+   the undefined `-$0`/`-$1` filenames those two expected additions used to be able to land under;
+   a re-run would confirm the criterion end to end as amended.
 7. **The three skills run end-to-end on a non-Python project.** A feature taken from `specify` to
    VERIFIED in a TypeScript or Go repository with no skill edits. This is the test for the
    Python-shaped anti-goal, and no amount of reading the text substitutes for it. The new
@@ -749,6 +777,7 @@ recorded as his.
 | 28 | **`constellize-craft:defensive-programming` is a new skill**, carrying the course's Gate 2 subject, which nothing in the marketplace covers. Consequence of 27; the alternative is 19, which 27 makes unnecessary | author, following Steve's r3 change |
 | 29 | **`gap-analysis`, `implementation-sketch` and `constellation-map` take an optional output path**, defaulting to today's path. Consequence of 21's withdrawal; replaces r2's capture mode (§6.6b) | author, following Steve's r3 change |
 | 30 | **Four plugin version bumps** — craft, deliver, design, harness — enforced by `check-version-bump.sh` | author |
+| 31 | **Acceptance 6 is narrowed** to the isolation it was always testing — no feature-scoped run writes a project-level design artifact, and two features never share a path — instead of `llm/construction/` being byte-identical, which contradicted §6.6b's per-gap plan and Gate 1's coverage report. The two expected additions are named in §8 | **Steve, 2026-11-10** |
 
 ### 9a. The plugin, reopened (decision 1)
 
