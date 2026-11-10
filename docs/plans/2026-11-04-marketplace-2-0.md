@@ -2826,7 +2826,85 @@ default. Closing that means adding a requirement — gate 1 must read the projec
 say whether the threshold it reports is enforced — which changes the gate contract rather than
 correcting its prose. **Steve's call, not a text fix.**
 
-## Left open after the six 2026-11-09/10 entries above
+## 2026-11-10 — the operational root variable: a mode used as a path, fixed and shipped
+
+Factory **`2b1dda3`**, marketplace **`67e9d02`**, `GENERATED_FROM` `2b1dda3`. Version: deliver
+1.1.1 → **1.1.2**. 358/358 tests, 20 of them new; drift confined to the three generated
+`constellize-deliver` files and nothing else; and line 14 of the generated `test-coverage` skill —
+the sentence the printed book quotes — is byte-identical before and after, sha256
+`4e58845b30cf76821e3a97a7082bd4e9aa9bb46517f50cc6f0316b5d19615456`.
+
+This is category 3 of the sweep recorded in the second entry, which that entry and the "Left open"
+list below both carried as a single low-severity item. It is **two defects with different
+severities**, and the more serious of them was mislabelled.
+
+### `memory_bank_structure` was unconditionally broken, not lower severity
+
+`assess-operational-knowledge-health` and `query-operational-knowledge-during-incidents` both
+declare it as a **mode** — "Whether operational knowledge is separate or integrated", example
+`"Separate: operations-memory-bank/"` — and then use it **28 times as a bare path prefix with no
+separator** (`{{memory_bank_structure}}runbooks/`). No argument value satisfies both readings:
+
+| how the skill is called | the path that results |
+|---|---|
+| no fourth argument supplied | `$3runbooks/` — an unsupplied index stays literal |
+| the documented example, as it arrives | `Separate:runbooks/` — arguments split on whitespace |
+| the documented example, quoted whole | `Separate: operations-memory-bank/runbooks/` |
+
+So it was wrong **however the skill was called**, including for a caller who passed exactly what the
+documentation told them to pass. That is the opposite of the "path prefixes on read paths, lower
+severity" the earlier entry gave it. The middle row is the one that ties back to the first entry:
+the whitespace split puts a **colon** in the path, the same character class that produced
+`coverage-report-expand-codes:.md`.
+
+**The fix makes the variable the path prefix it was already being used as.** 28 of its 29 uses need
+a path; the single remaining use is the `<context>` header line `Memory Bank Structure: <root>`,
+which reads correctly with a path. The mode framing was therefore the half with no support in the
+prompt, and dropping it costs nothing — a root of `llm/operations-memory-bank/` versus
+`llm/memory-bank/` *encodes* separate-versus-integrated, so no expressiveness is lost.
+
+The two fallback roots were taken from the generator rather than invented: `paths.ts:10,14` already
+rewrites a bare `operations-memory-bank/` to `llm/operations-memory-bank/`, and only
+`llm/memory-bank/` is scaffolded by `constellize-harness:init` and checked at `tier1.ts:310`. That
+asymmetry is why the body prefers the operations root when it exists and falls back to the
+integrated root otherwise, rather than naming one unconditionally.
+
+### Two readers, and only one of them reads the frontmatter
+
+A variable's `description` and `example` **never reach the generated SKILL.md** — they are
+website and docs metadata. So this defect had to be fixed in two places for two different readers,
+and neither half substitutes for the other:
+
+- the **frontmatter** governs what a human caller is told to pass, and was advertising
+  `"Separate: operations-memory-bank/"` — the one value guaranteed to break;
+- the **prompt body** governs what the model executes, and now states the fallback for a root that
+  never arrives, with `\$3` escaped where it is *named* and left bare where its *value* is used.
+
+The new `operations-root-variable.test.ts` guards both separately for both skills. The instrument
+was checked the way the fifth entry requires: reverting the fix fails **16 of the 20**, and the four
+that survive are the deliberate invariants — `maps-to` is still `$3`, and the prefix uses are still
+unescaped — which are regression guards rather than assertions about this fix.
+
+### A shared-checkout hazard, avoided rather than discovered afterwards
+
+Another session landed `614ef6e` / `bfc1108` while this work was in progress, and its edits were
+sitting uncommitted in the same factory checkout alongside this one's. Two precautions were taken,
+and both turned out to be load-bearing:
+
+1. This session's two prompt edits were parked as a patch and the files restored while the other
+   session's release went out, so they could not be swept into its commit. They were not — that
+   session committed only its own four files.
+2. At regeneration time the factory's `tier1.ts` literal was **modified in the working tree** by
+   that session, which is implementing defect 4 (`threshold.enforced`). Regenerating from the
+   working tree would have published that unfinished work under this release. The committed factory
+   literal and the marketplace copy are byte-identical (sha256 `e82af1ee…`), so there is no real
+   drift there; the regenerated `tier1.ts` was restored and only the three deliver files were
+   staged.
+
+The general point: **drift measured against a shared working tree is not drift against a commit.**
+Check which one the number describes before acting on it.
+
+## Left open after the 2026-11-09/10 entries above
 
 This section was written as part of the first entry and is kept here, consolidated, because the
 second entry closed one of its items. It is the current open list, not a historical one.
@@ -2849,10 +2927,19 @@ second entry closed one of its items. It is the current open list, not a histori
 - `# Test Coverage Report: $0` and `# Code Generation Plan: $1` remain as report **headings** in
   the two generated skills. They are headings, not paths, so nothing lands at an undefined
   filename; cosmetic and separate.
-- **The memory-bank root variables** — `{{memory_bank_structure}}`, `{{memory_bank_location}}`,
-  `{{operations_memory_location}}` across four `07-operations/` prompts — are the remaining
-  `$N`-in-a-path instances. They are path *prefixes* on **read** paths, so an unsubstituted one
-  fails a lookup rather than writing a junk file. Lower severity; not fixed.
+- **The memory-bank root variables** were one item here and are in fact two, with different
+  severities. **`{{memory_bank_structure}}` is closed** — it was unconditionally broken rather than
+  lower severity, and was fixed and shipped on 2026-11-10 as factory `2b1dda3` / marketplace
+  `67e9d02`, deliver 1.1.2; see the entry above for why no argument value worked.
+  **`{{memory_bank_location}}` / `{{operations_memory_location}}` remain open and genuinely are
+  lower severity**: 12 prompts across `07-operations/`, `08-learning/` and `09-adoption/`, and
+  **all 50 uses are followed by an explicit `/`**, so a caller who passes the documented value gets
+  correct behaviour. The only exposure is the general unsupplied-index case
+  (`$3/systemPatterns.md`) on **read** paths, which fails a lookup rather than writing a junk file.
+  The test that separates the two: **does the documented value work?** If it does not, it is the
+  serious kind and the severity call changes. Also note the earlier count of "four
+  `07-operations/` prompts" was wrong — the sweep's path-shaped regex only catches three of the
+  files, and the root variables span 14 prompts in all.
 - `npm run validate:chain` fails with 209 issues, every one of the form "Missing
   `../website/public/prompts/<id>/prompt.txt`". `validate-full-chain.ts:111` builds that path
   without the `v1/` segment, so it predates the version layout. It is not in any CI workflow
