@@ -2601,7 +2601,55 @@ being a top-level field, so Claude Code ignores it outright — display-only *an
 
 **No code, no generated output, no version bump.** This entry is the only change.
 
-## Left open after the five 2026-11-09/10 entries above
+## 2026-11-10 — the two prose defects fixed and shipped
+
+**Steve approved the release on 2026-11-10**, resolving the item the entry above left open. Factory
+**`44e8aae`**, marketplace **`d2e5923`**, `GENERATED_FROM` = `44e8aae`, **constellize-craft 1.1.1 →
+1.1.2** and **constellize-design 1.1.2 → 1.1.3**.
+
+**What changed: one line per skill.** `test-coverage` line 59 and `code-generation-plan` line 67 —
+the body rules themselves, nothing else. Generated line 14 and both book previews are byte-identical,
+`book/generated/` regenerated unchanged, and the `book` working tree stayed clean throughout.
+
+**The escape.** `a literal `$0`` → `a literal `\$0`` and the same for `$1`, plus
+`code-generation-plan`'s "Take the gap name from the `\$1` argument when one was supplied", which
+was a tautology before. A single backslash, which is what the skills docs prescribe. **This is the
+first escaped dollar in the marketplace** — there were none before.
+
+**The justification, replaced rather than deleted.** "A delegated skill is invoked by name and
+receives no positional arguments at all" is gone from both prompts, and a grep confirms it appears
+nowhere under `plugins/` any more. In its place, the mechanism that is actually true and is what the
+original defect was: *an indexed placeholder that receives no argument stays in the text literally.*
+
+**One thing the correction exposed, now covered.** If the cause is an unsupplied argument rather
+than an unsuppliable one, the opposite failure is also possible: arguments split on whitespace, so a
+caller passing free-form prose where a name belongs leaves only its first word. Both rules now say
+to treat such a fragment as absent — `test-coverage` falls back to the fixed path, and
+`code-generation-plan` prefers the gap described inline. This is the failure that gave the
+acceptance-7 session an artifact titled "output_path:".
+
+**Guards.** Four new tests, 338 total (was 334). They pin the escaped form, assert the false
+sentence cannot return (`not.toMatch`), and cover the whitespace rule. Both book-quote guards still
+pass. Drift stayed at 109 with no drift. The version bump went in the **factory** commit, before the
+factory push, so `check-version-bump.sh` had nothing to catch this time.
+
+**What is NOT yet verified, and why.** The escape is confirmed present in the generated and pushed
+artifact, and the syntax is the docs'. Its **rendered** behaviour is not confirmed, because
+`~/.claude/plugins/cache/` is version-keyed and still holds only 1.1.1 (craft) and 1.1.2 (design),
+both pre-fix — so this session cannot invoke the fixed bodies. Confirming it needs a plugin update,
+which is Steve's action. The **known positive** half of the instrument check is already done: the
+currently installed unescaped versions were shown to render `` `$0` `` as the substituted value, so
+the mechanism is established and only the escape's effect awaits a refresh.
+
+**CI green on `d2e5923`** — the drift workflow passed every step, including "Generated files match
+the recorded commit", "Catalog matches the plugin directories" and **"Skill changes bump the plugin
+version"**, which is the step that failed on 2026-11-09 when the bump was omitted.
+
+**Frozen refs re-verified unchanged:** marketplace `v1` = `8f470b2`, tag `v1.0.0` = `43212a2`,
+factory `v1` = `69dffee`. Nothing committed in `website`; its `public/prompts/v1/` generator dirt was
+restored, and `book` stayed clean.
+
+## Left open after the six 2026-11-09/10 entries above
 
 This section was written as part of the first entry and is kept here, consolidated, because the
 second entry closed one of its items. It is the current open list, not a historical one.
@@ -2609,11 +2657,12 @@ second entry closed one of its items. It is the current open list, not a histori
 - **Closed by the second entry.** `code-generation-plan.md:120`, named here as having the same
   shape of interpolated output path, was fixed on 2026-11-09 (factory `b0a0a3f`). It is listed only
   so the trail from "worth a look" to "fixed" is visible.
-- **The two prose defects in the fifth entry above are OPEN and need Steve's decision**, because a
-  skill change is a plugin release: the `\$0`/`\$1` escape at `test-coverage` line 59 and
-  `code-generation-plan` line 67, and the false "receives no positional arguments" justification in
-  both. Latent, not active — every run so far wrote the correct filename. Fixing them is one factory
-  commit, both plugin versions bumped, the full four-step handshake.
+- **Closed by the sixth entry.** The two prose defects — the `\$0`/`\$1` escape and the false
+  "receives no positional arguments" justification — were approved and shipped on 2026-11-10 as
+  factory `44e8aae` / marketplace `d2e5923`, craft 1.1.2 and design 1.1.3, CI green. Listed only so
+  the trail from "found" to "shipped" is visible. **One piece remains:** the escape's *rendered*
+  behaviour is unconfirmed until a plugin update lands the new versions in
+  `~/.claude/plugins/cache/`, which still holds only pre-fix copies.
 - **Acceptance 7 and Task C9 Step 3 are being driven by another session**, which is running a full
   `specify` → `implement` → `verify` cycle on a TypeScript fixture and will record its own result.
   Not duplicated here. The headless-`claude -p` blocker described in the fourth entry applies to
