@@ -3035,11 +3035,40 @@ second entry closed one of its items. It is the current open list, not a histori
   severities. **`{{memory_bank_structure}}` is closed** — it was unconditionally broken rather than
   lower severity, and was fixed and shipped on 2026-11-10 as factory `2b1dda3` / marketplace
   `67e9d02`, deliver 1.1.2; see the entry above for why no argument value worked.
-  **`{{memory_bank_location}}` / `{{operations_memory_location}}` remain open and genuinely are
-  lower severity**: 12 prompts across `07-operations/`, `08-learning/` and `09-adoption/`, and
-  **all 50 uses are followed by an explicit `/`**, so a caller who passes the documented value gets
-  correct behaviour. The only exposure is the general unsupplied-index case
-  (`$3/systemPatterns.md`) on **read** paths, which fails a lookup rather than writing a junk file.
+  **`{{memory_bank_location}}` / `{{operations_memory_location}}` remain open and are still lower
+  severity, but the count below was wrong and the shape is two shapes.** 12 prompts across
+  `07-operations/`, `08-learning/` and `09-adoption/`. **68 uses, not 50** — 34 of each variable,
+  confirmed two ways:
+
+  | | total | followed by `/` | at end of line |
+  |---|---|---|---|
+  | `{{memory_bank_location}}` | 34 | 17 | 17 |
+  | `{{operations_memory_location}}` | 34 | 33 | 1 |
+  | | **68** | **50** | **18** |
+
+  - **50 are the path-prefix form.** An unsupplied index leaves `$3/systemPatterns.md` on a **read**
+    path, which fails a lookup rather than writing a junk file. This is the case the original
+    sentence described, and for these it is accurate.
+  - **18 are label-value lines in `<context>` blocks** — `Documentation:`, `Location:`,
+    `Development Memory:`, `Operations Memory:`, `- Primary location:` — where the variable **is**
+    the value rather than a prefix to one. An unsupplied index renders `Documentation: $2`: a bare
+    placeholder handed to the model as the location itself. Arguably the more misleading of the two,
+    because a relative path that fails a lookup announces itself, whereas a bare `$2` offered as a
+    location can simply be believed.
+
+  So the two shapes need **different fixes**: the prefix form needs a defined path for the absent
+  index, the label form needs a stated fallback or no placeholder at all. Size the work from 68, not
+  50.
+
+  **Why the original count was wrong, because it is a repeat offence.** It came from
+  `grep -rho "{{memory_bank_location}}."` — the trailing `.` requires a character *after* the
+  variable and does not match a newline, so **every end-of-line use was invisible**. It returned 17,
+  which is exactly the slash count, so the number looked self-consistent and went unchallenged into
+  this ledger. It is the same failure as the `grep '"test"\|"lint"'` that could not match
+  `"test:coverage"` because the closing quote stopped it — recorded earlier the same day, then
+  repeated within hours with a different terminator. **The rule: count the token alone first, then
+  classify what follows in a second pass.** A pattern ending in any specific character answers a
+  narrower question than the one asked, and its answer can be wrong while looking tidy.
   The test that separates the two: **does the documented value work?** If it does not, it is the
   serious kind and the severity call changes. Also note the earlier count of "four
   `07-operations/` prompts" was wrong — the sweep's path-shaped regex only catches three of the
