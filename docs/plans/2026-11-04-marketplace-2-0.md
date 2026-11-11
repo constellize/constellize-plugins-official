@@ -2250,6 +2250,16 @@ Then specify and verify a second feature and confirm neither feature's artifact 
 > is not: every delegated `verify` targets one fixed `coverage-report.md`. See the
 > 2026-11-10 end-to-end entry below.
 
+> **The defect that failed clause 2 is fixed and shipped 2026-11-11 (factory `b84b05e` /
+> marketplace `139617a`, craft 1.1.5 and feature 1.1.1), and the box still stays unchecked.** What
+> is shipped is the rule: a per-subject slug in `test-coverage`, and the feature name passed as its
+> first argument by `verify`. What has **not** happened is a re-run of this step against the new
+> skill text, and this step is a measurement, not a rule — nothing here is checked by a change to
+> the thing being measured. Checking it needs one more two-feature run through the installed
+> plugins at craft 1.1.5 / feature 1.1.1, judged on disk: the four files byte-identical, the two
+> named additions, and **two distinct `coverage-report-*.md` filenames** where the last run
+> produced one path and three improvised names. See the 2026-11-11 entry below.
+
 - [ ] **Step 4: Run it again with the siblings uninstalled — acceptance 8**
 
 Install `constellize-feature` alone, without `constellize-design`, `:craft`, `:deliver`,
@@ -3199,6 +3209,82 @@ skill file whose line 14 the printed book quotes, so it is Steve's call, not a s
 **No code, no generated output, no version bump.** The fixture and the three runs live in the session
 scratchpad, outside every repository; this entry is the only change.
 
+## 2026-11-11 — acceptance 6's second clause: one report per feature, fixed and shipped
+
+**Steve approved the fix on 2026-11-11**, in answer to the question the previous entry ends on. The
+decision that entry said was his and not a session's was *which* of the two routes to take; he took
+"fix it", and both routes turned out to be needed for different reasons, so both shipped.
+
+**What was wrong.** The 2026-11-09 fix for the interpolated report path chose a single fixed
+filename for every argument-less run of `constellize-craft:test-coverage` and wrote, in the skill
+itself, that this is "the ordinary case when another skill delegates to this one". It is: the usual
+caller is `constellize-feature:verify`. So every feature verified in a project wrote
+`llm/construction/quality/coverage-report.md`, and the second erased the measurement the first
+feature's gate 1 verdict rests on. Acceptance 6's second clause — "two features never share an
+artifact path", spec §8 item 6 and §6.6b — is exactly that. The sibling
+`constellize-design:code-generation-plan` was fixed the same day from the same finding and chose the
+opposite rule, stating "a plan must never overwrite another gap's" outright. Only `test-coverage`
+collapsed, and only a project with two features in it shows the difference.
+
+**What shipped, in two halves, because they fail differently.**
+
+- **`test-coverage` derives a per-subject slug**, from the `\$0` argument when one was supplied and
+  otherwise from what the caller described inline — its sibling's rule, in its sibling's words — and
+  keeps the fixed path only for the case where nothing at all can be named. It now says that two
+  features must never slug to the same name and that a report must never overwrite another
+  feature's. Both places that *documented* the path still carried the raw `coverage-report-$0.md`
+  shape, which is the shape 7 of 12 live runs copied verbatim in the original finding; both now name
+  `coverage-report-<slug>.md`.
+- **`verify` passes the feature name as that skill's first argument.** Inline derivation alone is
+  not enough, and the reason is in the previous entry's own evidence: three independent runs refused
+  the shared path and each invented a different filename, leaving the fixture's `progress.md` citing
+  two of them. Inline derivation fixes the collision and leaves the *name* to the delegate's
+  judgement, which is a second defect wearing the first one's clothes — a verdict whose evidence
+  file cannot be found from the verdict. `verify` already resolved the feature name in Phase 1, so
+  passing it makes the per-feature path a consequence of the call rather than an inference about it.
+
+**Why the asymmetry was worth keeping rather than flattening.** The obvious tidy-up would have been
+to give both skills one rule. They genuinely differ: `code-generation-plan` is invoked once per gap
+within one feature, `test-coverage` once per feature. What they share is the invariant — one
+artifact per subject, and never overwrite another subject's — so that is what was made to match,
+not the mechanism.
+
+**Verified, in this order.**
+
+- **The instrument first.** Five assertions added to `build/__tests__/coverage-report-path.test.ts`;
+  run against the **unfixed** text, 9 of that file's 28 assertions fail and 19 pass. The 19 include
+  every assertion about the sibling, which is the control: the sibling was already correct and must
+  stay untouched. After the fix, 28/28.
+- `npm test` in the factory: **426 passed, 17 suites** (421 before, +5).
+- **Line 14 of the generated `constellize-craft:test-coverage` SKILL.md is byte-identical**, sha256
+  `4e58845b30cf7682…`, which is the sentence the printed book quotes. The hunks land at generated
+  lines 56, 58 and 72, each one-line-for-one-line, so nothing above them moves. The existing
+  assertion that pins line 14 by value was already in this file and passed throughout.
+- `npm run validate:book` **PASSED**; `git -C book status` clean at `18c83e5`, so the ten tracked
+  files under `book/generated/` regenerated byte-identical.
+- `check-drift --target marketplace`: **no drift, 109 files**, taken from a factory tree whose only
+  modifications were this change's four files, with `git status` re-read at the moment of staging.
+- `generate:all` dirtied 31 files under `website/public/prompts/v1/` as finding F5 predicts, all 31
+  confined there and all 31 restored. Nothing committed in `website`. The untracked
+  `public/The_Constellize_Method.mp4` is not this session's and was left alone.
+- Pushed as factory `b84b05e` → marketplace `GENERATED_FROM` → marketplace `139617a`. CI green in
+  both repos, including the marketplace's "Skill changes bump the plugin version" step, which is why
+  **two** version bumps were needed: craft 1.1.4 → 1.1.5 and feature 1.1.0 → 1.1.1. Second time a
+  single fix has spanned two plugins.
+
+**One check that mattered more than it looked.** Before changing the filename convention, the
+question is who reads the old one. The harness assessor reads nothing under `llm/construction/quality/`
+at all — `tier1.ts` has no reference to it, unlike `code-generation-plan`, where the fallback name
+had to match an existing assessor contract. And `verify` consumes `test-coverage`'s verdict from its
+report in the session, never from the file, so no consumer was pointed at the path being changed.
+Had either been otherwise, the fix would have broken assessment silently.
+
+**What this does not do: it does not check Task C9 Step 3.** The rule is shipped; the step is a
+measurement. Re-running acceptance 6 end to end against craft 1.1.5 / feature 1.1.1 is what would
+check it, and the thing to look for is two distinct `coverage-report-*.md` filenames where the last
+run produced one shared path and three improvised names. A rule changed in response to a failed
+measurement cannot check the measurement.
+
 ## Left open after the 2026-11-09/10 entries above
 
 This section was written as part of the first entry and is kept here, consolidated, because the
@@ -3224,7 +3310,16 @@ second entry closed one of its items. It is the current open list, not a histori
   *this* session's route, not to that one.
 - `# Test Coverage Report: $0` and `# Code Generation Plan: $1` remain as report **headings** in
   the two generated skills. They are headings, not paths, so nothing lands at an undefined
-  filename; cosmetic and separate.
+  filename; cosmetic and separate. **Narrowed 2026-11-11:** `verify` now passes the feature name in
+  that position, so the craft heading resolves to a real name on the common path and only a direct
+  argument-less invocation still shows `$0`. The design one is unchanged.
+- **New, found 2026-11-11 while fixing the report path, not fixed.** `validate-test-coverage`
+  guards `\$0` and nothing guards `\$1` (`system_name`), so an unsupplied `$1` survives literally
+  into the prose of the task line — "Validate test coverage for link-expiry in `$1`". It was always
+  the case, since no caller supplied either argument, but making one-argument delegation the normal
+  route makes a surviving `$1` the normal sight rather than an edge. Prose, not a path, so no
+  acceptance criterion covers it. Same root cause as the fixed defects: an unsupplied index stays
+  literal.
 - **The memory-bank root variables** were one item here and are in fact two, with different
   severities. **`{{memory_bank_structure}}` is closed** — it was unconditionally broken rather than
   lower severity, and was fixed and shipped on 2026-11-10 as factory `2b1dda3` / marketplace
