@@ -2240,6 +2240,16 @@ Then specify and verify a second feature and confirm neither feature's artifact 
 > and `verify` themselves, which is what "a full feature run" in this step means, so this step is
 > not complete. The blocker and the two ways out are in the 2026-11-10 re-run entry below.
 
+> **Driven end to end 2026-11-10, and the box still stays unchecked — for a new reason.** With
+> `constellize-feature` installed at user scope, two uninformed runs drove
+> `constellize-feature:implement` → `verify` themselves, both to VERIFIED, which closes the gap the
+> paragraph above describes. The four files are byte-identical against the original baseline after
+> both runs and every addition matched the two named shapes, so the expectation as revised above
+> holds. What fails is the step's **second** sentence — "confirm neither feature's artifact mentions
+> the other" is satisfied, but the clause it serves, two features never sharing an artifact path,
+> is not: every delegated `verify` targets one fixed `coverage-report.md`. See the
+> 2026-11-10 end-to-end entry below.
+
 - [ ] **Step 4: Run it again with the siblings uninstalled — acceptance 8**
 
 Install `constellize-feature` alone, without `constellize-design`, `:craft`, `:deliver`,
@@ -3076,6 +3086,118 @@ the catalog and in `plugins/` while `installed_plugins.json` had no entry for it
 1.1.0 with its three orchestrator skills (`specify`, `implement`, `verify`), each byte-identical to
 this repo's copy. The earlier note that "the three orchestrators ran from the pushed marketplace
 text while their delegates ran from the cache" no longer applies to future runs.
+
+## 2026-11-10 — acceptance 6 end to end at last, and the isolation clause fails
+
+**Steve approved running Task C9 Step 3 on 2026-11-10**, after `constellize-feature` was installed
+at user scope earlier the same day, which removed one of the two blockers the re-run entry above
+names. The other blocker — headless `claude -p` with tool grants — was not needed: with the plugin
+installed at user scope the three orchestrators resolve from the cache in any freshly spawned
+process, so the runs were driven by uninformed subagents invoking
+`constellize-feature:implement` and `constellize-feature:verify` **as skills**. That is the half
+the 2026-11-10 re-run could not reach, where a briefed agent stood in for the orchestrators and
+supplied the caller's context inline.
+
+**Two full cycles, both reaching VERIFIED.** A purpose-built zero-dependency Node ESM fixture (a
+URL-shortener core: codec, store, create, resolve), 16 tests at 100% on all three dimensions before
+anything ran, the four project-level artifacts pre-placed so "byte-identical" is a real measurement,
+and two SPECIFIED features neither of which mentions the other. Baseline sha256 over all 21 files;
+a judge script classifies every file afterwards as protected-unchanged, protected-changed, expected
+addition, unexpected addition or deleted, and fails on any filename containing `$` or `:`. The judge
+was checked against the pre-run state first, where it correctly reports the one failure that should
+be there — the feature under run was never written.
+
+| run | feature | orchestrators | result |
+|---|---|---|---|
+| 1 | `link-expiry` | `implement` 7/7 phases, `verify` 7/7 | VERIFIED, 38/38 tests, 100% |
+| 2 | `custom-aliases` | `implement` 7/7 phases, `verify` 7/7 | VERIFIED, 77/77 tests, 100% |
+
+Both statuses, both suites and both Gate Results blocks were verified on disk rather than taken
+from the runs' reports: one `## Gate Results` section each, `schema` 2, gates 1–4 each once, every
+required gate PASS, gate 3 SKIPPED and not required, both surface booleans present, threshold
+`default` with `enforced: true`. Run 1's own report miscounted its file lists twice (said 2 created
+and listed 3, said 7 modified and listed 8) and flagged both itself — a reminder that the report is
+the thing being measured, not the measurement.
+
+**Clause 1 — "no feature-scoped run writes a project-level design artifact" — PASSES, twice.**
+`constellation-map.md`, `gap-analysis.md`, `scope-lock.md` and `implementation-sketches.md` are
+byte-identical to the **original** baseline after both runs, not merely after each. The delegated
+design skills took the `output_path` route in every case and owned their sections of the feature
+artifact. Every addition under `llm/construction/` matched one of the two shapes the amended
+criterion names, and no filename anywhere under `llm/` contains `$` or `:` — so the 2026-11-09
+output-path fixes hold when the real orchestrators drive the delegation, not only when a stand-in
+does. Cross-contamination is zero in both directions: neither feature artifact names the other's
+terms, and neither per-gap plan mentions the other feature.
+
+**Clause 2 — "two features never share an artifact path" — DOES NOT HOLD as the skills are
+written.** The two sibling fixes of 2026-11-09 made opposite choices for the same input, and this
+is the first run to put two features through one project and expose it:
+
+- `constellize-design:code-generation-plan` prefers **the gap the caller described inline** when the
+  argument is a sentence fragment, and says so explicitly: "two gaps must never slug to the same
+  name, and a plan must never overwrite another gap's". The fixed path is reached only "when no gap
+  can be identified at all".
+- `constellize-craft:test-coverage` says that when the argument is a fragment, "**treat it as absent
+  and use the fixed path**" — and notes this "is the ordinary case when another skill delegates to
+  this one". There is no inline-derivation step and **no never-overwrite clause**.
+
+So every delegated `verify` targets the single path `llm/construction/quality/coverage-report.md`.
+Run 1 landed there, exactly as the rule requires. The criterion's own rationale decides whether that
+matters: what acceptance 6 "was always testing is the isolation §6.6b exists to provide — that a
+feature-scoped run cannot overwrite the project's own `gap-analysis.md` **or make two features
+clobber each other**", and §6.6b uses the same words. Two features sharing the coverage report's
+path is that.
+
+**The overwrite was never observed, and the reason is the finding.** Three independent uninformed
+runs reached the rule with a report already on disk, and **all three refused it** — run 2 wrote
+`coverage-report-custom-aliases.md`, a later isolated probe wrote `coverage-report-suite.md`, and
+each reported the departure unprompted, on the grounds that compliance would destroy a verified
+feature's evidence in a working copy under no version control. None was told what was under test.
+So the collision is **definitional rather than empirical**: the rule names one literal path and
+carries no existence check, the first run does land on it, and after that compliance and data
+preservation are mutually exclusive. Attempts to observe the overwrite keep producing evidence that
+the rule is unfollowable instead.
+
+**And the practical consequence is worse than a collision.** Because each run invents its own
+departure, Gate 1's evidence path is now **non-deterministic**: `llm/construction/quality/` holds
+`coverage-report.md`, `coverage-report-custom-aliases.md` and `coverage-report-suite.md`, and the
+fixture's own `llm/memory-bank/progress.md` cites two different ones (line 40 and line 86). A later
+reader following a verdict to its evidence has no rule that tells them where it is. The amended
+criterion's glob, `quality/coverage-report*.md`, is satisfied by every one of these — which is why
+the file-classification half passes while the isolation half fails.
+
+**An irony worth recording, because it is a lesson about amendments.** The 2026-11-10 amendment that
+unblocked acceptance 6 is what blessed this path: it added `quality/coverage-report*.md` as an
+expected addition "because the coverage report is the durable record behind a Gate 1 verdict". That
+is right about the location and did not notice that the fallback rule makes the location a *single*
+path shared by every feature, so the durable record is destroyed — or displaced — by the next
+feature's verify. The `*` in the glob reads as though per-feature variants were expected, which is
+precisely what the rule prevents under delegation. **An amendment that widens a criterion to admit
+an observed behaviour should check what that behaviour does on the second run, not the first.**
+
+**A correction to the enforcement claim in the entry above, and to this session's own.** Both prior
+establishments of "the threshold is enforced" degraded **line** coverage. The dimension Gate 1's
+verdict leads with is **branch**, and it had never been exercised. Isolated here: a probe leaving one
+arm of several ternaries untaken drove branch coverage to 58.33% with lines still at 100.00%, and the
+declared test command exited 1 with `58.33% branch coverage does not meet threshold of 80%` while
+every test passed. The line dimension was re-confirmed independently. So the claim now holds for the
+dimension it is made about. Same shape as the hash-scope and trailing-`.` lessons: *which* thing a
+measurement covered is part of the measurement.
+
+**Incidental evidence for acceptance 3, unasked for.** Run 1's Phase 5 adversarial review found six
+surviving mutations in a suite at 100% on all three dimensions, the worst being `now = Date.now()`
+degraded to `now = Date.now` — one character, every link silently never expires, invisible because
+every expiry test passed `now` explicitly. Tests grew 16 → 38, then 38 → 77 in run 2, which killed
+24 of 24 mutants. The review phase earned its place rather than ratifying a green suite.
+
+**Step 3 stays unchecked.** The half that was blocked is now done and clause 1 passes end to end;
+clause 2 fails against the skills as written, and the fix is a design decision — `test-coverage` is
+never told the feature name, so a distinguishing path needs either a new argument from
+`constellize-feature:verify` or an inline-derivation rule like its sibling's. It also touches the
+skill file whose line 14 the printed book quotes, so it is Steve's call, not a session's.
+
+**No code, no generated output, no version bump.** The fixture and the three runs live in the session
+scratchpad, outside every repository; this entry is the only change.
 
 ## Left open after the 2026-11-09/10 entries above
 
