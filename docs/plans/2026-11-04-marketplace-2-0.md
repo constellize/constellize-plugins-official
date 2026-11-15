@@ -2260,6 +2260,23 @@ Then specify and verify a second feature and confirm neither feature's artifact 
 > named additions, and **two distinct `coverage-report-*.md` filenames** where the last run
 > produced one path and three improvised names. See the 2026-11-11 entry below.
 
+> **Re-run 2026-11-15 against craft 1.1.5 / feature 1.1.1. Both acceptance-6 clauses PASS. The box
+> still stays unchecked, and this time the thing in the way is this step's own wording.** Two
+> uninformed runs drove `implement` → `verify` on a *new* fixture. Clause 1: the four protected
+> artifacts byte-identical against the original baseline after **both** runs, every addition one of
+> the two named shapes, no placeholder in any filename. Clause 2: run 1 wrote
+> `coverage-report-column-alignment.md`, run 2 wrote `coverage-report-cell-truncation.md`, run 1's
+> survived run 2 **byte-identical** (`e36b7c4a…`), and the bare `coverage-report.md` was never
+> written at all. What now fails is the second sentence above, read literally — "confirm neither
+> feature's artifact mentions the other" — because this fixture's two features both extend one
+> options object, so each artifact references the other by name (8 times and 4). None of it is
+> bleed: one `# Feature:` heading each, one `## Gate Results` each, each with its own eight
+> acceptance criteria and none of the other's. Every reference is the second feature's constellation
+> map cataloguing the first feature's module as a star — the method working. **The sentence and the
+> clause it serves have swapped places since 2026-11-10**, when the sentence held and the clause
+> failed. Amending it is a judgement call about what isolation means, so it is Steve's, like
+> decision 31 before it. See the 2026-11-15 entry below.
+
 - [ ] **Step 4: Run it again with the siblings uninstalled — acceptance 8**
 
 Install `constellize-feature` alone, without `constellize-design`, `:craft`, `:deliver`,
@@ -3285,6 +3302,93 @@ check it, and the thing to look for is two distinct `coverage-report-*.md` filen
 run produced one shared path and three improvised names. A rule changed in response to a failed
 measurement cannot check the measurement.
 
+## 2026-11-15 — acceptance 6 re-run at craft 1.1.5 / feature 1.1.1: both clauses pass
+
+**Steve approved the re-run on 2026-11-13.** This is the measurement the 2026-11-11 entry said the
+fix could not stand in for.
+
+**A new fixture, not the old one.** Both earlier fixtures are post-run: features at VERIFIED, 77
+tests, coverage reports already on disk. Half-resetting one would have left a memory bank
+contradicting its own code, and pre-seeding a coverage report biases the very behaviour under test.
+So `acc6-v2` is a fresh 19-file project — `padtable`, a fixed-width table formatter, three modules
+at 25 tests and 100% on all three dimensions with the threshold enforced by the test command — with
+the four protected project-level artifacts, a five-file memory bank, and two features SPECIFIED in
+`specify`'s template order. The run therefore met text it had never seen. The two features
+deliberately both extend `renderTable`'s options object, which turned out to matter (below).
+
+**Method unchanged from the previous runs**, except for one addition. Uninformed subagents: no
+mention of `llm/construction/`, of output paths, of placeholders, of coverage-report filenames or of
+acceptance 6. Each was asked for every path it touched "character for character, even if a name
+looks odd, ugly or malformed", and told not to tidy any filename. The addition: each was told to
+**follow each skill's written instructions exactly as written, including any instruction about where
+to write a file**. That is deliberate — three runs on 2026-11-10 refused the old rule on their own
+judgement, so without it a pass would not distinguish a correct rule from an agent improvising a
+correct answer. The run measures the skill text, which is what was changed.
+
+**Clause 1 — PASS.** The four protected artifacts byte-identical against the **original** baseline
+after both runs, not merely after each. Every addition under `llm/construction/` matched one of the
+two permitted shapes: four `code-generation-plan-<slug>.md` and two `coverage-report-<slug>.md`. No
+filename anywhere contains `$` or `:`. Nothing deleted.
+
+**Clause 2 — PASS, which is the result this re-run exists for.**
+
+| after | coverage reports on disk |
+|-------|--------------------------|
+| run 1 | `coverage-report-column-alignment.md` |
+| run 2 | `coverage-report-cell-truncation.md`, `coverage-report-column-alignment.md` |
+
+Run 1's report survived run 2 **byte-identical** at `e36b7c4a…`, run 2 added one of its own, two
+distinct paths exist for two features, and the bare `coverage-report.md` was never written once.
+Where the 2026-11-10 run produced one shared path and three improvised filenames, this one produced
+two deterministic ones.
+
+**Verified independently of both reports**, as before: `npm test` run by this session — 85 tests at
+100/100/100 after run 1, 144 after run 2, exit 0 both times; status lines read from line 3 of each
+artifact; both `## Gate Results` blocks parsed; every filename taken from `find`, never from an
+agent's prose.
+
+**Run 2 ended at IMPLEMENTED, and that is the gate system working rather than a failed run.** Gate 1
+passed — which is what matters here, since gate 1 is the one that invokes `test-coverage` and writes
+the file under test. Gates 2 and 4 failed on one line: `src/table.js` reads `options.truncate` for
+truthiness, so `{ truncate: 'false' }` truncates, while the sibling `align` key on the *same object*
+is type-checked exactly and throws. Gate 2 failed it as an unvalidated external input, gate 4 as a
+second convention where one existed, and `systemPatterns.md` states the project's own rule as
+"nothing coerces". The implementation had disclosed it as an open question — measured against
+`## Design Approach` calling `truncate` a boolean, never against the recorded rule it contradicts,
+which is how it read as stylistic through a whole implementation and two adversarial reviews. Gate 4
+earning its place on an architectural rule, not a lint, is worth noting.
+
+**What this re-run did NOT establish, found only because it ran.** `verify`'s `read` field is
+asymmetric across the two runs: run 1 recorded
+`"constellize-craft:test-coverage, whose report is at llm/construction/quality/coverage-report-column-alignment.md"`,
+and run 2 recorded `"constellize-craft:test-coverage"` and nothing more. So the report path is now
+deterministic, but a verdict is **not** required to say where its evidence is. The 2026-11-11 fix
+closed the collision and the filename non-determinism; it did not close traceability, because
+nothing in the Gate Results schema asks for the path. Run 1 volunteered it. That is a smaller,
+cleaner defect than the one it replaced, and it is unfixed — see "Left open".
+
+**Incidental, and both the same lesson as the ledger's own.** Run 2's review found a comment in the
+new module attributing an "overshoot" to `src/wrap.js` that is **unreachable** there — `wrapText`
+splits on `/\s+/`, so no word can contain a tab — while the real latent defect in that arm is a
+**split surrogate pair**, invisible to the suite because both halves sit inside the column width.
+And a gate nearly failed the change for breaking "every error names what was wrong", a rule the
+memory bank asserted and six of the library's ten messages contradict, three of them predating both
+features. Checking the stated pattern against the code before failing anything is what caught it:
+the pattern was wrong, not the change.
+
+**No code, no generated output, no version bump.** The fixture, both runs and one enforcement probe
+live in the session scratchpad, outside every repository. Factory `b84b05e` and marketplace
+`058b090` are unmoved and clean, `GENERATED_FROM` still names `b84b05e`, and line 14 of the
+generated `test-coverage` SKILL.md is still `4e58845b30cf7682…`. This entry is the only change.
+
+**One instrument correction, recorded because the ledger's own lesson is about exactly this.** The
+first clause-1 judgement of run 2 reported a failure — "control feature artifact changed" — by
+comparing run 2's control against the **original** baseline, where run 1 had legitimately changed
+it. The judge was right about the bytes and wrong about which comparison the question needed. Run 2
+is judged against the state *before run 2*; the original baseline is what the four protected
+artifacts are judged against. Same shape as the drift-count lesson: a number names a comparison, and
+the comparison may not be the one being asked about.
+
 ## Left open after the 2026-11-09/10 entries above
 
 This section was written as part of the first entry and is kept here, consolidated, because the
@@ -3313,6 +3417,20 @@ second entry closed one of its items. It is the current open list, not a histori
   filename; cosmetic and separate. **Narrowed 2026-11-11:** `verify` now passes the feature name in
   that position, so the craft heading resolves to a real name on the common path and only a direct
   argument-less invocation still shows `$0`. The design one is unchanged.
+- **New, found 2026-11-15 by the re-run, not fixed.** A Gate Results verdict is not required to
+  say where its evidence is. Run 1 recorded the coverage report's path in gate 1's `read` field;
+  run 2 recorded only the skill name, because nothing in `verify`'s schema asks for the path. The
+  2026-11-11 fix made the path deterministic and left traceability optional, so a reader following a
+  verdict to its evidence may still have to guess — a smaller version of the defect it replaced.
+  The fix would be a sentence in `verify`'s Phase 3 or in the block's schema, and it is a one-line
+  prompt change plus a feature version bump.
+- **New, found 2026-11-15, needs a decision rather than a fix.** Task C9 Step 3's second sentence,
+  "confirm neither feature's artifact mentions the other", now fails literally while the clause it
+  serves passes — the inverse of 2026-11-10. Two features that share one options object reference
+  each other by name in their constellation maps, with no bleed of sections, criteria or verdicts.
+  Either the sentence means "no bleed", in which case it should say so, or it means what it says, in
+  which case the method forbids a gap analysis from noticing that two features touch the same
+  function. Steve's call, like decision 31.
 - **New, found 2026-11-11 while fixing the report path, not fixed.** `validate-test-coverage`
   guards `\$0` and nothing guards `\$1` (`system_name`), so an unsupplied `$1` survives literally
   into the prose of the task line — "Validate test coverage for link-expiry in `$1`". It was always
