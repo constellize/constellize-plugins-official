@@ -696,6 +696,16 @@ course's 100% survives as the setting Copernicus turns on.
    2026-11-06 run. Note that run predates the two output-path fixes of 2026-11-09, which removed
    the undefined `-$0`/`-$1` filenames those two expected additions used to be able to land under;
    a re-run would confirm the criterion end to end as amended.
+
+   **Confirmed by re-run, 2026-11-15. This criterion is MET.** Two uninformed runs drove
+   `constellize-feature:implement` → `verify` on a fresh fixture at craft 1.1.5 / feature 1.1.1 and
+   were judged on disk: the four named files byte-identical before and after both runs, only the two
+   expected additions, no placeholder in any filename, and the two features' coverage reports at
+   distinct per-feature paths with the first surviving the second byte-identical. The "without either
+   one's artifacts appearing in the other's" half was confirmed at paragraph level — no section,
+   criterion, verdict or copied block of one inside the other. A shared-path defect found by the
+   2026-11-10 run was fixed and shipped on 2026-11-11 before this re-run; see the project ledger's
+   2026-11-11, 2026-11-15 and 2026-11-19 entries.
 7. **The three skills run end-to-end on a non-Python project.** A feature taken from `specify` to
    VERIFIED in a TypeScript or Go repository with no skill edits. This is the test for the
    Python-shaped anti-goal, and no amount of reading the text substitutes for it. The new

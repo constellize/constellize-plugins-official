@@ -2220,7 +2220,7 @@ dependency (Gate 4).
 Expected: each is left at `**Status:** IMPLEMENTED` with that gate named. This is the test of goal 3
 — a verdict section no caller reads would pass a reading of the text and fail here.
 
-- [ ] **Step 3: Prove the project's design artifacts are untouched — acceptance 6**
+- [x] **Step 3: Prove the project's design artifacts are untouched — acceptance 6**
 
 Record `sha256` of every file under `llm/construction/` before a full feature run and compare after.
 
@@ -2231,7 +2231,16 @@ Record `sha256` of every file under `llm/construction/` before a full feature ru
 > `design/code-generation-plan-<slug>.md` and `quality/coverage-report*.md`. Anything else under
 > `llm/construction/` is a regression. See spec §8 acceptance 6 and decision 31.
 
-Then specify and verify a second feature and confirm neither feature's artifact mentions the other.
+Then specify and verify a second feature and confirm that neither one's artifacts appear in the
+other's — no section, acceptance criterion, verdict or copied block of one inside the other.
+
+> **Wording aligned 2026-11-19.** This sentence used to read "confirm neither feature's artifact
+> **mentions** the other", which predates decision 31 and is stricter than the criterion it
+> serves: spec §8 item 6 asks that two features be verifiable "without either one's artifacts
+> appearing in the other's". A mention is not an appearance. Two features that touch the same
+> function *should* reference each other in their constellation maps — not noticing is how they
+> collide — so the old phrasing would have forbidden the method working. It cost a false blocker
+> on 2026-11-15; see the correction in that entry below.
 
 > **Partly done 2026-11-10; the box stays unchecked.** Eight probe runs against the installed,
 > sha256-verified plugin bodies confirmed the file-level expectations above — the four files
@@ -2272,10 +2281,25 @@ Then specify and verify a second feature and confirm neither feature's artifact 
 > options object, so each artifact references the other by name (8 times and 4). None of it is
 > bleed: one `# Feature:` heading each, one `## Gate Results` each, each with its own eight
 > acceptance criteria and none of the other's. Every reference is the second feature's constellation
-> map cataloguing the first feature's module as a star — the method working. **The sentence and the
-> clause it serves have swapped places since 2026-11-10**, when the sentence held and the clause
-> failed. Amending it is a judgement call about what isolation means, so it is Steve's, like
-> decision 31 before it. See the 2026-11-15 entry below.
+> map cataloguing the first feature's module as a star — the method working.
+
+> **CHECKED 2026-11-19, and the blocker above was not real.** Steve asked whether any of this was
+> already being done elsewhere and what was actually his to decide; answering it meant reading spec
+> §8 item 6 rather than the paraphrase of it in this step, and the criterion he amended on 2026-11-10
+> asks that two features be verifiable **"without either one's artifacts appearing in the other's"**.
+> That was satisfied by the 2026-11-15 runs. A *mention* of a sibling feature is not an *appearance*
+> of its artifacts, and the sentence in this step that said otherwise predates decision 31. It has
+> been aligned with the criterion above.
+>
+> **Verified before ticking, and more carefully than on 2026-11-15**, when the claim rested on a
+> name-count: a paragraph-level comparison of the two artifacts found 3 identical paragraphs out of
+> 136 and 148, all three inside each artifact's *own* `## Gap Analysis` section — the delegated
+> skill's template boilerplate ("Total Gaps Identified: 2 / Critical: 2"), identical because both
+> features happened to have two critical gaps. The longest run of consecutive shared lines is **1**,
+> so no block was copied. The check flagged it as needing a look and the look settled it.
+>
+> So: clause 1 PASS, clause 2 PASS, and the isolation sentence PASS on the criterion's own wording.
+> **Steve ticked this box on 2026-11-19.**
 
 - [ ] **Step 4: Run it again with the siblings uninstalled — acceptance 8**
 
@@ -2539,6 +2563,10 @@ isolation §6.6b exists to provide, which is what the criterion was always testi
 predates the two output-path fixes, so the criterion is **not** being claimed MET off the back of
 it: a re-run would confirm it end to end as amended, and Task Step 3 above now carries the revised
 expectation. What is settled is that the criterion no longer contradicts the design.
+
+> **MET as of 2026-11-19.** The re-run this paragraph asks for happened on 2026-11-15 against craft
+> 1.1.5 / feature 1.1.1, on a fresh fixture, judged on disk — both clauses and the isolation
+> sentence pass. Task C9 Step 3 is ticked. See the 2026-11-15 entry and its 2026-11-19 correction.
 
 **One prose correction made while writing the amendment**, in the spirit of this project's own
 rule about checking changed prose against the code it describes. A first draft said the coverage
@@ -3381,6 +3409,14 @@ live in the session scratchpad, outside every repository. Factory `b84b05e` and 
 `058b090` are unmoved and clean, `GENERATED_FROM` still names `b84b05e`, and line 14 of the
 generated `test-coverage` SKILL.md is still `4e58845b30cf7682…`. This entry is the only change.
 
+> **Correction, 2026-11-19.** This entry reported Step 3 as still blocked, by its own second
+> sentence, and called amending that sentence a judgement call about what isolation means. Wrong on
+> the second part: spec §8 item 6, as amended by decision 31, asks for two features verifiable
+> "without either one's artifacts appearing in the other's", which the runs above satisfied. I had
+> been checking this step's paraphrase instead of the criterion, and a paraphrase is not a
+> criterion. Acceptance 6 is **MET**; the box is ticked. The one real finding in this entry stands
+> unchanged: a verdict is still not required to name its evidence path.
+
 **One instrument correction, recorded because the ledger's own lesson is about exactly this.** The
 first clause-1 judgement of run 2 reported a failure — "control feature artifact changed" — by
 comparing run 2's control against the **original** baseline, where run 1 had legitimately changed
@@ -3424,13 +3460,14 @@ second entry closed one of its items. It is the current open list, not a histori
   verdict to its evidence may still have to guess — a smaller version of the defect it replaced.
   The fix would be a sentence in `verify`'s Phase 3 or in the block's schema, and it is a one-line
   prompt change plus a feature version bump.
-- **New, found 2026-11-15, needs a decision rather than a fix.** Task C9 Step 3's second sentence,
-  "confirm neither feature's artifact mentions the other", now fails literally while the clause it
-  serves passes — the inverse of 2026-11-10. Two features that share one options object reference
-  each other by name in their constellation maps, with no bleed of sections, criteria or verdicts.
-  Either the sentence means "no bleed", in which case it should say so, or it means what it says, in
-  which case the method forbids a gap analysis from noticing that two features touch the same
-  function. Steve's call, like decision 31.
+- **CLOSED 2026-11-19, and it was never a product question.** This bullet reported Task C9 Step 3's
+  second sentence as failing and needing Steve's decision. Reading spec §8 item 6 rather than this
+  step's paraphrase of it settled it: the criterion asks that two features be verifiable "without
+  either one's artifacts appearing in the other's", a mention is not an appearance, and the
+  paraphrase predates decision 31. Acceptance 6 was met by the 2026-11-15 runs on every clause of
+  its own wording; the sentence has been aligned and the box is ticked. Kept here because the
+  failure was mine — I reported a paraphrase as a criterion, and it cost four days of a false
+  blocker. **Read the criterion, not the checklist's restatement of it.**
 - **New, found 2026-11-11 while fixing the report path, not fixed.** `validate-test-coverage`
   guards `\$0` and nothing guards `\$1` (`system_name`), so an unsupplied `$1` survives literally
   into the prose of the task line — "Validate test coverage for link-expiry in `$1`". It was always
