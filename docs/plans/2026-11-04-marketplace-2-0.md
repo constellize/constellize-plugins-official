@@ -3393,7 +3393,8 @@ and run 2 recorded `"constellize-craft:test-coverage"` and nothing more. So the 
 deterministic, but a verdict is **not** required to say where its evidence is. The 2026-11-11 fix
 closed the collision and the filename non-determinism; it did not close traceability, because
 nothing in the Gate Results schema asks for the path. Run 1 volunteered it. That is a smaller,
-cleaner defect than the one it replaced, and it is unfixed — see "Left open".
+cleaner defect than the one it replaced, and it was fixed and shipped on 2026-11-19 — see the entry
+below.
 
 **Incidental, and both the same lesson as the ledger's own.** Run 2's review found a comment in the
 new module attributing an "overshoot" to `src/wrap.js` that is **unreachable** there — `wrapText`
@@ -3414,8 +3415,8 @@ generated `test-coverage` SKILL.md is still `4e58845b30cf7682…`. This entry is
 > the second part: spec §8 item 6, as amended by decision 31, asks for two features verifiable
 > "without either one's artifacts appearing in the other's", which the runs above satisfied. I had
 > been checking this step's paraphrase instead of the criterion, and a paraphrase is not a
-> criterion. Acceptance 6 is **MET**; the box is ticked. The one real finding in this entry stands
-> unchanged: a verdict is still not required to name its evidence path.
+> criterion. Acceptance 6 is **MET**; the box is ticked. The one real finding in this entry — that a verdict is
+> not required to name its evidence path — was approved and shipped on 2026-11-19, feature 1.1.2.
 
 **One instrument correction, recorded because the ledger's own lesson is about exactly this.** The
 first clause-1 judgement of run 2 reported a failure — "control feature artifact changed" — by
@@ -3424,6 +3425,59 @@ it. The judge was right about the bytes and wrong about which comparison the que
 is judged against the state *before run 2*; the original baseline is what the four protected
 artifacts are judged against. Same shape as the drift-count lesson: a number names a comparison, and
 the comparison may not be the one being asked about.
+
+## 2026-11-19 — the traceability finding fixed and shipped: a gate 1 verdict names its report
+
+The one real defect the 2026-11-15 re-run found, approved by Steve and shipped. Factory `a396a2c`,
+marketplace `618d6dc`, `constellize:feature` 1.1.1 → 1.1.2, CI green, release in the local cache and
+sha-verified against the pushed tree.
+
+**The defect, restated from the evidence.** Both runs wrote their coverage report to a per-feature
+path, which is what the 2026-11-11 fix was for. Only one of them said so. Run 1's gate 1 entry
+recorded `"read": "constellize-craft:test-coverage, whose report is at
+llm/construction/quality/coverage-report-column-alignment.md"`; run 2's recorded
+`"read": "constellize-craft:test-coverage"` — which is **verbatim what the block template showed**.
+Nothing in the prompt asked for the path, so run 2 was not deviating; it was copying. And the
+2026-11-11 fix is what made the omission bite: while every delegated run wrote to one shared
+filename, naming the skill identified the file. One report per feature means the skill's name
+narrows a verdict to nothing.
+
+**Three changes, all prose, all in `verify`:**
+
+- **Phase 3** now requires the report's path in the gate's `read` field — "the path, not the skill's
+  name on its own" — taken from what the delegate reported or from the file it left on disk, and
+  **never composed from the feature name**. That last clause is the one that matters most: a
+  verifier that builds a plausible path from the name it passed in records a path it never read,
+  which is a fabricated citation that looks exactly like a real one.
+- **The block template's gate 1 `read`** shows a path rather than a bare skill name. Leaving the
+  template alone would have put the new sentence in direct conflict with the example beside it, and
+  the example is what the live run copied.
+- **The field documentation** states the general rule — where a gate's evidence is a file, that
+  gate's entry gives the file's path — and says plainly that **the assessor does not parse `read`**,
+  which is why the prompt is the only place the requirement can live. Written down so the next
+  editor does not read the paragraph as decoration some validator enforces.
+
+**No assessor contract changed.** `tier1.ts` reads nothing from the `read` field — checked before
+writing the sentence, not after. This is audit evidence for a human following a verdict to the file
+it rests on, which is why no amount of schema validation would have caught the asymmetry and why
+the fix had to be text.
+
+**The instrument was checked before the fix was believed.** The five new assertions in
+`coverage-report-path.test.ts` were run against the **pre-fix** prompt text, recovered with
+`git show b84b05e:…`: all five fail there, including the one that forbids the exact literal
+`"read": "constellize-craft:test-coverage",` that the live run copied. 430 factory tests pass. Line
+14 of the generated `test-coverage` SKILL.md is still `4e58845b30cf7682…`, `git -C book status` is
+clean, the finding-F5 website dirt was confined to `public/prompts/v1/` and restored (`website`
+clean, `GENERATED_FROM` still `0d97085`), and the frozen refs are intact: marketplace `v1` =
+`8f470b2`, `v1.0.0` = `43212a2`, factory `v1` = `69dffee`.
+
+**What this does NOT establish, stated because the ledger's own rule says to.** The text now
+requires the path; no live run has been judged on whether an agent writes it. Every verification
+above is of the prompt, the release and the test instrument. The proof that would close it is the
+same shape as the 2026-11-15 proof: an uninformed `verify` run on a fresh fixture, judged on the
+`read` field that lands on disk rather than on what the session says. Until that runs, this is a
+fixed prompt and an unverified behaviour — which is precisely the distinction the 2026-11-10 entries
+were written to stop blurring.
 
 ## Left open after the 2026-11-09/10 entries above
 
@@ -3453,13 +3507,14 @@ second entry closed one of its items. It is the current open list, not a histori
   filename; cosmetic and separate. **Narrowed 2026-11-11:** `verify` now passes the feature name in
   that position, so the craft heading resolves to a real name on the common path and only a direct
   argument-less invocation still shows `$0`. The design one is unchanged.
-- **New, found 2026-11-15 by the re-run, not fixed.** A Gate Results verdict is not required to
+- **CLOSED 2026-11-19, found 2026-11-15 by the re-run.** A Gate Results verdict was not required to
   say where its evidence is. Run 1 recorded the coverage report's path in gate 1's `read` field;
-  run 2 recorded only the skill name, because nothing in `verify`'s schema asks for the path. The
-  2026-11-11 fix made the path deterministic and left traceability optional, so a reader following a
-  verdict to its evidence may still have to guess — a smaller version of the defect it replaced.
-  The fix would be a sentence in `verify`'s Phase 3 or in the block's schema, and it is a one-line
-  prompt change plus a feature version bump.
+  run 2 recorded only the skill name, because nothing in `verify`'s schema asked for the path and
+  the block template showed exactly that. The 2026-11-11 fix made the path deterministic and left
+  traceability optional, so a reader following a verdict to its evidence could still have to guess.
+  Fixed and shipped as factory `a396a2c` / marketplace `618d6dc`, feature 1.1.2, CI green — see the
+  entry above, including the one thing it does not establish: the text requires the path, and no
+  live run has yet been judged on whether an agent writes it.
 - **CLOSED 2026-11-19, and it was never a product question.** This bullet reported Task C9 Step 3's
   second sentence as failing and needing Steve's decision. Reading spec §8 item 6 rather than this
   step's paraphrase of it settled it: the criterion asks that two features be verifiable "without
