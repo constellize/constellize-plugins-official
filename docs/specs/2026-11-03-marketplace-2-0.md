@@ -11,7 +11,12 @@ saw.) The two amendments below rest on his separate "narrow 13, keep card" decis
 and are unaffected either way.
 **Date**: 2026-11-03; revision 3 landed 2026-11-04. All tree checks were made on 2026-11-03 against
 the commits named in §15, which is also what §5a's book baseline was measured at.
-**Sequence**: project 1 (done) → 1.5 (done) → **2** → 4 (delivery) → 3 (Copernicus)
+**Sequence**: project 1 (done) → 1.5 (done) → **2** → 4 (Copernicus) → 3 (delivery)
+(Steve settled the labelling on 2026-11-19: **4 is Copernicus and the course, 3 is delivery**, which is
+what this spec's body has always said; project 5, our own harness-engineering curriculum, is part of or
+the same as 4 and holds no slot of its own. This line had been flipped to `4 (delivery)` on 2026-11-10.
+Note the consequence, which is not yet settled: with the agreed order the course now comes **before**
+delivery, where the 2026-10-28 reorder intended it last.)
 
 > Written without a brainstorming interview. Steve chose on 2026-11-03 to have the design written
 > from the memory bank rather than answer questions first, so **every decision below is the
@@ -662,6 +667,41 @@ course's 100% survives as the setting Copernicus turns on.
    violates it is left IMPLEMENTED with that gate named. This is the test of goal 3, and the
    "gate still cannot fail" anti-goal is exactly what it rules out. A verdict section no caller
    reads would pass a reading of the text and fail this.
+
+   **Amended 2026-11-19.** This criterion originally required the demonstration "one gate at a
+   time" for all four gates. Two of the four cannot be isolated, for reasons that are properties of
+   the gates rather than defects in them, so the criterion as written was unsatisfiable:
+
+   - **Gate 2 cannot fail alone.** A swallowed failure violates `defensive-programming` *and* the
+     project's own recorded `systemPatterns.md`, so gate 4's `architectural-consistency` fails with
+     it. That is the gates agreeing, not a defect. The criterion as written could never be met for
+     gate 2 in any project whose memory bank records defensive rules -- which is every project the
+     method would approve of.
+   - **Gate 3 cannot practically fail alone.** Isolating it needs a fixture with a real operational
+     surface *and* health checks, monitoring and health reporting already in place: an application,
+     not a fixture.
+
+   **Steve amended it on 2026-11-19** to require isolation only where the gates are independent, and
+   to record the coupling with its reason where they are not. What the criterion tests is that each
+   gate can fail, names itself and its finding, leaves the artifact at IMPLEMENTED, and is agreed
+   with by the harness assessor parsing the block independently.
+
+   **MET on the 2026-11-06 evidence, as amended.** All four gates produced a FAIL in a live run,
+   each naming its gate and its finding, each leaving the artifact at IMPLEMENTED, with the
+   assessor's `failedGates` listing that gate: gate 1 in `fix-iso1`, gate 2 in `fix-iso2`, gate 3 in
+   `fix-gate3`, gate 4 in `fix-iso4`. Isolation was demonstrated for the two independent gates --
+   `fix-iso4` -> `failed=[4]` and `fix-iso10` -> `failed=[1]`, each with the other required gates
+   passing. Gates 1, 2 and 4 were also observed passing (`fix-clean`, `fix-th-default`), and
+   `fix-clean` reached VERIFIED with the assessor reporting `complete`, so the workflow can say yes
+   as well as no.
+
+   **One residual, recorded rather than closed: gate 3 has never been observed PASSING.** No fixture
+   was genuinely deployment-ready, so gate 3's *determination* is proven -- `required=false` /
+   `SKIPPED` with the determination as its reason in every no-deployment fixture, and `required=true`
+   in the one with a deployment surface -- while its pass verdict is not. This criterion asks only
+   that each gate can fail, so the residual does not hold it open; it is written here so it is not
+   later mistaken for proven.
+
 4. **No existing skill lost any constructive content.** For each of the 12 skills that gain a verdict, the diff
    is additive: a verdict section appended, nothing removed or reworded. Checkable mechanically.
 5. **Every existing caller of the three artifact skills is unaffected** by the new output-path

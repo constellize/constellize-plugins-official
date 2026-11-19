@@ -2212,7 +2212,7 @@ Expected: `llm/features/<name>.md` at `**Status:** VERIFIED` with a complete `##
 > fail gate 3 on both. If acceptance 3 Step 2 is run here, fix these first or gate 3 will fail for
 > the wrong reason.
 
-- [ ] **Step 2: Make each gate fail, one at a time — acceptance 3**
+- [x] **Step 2: Make each gate fail, one at a time — acceptance 3**
 
 Four features, each violating one gate: coverage below the threshold (Gate 1); an unvalidated
 external input (Gate 2); a hardcoded environment-specific value (Gate 3); an unjustified new
@@ -2301,7 +2301,7 @@ other's — no section, acceptance criterion, verdict or copied block of one ins
 > So: clause 1 PASS, clause 2 PASS, and the isolation sentence PASS on the criterion's own wording.
 > **Steve ticked this box on 2026-11-19.**
 
-- [ ] **Step 4: Run it again with the siblings uninstalled — acceptance 8**
+- [x] **Step 4: Run it again with the siblings uninstalled — acceptance 8**
 
 Install `constellize-feature` alone, without `constellize-design`, `:craft`, `:deliver`,
 `:memory` or `:harness`.
@@ -2309,20 +2309,20 @@ Expected: each phase falls back to advisory, printing the command and naming wha
 verifying what the step should have produced. Nothing fails silently. The state file is resumable,
 which is what makes this work.
 
-- [ ] **Step 5: Prove the evidence check, both ways — acceptance 9**
+- [x] **Step 5: Prove the evidence check, both ways — acceptance 9**
 
 A failing gate leaves the status IMPLEMENTED. Then hand-edit an artifact to `**Status:** VERIFIED`
 with a gate-results block missing a required gate's verdict, and run `constellize-harness:assess`.
 Expected: `VERIFIED (unsubstantiated)`, with the missing gate named.
 
-- [ ] **Step 6: Prove a stricter declared threshold is enforced — acceptance 10**
+- [x] **Step 6: Prove a stricter declared threshold is enforced — acceptance 10**
 
 Write `llm/constellize.json` with `{"coverageThreshold": {"branch": 100}}` on a feature measuring
 85%.
 Expected: verification fails where the default would have passed. Then set `{"branch": 50}` and
 confirm the declaration is **refused** and the default 80 applies (Review Focus 1).
 
-- [ ] **Step 7: Prove the assessor's own tests run in CI — acceptance 15**
+- [x] **Step 7: Prove the assessor's own tests run in CI — acceptance 15**
 
 Run: `npx jest`
 Expected: all suites pass, including `assessor-features`, `gate-verdicts`, `feature-prompts`,
@@ -2330,7 +2330,7 @@ Expected: all suites pass, including `assessor-features`, `gate-verdicts`, `feat
 `check-drift` suites. The factory's CI runs `npm ci`, `check-determinism.sh` and `npx jest`, so these
 now gate the factory.
 
-- [ ] **Step 8: Record the results**
+- [x] **Step 8: Record the results**
 
 Write the outcome of each acceptance into the memory bank
 (`memory-bank/activeContext.md` and `progress.md`) with
@@ -3528,6 +3528,139 @@ judgement ran against a complete fixture and printed PASS, which it could not ha
 protected artifacts missing. What is gone is *re-derivability* — nobody can re-run that judgement
 from the artefacts today, so entry `ecae3e2` and the spec note are the record of record. **A
 measurement whose evidence will be cited for weeks does not belong in a scratchpad.**
+
+## 2026-11-19 — the last four acceptance criteria closed, on Steve's four decisions
+
+**All 18 acceptance criteria are now met.** Steve settled four questions this day and the work below
+carries them out. Nothing in the product changed: this entry is measurement and record only.
+
+**His four decisions, as given.**
+
+1. **Acceptance 3: amend the criterion** rather than keep re-running it.
+2. **Re-verify 9 and 10 only** — the two the gate-1 and assessor changes of 2026-11-10 actually
+   touched. Keep 8's 2026-11-06 result, whose fallback mechanism did not change, and tick 15 on
+   today's evidence.
+3. **Update the memory bank after the re-runs**, so one pass records final numbers.
+4. **Project 4 is Copernicus and the course; project 3 is delivery.** Project 5, our own
+   harness-engineering curriculum, is "part or equal to" project 4 and holds no slot of its own.
+
+### Acceptance 3, amended and met
+
+The amendment is in **§8 item 3 of the spec, beside the criterion**, not only here. That placement is
+deliberate: criterion 6 cost four days because an amendment sat in one place and a paraphrase of it in
+another, and a later reader checks the criterion, not the ledger.
+
+What it now requires: each gate can fail, names itself and its finding, leaves the artifact at
+IMPLEMENTED, and is agreed with by the assessor parsing the block independently — with **isolation
+demonstrated only where the gates are independent, and the coupling recorded with its reason where
+they are not**. Two of the four cannot be isolated, and both reasons are properties of the gates:
+
+- **Gate 2 cannot fail alone.** A swallowed failure violates `defensive-programming` *and* the
+  project's own recorded `systemPatterns.md`, so gate 4's `architectural-consistency` fails with it.
+  The criterion as written could never be met for gate 2 in any project whose memory bank records
+  defensive rules — which is every project the method would approve of.
+- **Gate 3 cannot practically fail alone.** Isolating it needs a real operational surface *and*
+  health checks, monitoring and reporting already in place: an application, not a fixture.
+
+MET on the 2026-11-06 evidence as amended: all four gates failed naming themselves with the
+assessor's `failedGates` agreeing, and `fix-iso4` -> `failed=[4]` and `fix-iso10` -> `failed=[1]` give
+the two independent isolations. **One residual is recorded rather than closed: gate 3 has never been
+observed PASSING.** Its determination is proven; its pass verdict is not. The criterion asks only
+that each gate can fail, so this does not hold it open — it is written down so it is not later
+mistaken for proven.
+
+### Acceptance 9, re-verified both ways at harness 1.3.0
+
+Run with the instrument the skill itself invokes, `node <harness>/scripts/assess.mjs --format json`,
+over two artifacts identical apart from one gate entry:
+
+| fixture | status | evidence | missingGates |
+|---|---|---|---|
+| gate 4's verdict dropped | `VERIFIED (unsubstantiated)` | `incomplete` | `[4]` |
+| control, gate 4 present | `VERIFIED` | `complete` | `[]` |
+
+**The control is the point.** Without it, "unsubstantiated" could have been the assessor's only
+answer; the pair shows it discriminates. The criterion's other half — a failing gate leaves the status
+IMPLEMENTED — came from the acceptance-10 runs below, which both left IMPLEMENTED with the failing
+gates named.
+
+### Acceptance 10, re-verified in a controlled A/B
+
+Two fixtures differing in **exactly one line**, the declared `coverageThreshold.branch`, 100 against
+50. Identical uninformed prompt, saying nothing about thresholds. The feature measures 92.1% branch
+with all error paths tested and lint clean. Judged on disk from the written block, not from either
+session's account of itself.
+
+| | strict (declares 100) | loose (declares 50) |
+|---|---|---|
+| `threshold.source` | **declared** | **default** |
+| `threshold.branch` | **100** | **80** |
+| `threshold.enforced` | false | false |
+| gate 1 | FAIL | FAIL |
+| status | IMPLEMENTED | IMPLEMENTED |
+
+The declared 100 was honoured and failed the gate at 92.1%; the declared 50 was **refused** for being
+below the floor and the default 80 applied, which is Review Focus 1's second half. Both blocks are
+`schema: 2` carrying `enforced`, so the 2026-11-10 defect-4 work is exercised too — the strict run
+recorded in the session that a declared threshold nothing enforces fails gate 1 by itself, and the
+loose run that an *undeclared* one that nothing enforces does not.
+
+**Caveat, stated rather than buried.** Gate 1 failed in the loose run as well, on a different
+dimension — critical-logic coverage 70%, the three non-default display styles having no test. Branch
+passed the default. So the loose run demonstrates the refusal and the threshold in force, not a
+VERIFIED outcome. The criterion asks for the former.
+
+### Acceptance 15 and 8
+
+**15** is met on today's evidence: the factory workflow runs `npm ci`, `check-determinism.sh` and
+`npx jest`, and CI is green at factory `a396a2c` with 430 tests passing locally. **8** keeps its
+2026-11-06 result by Steve's decision — the isolation mechanism it tested is untouched by the four
+releases since.
+
+### Two instrument faults found on the way, both mine
+
+1. **The first fixture pair declared no `lintCommand`.** `verify` asks rather than guessing one,
+   because a wrong lint command that exits 0 would read as a pass. Both runs stopped at that question
+   and wrote no block. A fixture defect, not a product defect — but it cost a full pair of runs.
+2. **My own judge was wrong before either run was.** It required the ```` ```json ```` fence
+   immediately after the `## Gate Results` heading; both runs wrote three lines of prose in between,
+   so it reported "no block written" when the block was there at line 61. I nearly passed that on as
+   a product failure. **Read what a judge compared before passing its failure on.**
+
+Incidentally, the gates found three defects in the first fixture that were **not** planted: `digits:
+NaN` passing a numeric range check, unvalidated `options` and flags, and `compact` combined with
+`clamp` returning `150%`. Two independent uninformed runs found them. That is evidence the gates
+discriminate, which is what acceptance 3 is about.
+
+### A plan box is not a criterion
+
+C9 **Step 2** was the box still showing `[ ]`, and Step 2 is acceptance 3 — which led a session to
+report "7 is the only one outstanding" when 7 had been met since 2026-11-10 and ticked. A box can lag
+an amendment, which is exactly what happened to criterion 6's paraphrase. The five measurement boxes
+are now ticked; **Step 8 stays open** until the memory-bank pass, which is the one thing it asks for.
+
+### Where the 2026-11-15 verdict now rests
+
+The acceptance-6 fixture was partly eaten by the scratchpad's temp reaper afterwards: 13 files
+including the four protected artifacts and the baseline sha file itself. **The measurement was
+complete when it ran** — the judge compared sha256 against the pre-run baseline and printed PASS,
+which it could not have done had any been missing — but the verdict is **no longer re-derivable from
+the artefacts**. It rests on the recorded judge output in `ecae3e2` and the spec note. That is an
+argument for the ledger being the record of record, not for amending anything. Evidence for the runs
+in this entry was therefore copied out of the scratchpad as it was made, to the shared notes folder:
+`acceptance-9-10-reverify-2026-11-19.md`, `acceptance-10-reverify-2026-11-19.md` and the two artifacts.
+
+### The numbering, and a consequence that is not settled
+
+The spec's sequence line now reads `4 (Copernicus) -> 3 (delivery)`, which is what the body always
+said in its eight references. The line had been flipped the other way on 2026-11-10 in `d4510b3` as a
+"restore"; this is its third edit, and it is now Steve's own decision rather than an inference, so it
+should not be flipped again without him.
+
+**The consequence, flagged and left open:** with the agreed order 1 -> 1.5 -> 2 -> 4 -> 3, the course
+now comes **before** delivery, where the 2026-10-28 reorder intended the course rework last. Every
+source agrees the course was moved to last; only the labelling was ever in doubt. Both cannot hold.
+This is Steve's to settle and nothing here assumes an answer.
 
 ## Left open after the 2026-11-09/10 entries above
 
