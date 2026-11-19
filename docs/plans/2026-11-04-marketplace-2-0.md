@@ -3475,9 +3475,59 @@ clean, `GENERATED_FROM` still `0d97085`), and the frozen refs are intact: market
 requires the path; no live run has been judged on whether an agent writes it. Every verification
 above is of the prompt, the release and the test instrument. The proof that would close it is the
 same shape as the 2026-11-15 proof: an uninformed `verify` run on a fresh fixture, judged on the
-`read` field that lands on disk rather than on what the session says. Until that runs, this is a
-fixed prompt and an unverified behaviour — which is precisely the distinction the 2026-11-10 entries
-were written to stop blurring.
+`read` field that lands on disk rather than on what the session says. **That proof was then run the
+same day — see the paragraph below.** Until it was, this was a fixed prompt and an unverified
+behaviour, which is precisely the distinction the 2026-11-10 entries were written to stop blurring.
+
+**Behaviour confirmed by probe, 2026-11-19, same day.** An uninformed subagent was told to verify
+one IMPLEMENTED feature and to follow each skill's written instructions exactly, and was told
+nothing about `read` fields, paths or evidence; it was asked to report only the status and the gate
+verdicts. Judged on disk, gate 1's entry reads
+`"constellize-craft:test-coverage, whose report is at llm/construction/quality/coverage-report-cell-truncation.md"`,
+that file exists, it is the per-feature path rather than the fixed fallback, and the report's own
+first lines record the subject as having arrived in the `$0` argument — so the 2026-11-11 half is
+visible in the same run. Gate 1 PASSED with `enforced: true`, established by the delegate degrading
+coverage to 47.66% and seeing the test command exit 1. Gates 2 and 4 failed on the surviving
+`options.truncate` truthiness defect, which is the fixture's, not the fix's, and the block was
+written anyway — which is what put gate 1's entry on disk to be read. The subagent loaded
+`constellize-feature/1.1.2` from the plugin cache (once in its transcript, `1.1.1` not at all) and
+read neither this repository nor `prompt-factory`, so the sentence it followed was the released one
+and not the source of the fix.
+
+**Two things were done to the fixture to make that a real test, and both matter.** The subject's
+existing `## Gate Results` block was removed, so this was a *first-time* verify of an IMPLEMENTED
+feature — the situation run 2 was in, not a re-run with a block to copy. And the sibling
+`column-alignment` artifact's gate 1 `read`, the one place on disk that already showed the path,
+was reduced to the bare skill name. **Every precedent the agent could find modelled the defect**,
+so a path appearing in the new block could only have come from the prompt. Without that second
+step a pass would not have distinguished the new instruction from imitation of run 1.
+
+**What the probe still does not settle:** n = 1. One run following the sentence is evidence the
+sentence works, not that it always will; the 2026-11-15 failure was also one run out of two.
+
+**One false note in the probe's own report, worth recording because it is the recurring lesson.**
+The subagent reported that the 2026-11-15 run "never wrote a `## Gate Results` block, so the
+feature carried an unevidenced status for four days". The absence was real and the cause was wrong:
+**the block was there until the probe's own setup removed it.** An agent that finds a hole will
+explain it, and its explanation reaches for the project's history rather than the instrument it is
+standing in. Same shape as the drift count and the control-feature baseline: read what was compared
+before passing a finding on.
+
+**The 2026-11-15 fixture had to be rebuilt first, and that is a lesson about where evidence lives.**
+The scratchpad's temp reaper had removed 13 of its files — `src/width.js`, `src/align.js`,
+`src/wrap.js`, `package.json`, `llm/constellize.json`, two test files, `projectbrief.md`, the four
+protected requirement artifacts — **and `v2-baseline.txt`, the sha256 baseline the acceptance-6
+judgement was made against**. Most of it came back verbatim: that fixture was written with shell
+heredocs, so the original bytes were still in this session's transcript and were replayed from it.
+Only `src/align.js` could not be — a subagent wrote it, so it never passed through the transcript —
+and it was reconstructed from its 146-line unit test and the alignment cases in `table.test.js`;
+the suite is back to 144 tests at 100% line, branch and function on all five modules, which is
+strong evidence the reconstruction matches, since a wrong shape would not reach 100% branch against
+tests written for the original. **This does not disturb the acceptance-6 verdict**: the 2026-11-15
+judgement ran against a complete fixture and printed PASS, which it could not have done with the
+protected artifacts missing. What is gone is *re-derivability* — nobody can re-run that judgement
+from the artefacts today, so entry `ecae3e2` and the spec note are the record of record. **A
+measurement whose evidence will be cited for weeks does not belong in a scratchpad.**
 
 ## Left open after the 2026-11-09/10 entries above
 
@@ -3513,8 +3563,9 @@ second entry closed one of its items. It is the current open list, not a histori
   the block template showed exactly that. The 2026-11-11 fix made the path deterministic and left
   traceability optional, so a reader following a verdict to its evidence could still have to guess.
   Fixed and shipped as factory `a396a2c` / marketplace `618d6dc`, feature 1.1.2, CI green — see the
-  entry above, including the one thing it does not establish: the text requires the path, and no
-  live run has yet been judged on whether an agent writes it.
+  entry above. **The behaviour was then confirmed the same day** by an uninformed first-time `verify`
+  run judged on disk, against a fixture where every precedent showed the defect; what that leaves is
+  n = 1, not an open defect.
 - **CLOSED 2026-11-19, and it was never a product question.** This bullet reported Task C9 Step 3's
   second sentence as failing and needing Steve's decision. Reading spec §8 item 6 rather than this
   step's paraphrase of it settled it: the criterion asks that two features be verifiable "without
