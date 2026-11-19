@@ -73,7 +73,7 @@ Then state both determinations as booleans. **Silence is not a determination**: 
 
 ### Phase 3: Gate 1 — test integrity
 
-Invoke `constellize-craft:test-coverage`, **passing the feature name as its first argument**, and read the verdict and the numbers it reports. That argument is what keeps the report it writes at a per-feature path: with nothing in that position the skill has to infer its subject from what you described inline, and two features verified in one project would otherwise write the same report and overwrite each other's evidence — leaving this gate's verdict pointing at a file that describes a different feature. **Gate 1 consumes that verdict; it never runs a coverage command of its own**, for any language or tool. The measurement belongs to that skill, and a second measurement made here would be a different number from the one the project's own gate reports.
+Invoke `constellize-craft:test-coverage`, **passing the feature name as its first argument**, and read the verdict and the numbers it reports. That argument is what keeps the report it writes at a per-feature path: with nothing in that position the skill has to infer its subject from what you described inline, and two features verified in one project would otherwise write the same report and overwrite each other's evidence — leaving this gate's verdict pointing at a file that describes a different feature. **Then record the path of the report it wrote in this gate's `read` field** — the path, not the skill's name on its own. A per-feature filename is only traceable if the verdict says which file it rests on: a reader who finds several coverage reports under `llm/construction/quality/` and a verdict naming none of them cannot tell which one was measured, and the evidence is as good as unnamed. Take the path from what the skill reported, or from the file it left on disk; never compose it from the feature name and assume it matches. **Gate 1 consumes that verdict; it never runs a coverage command of its own**, for any language or tool. The measurement belongs to that skill, and a second measurement made here would be a different number from the one the project's own gate reports.
 
 What is yours is the comparison, and only when the project has declared a threshold stricter than the default:
 
@@ -232,7 +232,7 @@ The `## Gate Results` section, replacing the one already there or appended as th
       "required": true,
       "verdict": "PASS",
       "measured": "<the numbers test-coverage reported, against the threshold above>",
-      "read": "constellize-craft:test-coverage",
+      "read": "constellize-craft:test-coverage, whose report is at <the report path it wrote>",
       "at": "<ISO 8601 timestamp>"
     },
     {
@@ -274,6 +274,7 @@ Every field above is written every run. What each one is for:
 - `"enforced"` is a boolean, every run, and says whether the project's own test command fails when a dimension drops below the threshold in force — not whether the numbers are above it today. `false` is an ordinary, honest value for a project that declared nothing and guards nothing; it is a failure only against a declaration. Omitting it, or writing anything but a boolean, makes the evidence incomplete: silence is not "not enforced", for the reason silence is not "no deployment surface".
 - `"surface"` records `"operational"` and `"deployment"` as booleans and `"reason"` as the evidence behind them. Both booleans, every run, including the fail-safe `true`.
 - Each gate entry carries `"gate"` as a positive integer, `"required"`, `"verdict"`, `"measured"`, `"read"` and `"at"`. `"verdict"` is `"PASS"`, `"FAIL"` or `"SKIPPED"`, and `"SKIPPED"` is only ever used for a gate that was not required.
+- `"read"` names what the verdict rests on, and **where a gate's evidence is a file, that gate's entry gives the file's path**. Gate 1's `read` carries the coverage report's path, so the numbers in its `"measured"` can be traced back to the file they were read from. A `"read"` holding a skill's name and nothing else leaves a reader nothing to check — and the assessor does not parse this field, which is precisely why nothing downstream will catch the omission for you.
 - The `"gates"` array holds one entry per gate, 1 through 4, each gate exactly once.
 - The fence opens with ` ```json ` — that exact info string — and it is closed. A fence that is never closed, or that opens with anything else, records nothing the assessor can read, so the evidence is absent and a VERIFIED status over it is unsubstantiated.
 
