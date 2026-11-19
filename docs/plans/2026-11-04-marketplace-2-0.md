@@ -2163,6 +2163,8 @@ Expected: `llm/features/<name>.md` at `**Status:** VERIFIED` with a complete `##
 >    Constellize scaffolding. `llm/constellize.json`, `llm/features/json-output.md`,
 >    `llm/memory-bank/progress.md` and everything under `llm/construction/` were created during the
 >    run. A from-zero `init` run is still untested on a non-Python project.
+>    **Closed 2026-11-19** — run from zero on a bare TypeScript fixture; see the
+>    2026-11-19 `init` entry below for the result and the two findings it turned up.
 > 2. `constellize-feature` is **not in the installed plugin cache** — the cache holds
 >    `constellize-craft`, `-deliver`, `-design`, `-grow`, `-harness` and `-memory` (all at the
 >    released versions, design at 1.1.2) but not `-feature`. The three feature skills were
@@ -3662,6 +3664,85 @@ now comes **before** delivery, where the 2026-10-28 reorder intended the course 
 source agrees the course was moved to last; only the labelling was ever in doubt. Both cannot hold.
 This is Steve's to settle and nothing here assumes an answer.
 
+## 2026-11-19 — from-zero `init` on a non-Python project: the last acceptance-7 deviation closed
+
+Nothing shipped. This closes the first of the two deviations recorded under the acceptance-7 entry
+above — `constellize-harness:init` was never exercised there, because the `tabula` fixture already
+carried a committed `llm/memory-bank/`. **`init` works from zero on a TypeScript project**, and two
+findings came out of running it that are worth more than the deviation was.
+
+### The instrument, checked before the measurement
+
+- Fixture `tempo`: TypeScript 5.3.3 `strict` + `noUncheckedIndexedAccess`, CommonJS, jest 29 +
+  ts-jest, eslint 8, npm scripts (`test`, `test:coverage`, `lint`, `typecheck`, `build`). No Python:
+  `find` for `*.py`, `requirements*.txt` and `pyproject.toml` returned nothing.
+- **Nothing Constellize in it beforehand**, which is the whole point of a from-zero run and so was
+  verified rather than assumed: `find` for any `llm`, `constellize*`, `memory-bank` or `features`
+  path returned nothing. Committed clean first, so every creation shows up as one untracked `llm/`.
+- The skill resolved from the **plugin cache at harness 1.3.0** — `installed_plugins.json`
+  installPath `…/constellize-harness/1.3.0`, the released version — not from this repository and not
+  from `prompt-factory`.
+- The assessor was read before being run against a real repo: no `writeFileSync`, `mkdirSync`,
+  `appendFileSync`, `rmSync` or `unlinkSync`, and its one `execSync` is a git wrapper
+  (`tier1.ts:25`) whose callers pass only `rev-parse`, `symbolic-ref`, `log`, `status --porcelain`,
+  `rev-list` and `diff --name-only`. Read-only by construction.
+
+### What the run produced
+
+Bare: `memoryBank: absent` (all six missing), `construction: absent`, `features.count: 0`,
+`projectType: library`, `situation: brownfield-no-context`, flags `[brownfield, no-ci]`.
+
+Created, following the skill's four steps: `llm/memory-bank/`, `llm/construction/{design,
+requirements,archive}/`, `llm/features/`, and the six memory-bank files with headings and
+placeholder sections, `techContext.md` pre-populated from the assessment.
+
+- **Idempotent, measured rather than taken from the skill's own claim:** a second pass created
+  nothing and left all six files byte-identical by sha256.
+- **Post-init:** `memoryBank: complete`, all six `present`, `missing: []`,
+  `situation: feature-work`, and the first recommendation routes to ordinary feature development.
+  So the state `init` leaves is the state the rest of the harness expects to find.
+
+### Finding 1 — `hasTests` is a false negative for the idiomatic jest layout
+
+`scripts/tier1.ts:540` is `const hasTests = TEST_DIRS.some((d) => exists(root, d));` with
+`TEST_DIRS = ["test", "tests", "__tests__", "spec"]` (`:494`), checked **at the repository root
+only**. The fixture's `src/__tests__/duration.test.ts` is invisible to it, so a TypeScript project
+with a passing suite reports `hasTests: false`.
+
+**Confirmed on a known positive, not only on the fixture:** `prompt-factory` — 12 files in
+`build/__tests__/`, 421 tests — reports `hasTests: false` as well. The detector misses this
+project's own flagship repository, and has done so in every `assess` run anyone has read.
+
+Why this is more than a cosmetic flag: **`init` step 3 instructs the caller to pre-populate
+`techContext.md` using assessment data.** Followed literally, it writes "no tests" into the memory
+bank of a project with a full suite, where it is then read as recorded fact. The operator here knew
+better and wrote the true state plus the discrepancy — an *uninformed* operator, which is the
+realistic case, cannot. **Unfixed; a fix is an assessor change and therefore a harness release.**
+
+`packageManager: null` is **not** a finding: detection is lockfile-driven (`LOCKFILES`) and the
+fixture has no lockfile. Correct by design, and noted so it is not re-raised.
+
+### Finding 2 — D2 and the shipped skill disagree on who creates `llm/constellize.json`
+
+- **D2** (`:147`): "`constellize-harness:init` gains one line creating it."
+- **Task C3 Step 6** (`:1509`), still `[ ]`: add a template-file line after `llm/features/` naming
+  `llm/constellize.json` and its four optional keys.
+- The shipped skill says the opposite, and gives a reason: "an absent file is valid, so `init` does
+  not create it; a project adds it only to record a setting it actually needs."
+
+The discovery point D2 and Finding F4 wanted is present — the file and its four keys are named in
+the skill body — so this reads as a better decision that was never written back, not a defect. But
+the box records the step as not done, and nothing records that the behaviour was changed on purpose.
+**Steve's call:** amend D2 to match what shipped and tick Step 6, or add the creating line. The box
+is deliberately left `[ ]` rather than ticked on a divergent implementation — a plan box is not a
+criterion, and it is not a receipt either.
+
+### Evidence
+
+Copied out of the scratchpad as it was made, after the 2026-11-15 temp-reaper loss, to the shared
+notes folder: `init-from-zero-non-python-2026-11-19.md`, `init-from-zero-assess-before.json`,
+`init-from-zero-assess-after.json`, `init-from-zero-tempo-llm-tree.txt`.
+
 ## Left open after the 2026-11-09/10 entries above
 
 This section was written as part of the first entry and is kept here, consolidated, because the
@@ -3764,3 +3845,14 @@ second entry closed one of its items. It is the current open list, not a histori
   without the `v1/` segment, so it predates the version layout. It is not in any CI workflow
   (factory CI runs the determinism script and jest only), and it failed identically before these
   changes. Stale validator, pre-existing, out of scope.
+- **New, found 2026-11-19 by the from-zero `init` run, not fixed.** The assessor's `hasTests` is a
+  false negative for any project whose tests live below the root — `tier1.ts:540` checks
+  `["test", "tests", "__tests__", "spec"]` at the repository root only. `prompt-factory` itself,
+  with 12 files in `build/__tests__/` and 421 tests, reports `hasTests: false`. It matters because
+  `init` step 3 pre-populates `techContext.md` from assessment data, so the flag becomes a recorded
+  fact in a memory bank. A fix is an assessor change and therefore a harness release; see the entry
+  above for the instrument check that established it on a known positive.
+- **New, found 2026-11-19, Steve's call.** D2 (`:147`) says `init` creates `llm/constellize.json`
+  and Task C3 Step 6 (`:1509`) asks for the line; the shipped skill says `init` does *not* create it,
+  with a reason. The discovery point exists either way, so nothing is broken — but the plan and the
+  product disagree and the box is still `[ ]`. Amend D2, or add the line.
